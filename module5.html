@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 5: Data Cleaning & Preprocessing — Data Analytics Interview Packet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F7F8FC;
+  --surface: #FFFFFF;
+  --surface-2: #EFF2FA;
+  --text: #18202F;
+  --text-muted: #5A6585;
+  --accent: #2B5CE6;
+  --accent-light: #EEF3FF;
+  --border: #DDE3F2;
+  --code-bg: #1A1D2E;
+  --code-text: #C9D1F0;
+  --green: #059669;
+  --green-light: #ECFDF5;
+  --green-border: #6EE7B7;
+  --orange: #D97706;
+  --orange-light: #FFFBEB;
+  --orange-border: #FCD34D;
+  --red: #DC2626;
+  --red-light: #FEF2F2;
+  --red-border: #FCA5A5;
+  --purple: #7C3AED;
+  --purple-light: #F5F3FF;
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1117;
+    --surface: #1A1D2E;
+    --surface-2: #222639;
+    --text: #E8EAF6;
+    --text-muted: #8892B0;
+    --accent: #5B8AF0;
+    --accent-light: #1A2140;
+    --border: #2E3356;
+    --code-bg: #0D0F1A;
+    --code-text: #C9D1F0;
+    --green: #34D399;
+    --green-light: #064E3B;
+    --green-border: #065F46;
+    --orange: #FBBF24;
+    --orange-light: #451A03;
+    --orange-border: #92400E;
+    --red: #F87171;
+    --red-light: #450A0A;
+    --red-border: #7F1D1D;
+    --purple: #A78BFA;
+    --purple-light: #2E1065;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1117;
+  --surface: #1A1D2E;
+  --surface-2: #222639;
+  --text: #E8EAF6;
+  --text-muted: #8892B0;
+  --accent: #5B8AF0;
+  --accent-light: #1A2140;
+  --border: #2E3356;
+  --code-bg: #0D0F1A;
+  --code-text: #C9D1F0;
+  --green: #34D399;
+  --green-light: #064E3B;
+  --green-border: #065F46;
+  --orange: #FBBF24;
+  --orange-light: #451A03;
+  --orange-border: #92400E;
+  --red: #F87171;
+  --red-light: #450A0A;
+  --red-border: #7F1D1D;
+  --purple: #A78BFA;
+  --purple-light: #2E1065;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 16px;
+  padding-inline: 16px;
+  padding-block: 40px;
+}
+
+.container {
+  max-width: 860px;
+  margin-inline: auto;
+}
+
+/* MODULE HEADER */
+.module-header {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 12px;
+  padding: 40px 48px;
+  margin-bottom: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.module-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%);
+}
+.module-tag {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 12px;
+}
+.module-header h1 {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  text-wrap: balance;
+}
+.module-header p {
+  font-size: 1rem;
+  opacity: 0.85;
+  max-width: 580px;
+  line-height: 1.6;
+}
+
+/* THEME TOGGLE */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+/* TOC */
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 48px;
+}
+.toc h2 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.toc ol {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.toc a {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.toc a:hover { text-decoration: underline; }
+
+/* SECTIONS */
+section { margin-bottom: 56px; }
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  text-wrap: balance;
+}
+h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-top: 20px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+}
+p { margin-bottom: 14px; color: var(--text); }
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { margin-bottom: 6px; line-height: 1.6; }
+strong { font-weight: 600; }
+
+/* CALLOUT BOXES */
+.definition {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+.definition .def-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.definition p { margin: 0; font-size: 0.97rem; }
+
+.example {
+  background: var(--green-light);
+  border-left: 4px solid var(--green);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+.example .ex-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 6px;
+}
+.example p, .example li { font-size: 0.95rem; }
+
+.note {
+  background: var(--orange-light);
+  border-left: 4px solid var(--orange);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+.note .note-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 6px;
+}
+.note p { margin: 0; font-size: 0.95rem; }
+
+.warning {
+  background: var(--red-light);
+  border-left: 4px solid var(--red);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+.warning .warn-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 6px;
+}
+.warning p { margin: 0; font-size: 0.95rem; }
+
+.tip {
+  background: var(--purple-light);
+  border-left: 4px solid var(--purple);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+.tip .tip-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 6px;
+}
+.tip p { margin: 0; font-size: 0.95rem; }
+
+/* CODE BLOCKS */
+pre {
+  background: var(--code-bg);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  overflow-x: auto;
+  margin: 16px 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--code-text);
+}
+code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.875em;
+  background: var(--surface-2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent);
+}
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  border-radius: 0;
+}
+.kw { color: #82AAFF; }
+.fn { color: #C3E88D; }
+.st { color: #F78C6C; }
+.cm { color: #546E7A; font-style: italic; }
+.cl { color: #FFCB6B; }
+.nm { color: #F07178; }
+.op { color: #89DDFF; }
+
+/* FORMULA BOX */
+.formula-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 20px 0;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1rem;
+}
+.formula-box .formula-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  text-align: left;
+}
+.formula-box .formula {
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+
+/* TABLES */
+.table-wrap { overflow-x: auto; margin: 20px 0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+th {
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+}
+td {
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: var(--surface-2); }
+
+/* COMPARISON GRID */
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.compare-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.compare-card .card-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.compare-card h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.compare-card p, .compare-card li {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* STEP PIPELINE */
+.pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 20px 0;
+}
+.pipeline-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.pipeline-step:last-child { border-bottom: none; }
+.step-num {
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.step-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.step-content p { font-size: 0.92rem; color: var(--text-muted); margin: 0; }
+
+/* BADGE */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.badge-blue { background: var(--accent-light); color: var(--accent); }
+.badge-green { background: var(--green-light); color: var(--green); }
+.badge-orange { background: var(--orange-light); color: var(--orange); }
+.badge-red { background: var(--red-light); color: var(--red); }
+
+/* MISSING DATA TYPES */
+.missing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.missing-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.missing-card.mar { border-top-color: var(--orange); }
+.missing-card.mnar { border-top-color: var(--red); }
+.missing-card h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.missing-card .acronym {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  display: block;
+}
+.missing-card p { font-size: 0.88rem; color: var(--text-muted); margin: 0 0 8px; }
+
+/* QA SECTION */
+.qa-section { margin-top: 40px; }
+.qa-section h2 { color: var(--accent); }
+.qa-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.qa-q {
+  background: var(--accent-light);
+  padding: 14px 20px;
+  font-weight: 600;
+  font-size: 0.97rem;
+  color: var(--accent);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.qa-q::before {
+  content: 'Q';
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.qa-a {
+  padding: 16px 20px;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.qa-a p:last-child { margin-bottom: 0; }
+.qa-a pre { font-size: 0.82rem; }
+
+/* TECHNIQUE TABLE */
+.technique-row td:first-child {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+/* FLOWCHART STYLE */
+.decision-flow {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin: 20px 0;
+  font-size: 0.9rem;
+}
+.decision-flow .flow-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.flow-node {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.flow-node .node-box {
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-weight: 500;
+  color: var(--accent);
+  font-size: 0.88rem;
+  min-width: 160px;
+}
+.flow-node .node-box.result {
+  background: var(--green-light);
+  border-color: var(--green);
+  color: var(--green);
+}
+.flow-arrow {
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  margin-left: 28px;
+  margin-bottom: 4px;
+}
+.flow-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* HIGHLIGHT ROW */
+.highlight-row { background: var(--accent-light) !important; }
+
+</style>
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+<div class="container">
+
+<!-- MODULE HEADER -->
+<div class="module-header">
+  <div class="module-tag">Module 05 · Data Analytics Interview Packet</div>
+  <h1>Data Cleaning & Preprocessing</h1>
+  <p>From raw, messy real-world data to a clean, analysis-ready dataset — covering missing data mechanisms, outlier detection, normalization, encoding, and feature engineering.</p>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#why-cleaning">Why Data Cleaning Matters</a></li>
+    <li><a href="#missing-data">Missing Data: Types & Mechanisms</a></li>
+    <li><a href="#handling-missing">Handling Missing Values</a></li>
+    <li><a href="#outliers">Outlier Detection & Treatment</a></li>
+    <li><a href="#duplicates">Duplicate & Inconsistency Detection</a></li>
+    <li><a href="#scaling">Feature Scaling & Normalization</a></li>
+    <li><a href="#encoding">Encoding Categorical Variables</a></li>
+    <li><a href="#feature-engineering">Feature Engineering</a></li>
+    <li><a href="#pipeline">Building a Preprocessing Pipeline</a></li>
+    <li><a href="#qa">Interview Q&A</a></li>
+  </ol>
+</nav>
+
+<!-- SECTION 1 -->
+<section id="why-cleaning">
+  <h2>1. Why Data Cleaning Matters</h2>
+  <p>In practice, 60–80% of a data analyst's or data scientist's time is spent on data cleaning and preprocessing — not modeling. Raw data collected from production systems, third-party APIs, sensors, or user inputs is almost always imperfect. It contains missing values, duplicates, outliers, incorrect data types, inconsistent formats, and encoding errors.</p>
+
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p><strong>Data Cleaning</strong> (also called data cleansing or data scrubbing) is the process of identifying and correcting (or removing) inaccurate, incomplete, duplicate, or improperly formatted records from a dataset. The goal is to produce a dataset that is <em>accurate</em>, <em>consistent</em>, <em>complete</em>, <em>valid</em>, and <em>uniform</em>.</p>
+  </div>
+
+  <h3>The Five Dimensions of Data Quality</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Definition</th><th>Example Problem</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Completeness</strong></td><td>All required data is present</td><td>Age column has 30% NaN</td></tr>
+        <tr><td><strong>Accuracy</strong></td><td>Values reflect reality correctly</td><td>Age = 250 for a person</td></tr>
+        <tr><td><strong>Consistency</strong></td><td>Same data agrees across sources</td><td>Gender = "M" in one table, "Male" in another</td></tr>
+        <tr><td><strong>Validity</strong></td><td>Values conform to defined rules</td><td>Date = "2023-13-45" (invalid month/day)</td></tr>
+        <tr><td><strong>Uniformity</strong></td><td>Data is in a standard format</td><td>Dates stored as "01/15/23", "Jan 15 2023", "2023-01-15" in same column</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Typical Data Cleaning Workflow</h3>
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Inspect & Understand the Data</h4>
+        <p>Use <code>df.info()</code>, <code>df.describe()</code>, <code>df.shape</code>, <code>df.dtypes</code>. Understand schema, value ranges, and nulls.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Handle Missing Values</h4>
+        <p>Identify mechanism (MCAR/MAR/MNAR), then choose: drop, impute with statistical values, forward-fill, or use model-based imputation.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Remove Duplicates & Fix Inconsistencies</h4>
+        <p>Deduplicate exact and near-duplicate rows. Standardize string formats, fix typos, consolidate categories.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Detect & Treat Outliers</h4>
+        <p>Use IQR method, Z-score, or visual inspection (box plots). Decide to remove, cap (Winsorize), or transform.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>Fix Data Types</h4>
+        <p>Convert strings to datetime, object columns to categorical, numeric strings to float/int.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h4>Scale & Encode Features</h4>
+        <p>Normalize/standardize numeric features. Encode categorical variables using label encoding, one-hot, or ordinal encoding.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <h4>Feature Engineering</h4>
+        <p>Create new informative features from existing ones. Extract date parts, create interaction terms, apply transformations (log, sqrt).</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">8</div>
+      <div class="step-content">
+        <h4>Validate & Document</h4>
+        <p>Re-run <code>df.info()</code> and descriptive stats. Confirm no nulls in key columns. Document all transformations applied.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2 -->
+<section id="missing-data">
+  <h2>2. Missing Data: Types & Mechanisms</h2>
+  <p>Before deciding <em>how</em> to handle missing values, you must understand <em>why</em> the data is missing. The mechanism drives the appropriate strategy.</p>
+
+  <div class="missing-grid">
+    <div class="missing-card">
+      <h4>Missing Completely at Random</h4>
+      <span class="acronym">MCAR</span>
+      <p>The probability of being missing is the same for all observations. Missingness has no relationship to any variable, observed or unobserved.</p>
+      <p><strong>Example:</strong> A lab technician randomly drops some sample vials; the loss is unrelated to the sample values or subject characteristics.</p>
+      <p><strong>Safe to:</strong> Delete rows with no bias introduced. Imputation also works.</p>
+    </div>
+    <div class="missing-card mar">
+      <h4>Missing at Random</h4>
+      <span class="acronym">MAR</span>
+      <p>The probability of being missing depends on <em>observed</em> data, but not on the missing value itself. Once you control for the observed variables, missingness is random.</p>
+      <p><strong>Example:</strong> Men are less likely to report income than women, but conditional on gender, the missing income is random. Gender predicts missingness, but the actual income value does not.</p>
+      <p><strong>Safe to:</strong> Use model-based imputation (using other features to predict the missing value). Listwise deletion introduces bias.</p>
+    </div>
+    <div class="missing-card mnar">
+      <h4>Missing Not at Random</h4>
+      <span class="acronym">MNAR</span>
+      <p>The probability of being missing depends on the <em>unobserved value itself</em>. The missing data is systematically related to the value that is missing.</p>
+      <p><strong>Example:</strong> High earners are less likely to report their income — the higher the income, the more likely it is to be missing.</p>
+      <p><strong>Dangerous:</strong> Any imputation will be biased. Requires domain knowledge, sensitivity analysis, or explicitly modeling the missingness mechanism.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <div class="note-label">Key Insight</div>
+    <p>In practice, you cannot always distinguish MCAR from MAR from MNAR with data alone — it requires domain knowledge. The Little's MCAR test can statistically test if data is MCAR, but confirming MAR vs. MNAR requires understanding the data-generating process.</p>
+  </div>
+
+  <h3>Diagnosing Missingness in Pandas</h3>
+  <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+df = pd.<span class="fn">read_csv</span>(<span class="st">'data.csv'</span>)
+
+<span class="cm"># 1. Count and percentage of missing values per column</span>
+missing = pd.<span class="fn">DataFrame</span>({
+    <span class="st">'count'</span>: df.<span class="fn">isnull</span>().<span class="fn">sum</span>(),
+    <span class="st">'pct'</span>: df.<span class="fn">isnull</span>().<span class="fn">mean</span>() * <span class="nm">100</span>
+}).sort_values(<span class="st">'pct'</span>, ascending=<span class="kw">False</span>)
+<span class="fn">print</span>(missing[missing[<span class="st">'count'</span>] > <span class="nm">0</span>])
+
+<span class="cm"># 2. Heatmap of missing values (visual pattern detection)</span>
+<span class="kw">import</span> seaborn <span class="kw">as</span> sns
+plt.<span class="fn">figure</span>(figsize=(<span class="nm">12</span>, <span class="nm">6</span>))
+sns.<span class="fn">heatmap</span>(df.<span class="fn">isnull</span>(), yticklabels=<span class="kw">False</span>, cbar=<span class="kw">False</span>, cmap=<span class="st">'viridis'</span>)
+plt.<span class="fn">title</span>(<span class="st">'Missing Value Heatmap'</span>)
+plt.<span class="fn">show</span>()
+
+<span class="cm"># 3. Correlation between missingness indicators</span>
+<span class="cm"># High correlation → MAR (missingness of col A predicts col B)</span>
+miss_indicators = df.<span class="fn">isnull</span>().<span class="fn">astype</span>(<span class="nm">int</span>)
+<span class="fn">print</span>(miss_indicators.<span class="fn">corr</span>())</pre>
+</section>
+
+<!-- SECTION 3 -->
+<section id="handling-missing">
+  <h2>3. Handling Missing Values</h2>
+
+  <h3>Strategy 1: Deletion</h3>
+
+  <h4>Listwise Deletion (Drop Rows)</h4>
+  <pre><span class="cm"># Drop rows with ANY missing values</span>
+df_clean = df.<span class="fn">dropna</span>()
+
+<span class="cm"># Drop rows only where specific columns are null</span>
+df_clean = df.<span class="fn">dropna</span>(subset=[<span class="st">'age'</span>, <span class="st">'income'</span>])
+
+<span class="cm"># Drop rows missing more than 50% of values</span>
+threshold = len(df.columns) * <span class="nm">0.5</span>
+df_clean = df.<span class="fn">dropna</span>(thresh=threshold)</pre>
+
+  <div class="warning">
+    <div class="warn-label">Warning</div>
+    <p>Listwise deletion is only valid under MCAR. Under MAR or MNAR it introduces selection bias — the remaining dataset is no longer representative of the population.</p>
+  </div>
+
+  <h4>Column Deletion</h4>
+  <pre><span class="cm"># Drop columns with more than 40% missing values</span>
+threshold = <span class="nm">0.4</span>
+df_clean = df.loc[:, df.<span class="fn">isnull</span>().<span class="fn">mean</span>() < threshold]</pre>
+
+  <h3>Strategy 2: Statistical Imputation</h3>
+  <pre><span class="cm"># Mean imputation (for MCAR numeric data, low skew)</span>
+df[<span class="st">'salary'</span>].<span class="fn">fillna</span>(df[<span class="st">'salary'</span>].<span class="fn">mean</span>(), inplace=<span class="kw">True</span>)
+
+<span class="cm"># Median imputation (better for skewed distributions or outliers)</span>
+df[<span class="st">'salary'</span>].<span class="fn">fillna</span>(df[<span class="st">'salary'</span>].<span class="fn">median</span>(), inplace=<span class="kw">True</span>)
+
+<span class="cm"># Mode imputation (for categorical columns)</span>
+df[<span class="st">'city'</span>].<span class="fn">fillna</span>(df[<span class="st">'city'</span>].<span class="fn">mode</span>()[<span class="nm">0</span>], inplace=<span class="kw">True</span>)
+
+<span class="cm"># Group-wise median (better — impute per segment)</span>
+df[<span class="st">'salary'</span>] = df.<span class="fn">groupby</span>(<span class="st">'department'</span>)[<span class="st">'salary'</span>].\
+    <span class="fn">transform</span>(<span class="kw">lambda</span> x: x.<span class="fn">fillna</span>(x.<span class="fn">median</span>()))</pre>
+
+  <div class="note">
+    <div class="note-label">Mean vs Median Imputation</div>
+    <p>Mean imputation preserves the column mean but underestimates variance and distorts the distribution shape. Median imputation is more robust to outliers. <strong>Neither method is valid under MNAR.</strong></p>
+  </div>
+
+  <h3>Strategy 3: Forward Fill / Backward Fill (Time Series)</h3>
+  <pre><span class="cm"># For time-series: carry last known value forward</span>
+df_ts.<span class="fn">fillna</span>(method=<span class="st">'ffill'</span>, inplace=<span class="kw">True</span>)
+
+<span class="cm"># Or carry next known value backward</span>
+df_ts.<span class="fn">fillna</span>(method=<span class="st">'bfill'</span>, inplace=<span class="kw">True</span>)
+
+<span class="cm"># Limit consecutive fills to avoid propagating too far</span>
+df_ts.<span class="fn">fillna</span>(method=<span class="st">'ffill'</span>, limit=<span class="nm">3</span>, inplace=<span class="kw">True</span>)</pre>
+
+  <h3>Strategy 4: Model-Based Imputation</h3>
+  <pre><span class="kw">from</span> sklearn.impute <span class="kw">import</span> <span class="cl">KNNImputer</span>, <span class="cl">IterativeImputer</span>
+<span class="kw">from</span> sklearn.experimental <span class="kw">import</span> enable_iterative_imputer  <span class="cm"># required</span>
+
+<span class="cm"># K-Nearest Neighbors Imputation</span>
+<span class="cm"># Replaces missing value with weighted average of k nearest neighbors</span>
+knn_imputer = <span class="cl">KNNImputer</span>(n_neighbors=<span class="nm">5</span>)
+df_imputed = pd.<span class="fn">DataFrame</span>(
+    knn_imputer.<span class="fn">fit_transform</span>(df_numeric),
+    columns=df_numeric.columns
+)
+
+<span class="cm"># Iterative Imputation (MICE — Multiple Imputation by Chained Equations)</span>
+<span class="cm"># Models each feature as a function of all others, iterates until convergence</span>
+iter_imputer = <span class="cl">IterativeImputer</span>(max_iter=<span class="nm">10</span>, random_state=<span class="nm">42</span>)
+df_imputed = pd.<span class="fn">DataFrame</span>(
+    iter_imputer.<span class="fn">fit_transform</span>(df_numeric),
+    columns=df_numeric.columns
+)</pre>
+
+  <div class="example">
+    <div class="ex-label">When to Use Which Strategy</div>
+    <ul>
+      <li><strong>Drop rows:</strong> MCAR only, missing rate &lt; 5%, large dataset</li>
+      <li><strong>Mean/Median impute:</strong> MCAR, numeric, low missing rate (&lt;10%), no downstream ML model assumptions violated</li>
+      <li><strong>Mode impute:</strong> MCAR, categorical, single dominant category</li>
+      <li><strong>Forward fill:</strong> Time series, sensor data, ordered sequence</li>
+      <li><strong>KNN impute:</strong> MAR, multiple related features available, moderate dataset size</li>
+      <li><strong>MICE (Iterative):</strong> MAR, complex multivariate relationships, medium/large datasets</li>
+      <li><strong>MNAR:</strong> Consult domain expert; consider creating "missing" indicator feature</li>
+    </ul>
+  </div>
+
+  <h3>Strategy 5: Missing Indicator Feature</h3>
+  <pre><span class="cm"># Create a binary flag indicating missingness, then impute</span>
+<span class="cm"># Preserves the information that the value was missing (important for MNAR)</span>
+df[<span class="st">'income_was_missing'</span>] = df[<span class="st">'income'</span>].<span class="fn">isnull</span>().<span class="fn">astype</span>(<span class="nm">int</span>)
+df[<span class="st">'income'</span>].<span class="fn">fillna</span>(df[<span class="st">'income'</span>].<span class="fn">median</span>(), inplace=<span class="kw">True</span>)</pre>
+</section>
+
+<!-- SECTION 4 -->
+<section id="outliers">
+  <h2>4. Outlier Detection & Treatment</h2>
+
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p>An <strong>outlier</strong> is an observation that lies an abnormal distance from other values in a sample. Outliers can be errors (data entry mistake, sensor malfunction), natural extreme values (a billionaire in an income dataset), or indicators of important events (fraud, system failure).</p>
+  </div>
+
+  <h3>Method 1: IQR (Interquartile Range) Method</h3>
+  <p>The IQR method is non-parametric (does not assume normality) and is robust to extreme values.</p>
+
+  <div class="formula-box">
+    <div class="formula-title">IQR Fence Formula</div>
+    <div class="formula">
+      IQR = Q3 − Q1<br>
+      Lower Fence = Q1 − 1.5 × IQR<br>
+      Upper Fence = Q3 + 1.5 × IQR
+    </div>
+  </div>
+
+  <pre><span class="cm"># IQR-based outlier detection</span>
+Q1 = df[<span class="st">'salary'</span>].<span class="fn">quantile</span>(<span class="nm">0.25</span>)
+Q3 = df[<span class="st">'salary'</span>].<span class="fn">quantile</span>(<span class="nm">0.75</span>)
+IQR = Q3 - Q1
+
+lower_fence = Q1 - <span class="nm">1.5</span> * IQR
+upper_fence = Q3 + <span class="nm">1.5</span> * IQR
+
+<span class="cm"># Identify outlier rows</span>
+outliers = df[(df[<span class="st">'salary'</span>] < lower_fence) | (df[<span class="st">'salary'</span>] > upper_fence)]
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Found {len(outliers)} outliers"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Lower fence: {lower_fence:.2f}, Upper fence: {upper_fence:.2f}"</span>)
+
+<span class="cm"># Remove outliers</span>
+df_clean = df[(df[<span class="st">'salary'</span>] >= lower_fence) & (df[<span class="st">'salary'</span>] <= upper_fence)]</pre>
+
+  <h3>Method 2: Z-Score Method</h3>
+  <p>Assumes the data is approximately normally distributed. Observations more than 3 standard deviations from the mean are flagged as outliers.</p>
+
+  <div class="formula-box">
+    <div class="formula-title">Z-Score Formula</div>
+    <div class="formula">z = (x − μ) / σ &nbsp;&nbsp;&nbsp;&nbsp; |z| &gt; 3 → outlier</div>
+  </div>
+
+  <pre><span class="kw">from</span> scipy <span class="kw">import</span> stats
+
+<span class="cm"># Z-score method</span>
+z_scores = stats.<span class="fn">zscore</span>(df[<span class="st">'salary'</span>].<span class="fn">dropna</span>())
+outlier_mask = np.<span class="fn">abs</span>(z_scores) > <span class="nm">3</span>
+
+<span class="cm"># Or using numpy directly</span>
+mean = df[<span class="st">'salary'</span>].<span class="fn">mean</span>()
+std  = df[<span class="st">'salary'</span>].<span class="fn">std</span>()
+df[<span class="st">'z_score'</span>] = (df[<span class="st">'salary'</span>] - mean) / std
+outliers = df[df[<span class="st">'z_score'</span>].<span class="fn">abs</span>() > <span class="nm">3</span>]</pre>
+
+  <h3>Method 3: Modified Z-Score (Robust)</h3>
+  <p>Uses the <strong>Median Absolute Deviation (MAD)</strong> instead of standard deviation — much more robust when the data itself contains many outliers.</p>
+
+  <div class="formula-box">
+    <div class="formula-title">Modified Z-Score</div>
+    <div class="formula">
+      MAD = median(|xᵢ − median(x)|)<br>
+      Modified Z = 0.6745 × (xᵢ − median) / MAD<br>
+      |Modified Z| &gt; 3.5 → outlier
+    </div>
+  </div>
+
+  <pre><span class="cm"># Modified Z-score using MAD</span>
+median = df[<span class="st">'salary'</span>].<span class="fn">median</span>()
+MAD = (df[<span class="st">'salary'</span>] - median).<span class="fn">abs</span>().<span class="fn">median</span>()
+df[<span class="st">'modified_z'</span>] = <span class="nm">0.6745</span> * (df[<span class="st">'salary'</span>] - median) / MAD
+outliers = df[df[<span class="st">'modified_z'</span>].<span class="fn">abs</span>() > <span class="nm">3.5</span>]</pre>
+
+  <h3>Outlier Treatment Strategies</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Treatment</th><th>When to Use</th><th>How</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Remove</strong></td>
+          <td>Data entry error, physically impossible value</td>
+          <td><code>df_clean = df[~outlier_mask]</code></td>
+        </tr>
+        <tr>
+          <td><strong>Winsorize (Cap)</strong></td>
+          <td>Valid extreme values but want to limit influence</td>
+          <td>Replace values beyond fence with fence value</td>
+        </tr>
+        <tr>
+          <td><strong>Log Transform</strong></td>
+          <td>Right-skewed distribution (income, sales)</td>
+          <td><code>df['log_salary'] = np.log1p(df['salary'])</code></td>
+        </tr>
+        <tr>
+          <td><strong>Impute as Missing</strong></td>
+          <td>Probable error but uncertain</td>
+          <td>Set to NaN, then apply imputation strategy</td>
+        </tr>
+        <tr>
+          <td><strong>Keep as-is</strong></td>
+          <td>Outlier is a real, valid observation (e.g., fraud case in fraud detection)</td>
+          <td>Document it; use robust algorithms</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><span class="kw">from</span> scipy.stats.mstats <span class="kw">import</span> winsorize
+
+<span class="cm"># Winsorization: Cap at 5th and 95th percentile</span>
+df[<span class="st">'salary_winsorized'</span>] = winsorize(df[<span class="st">'salary'</span>], limits=[<span class="nm">0.05</span>, <span class="nm">0.05</span>])
+
+<span class="cm"># Manual capping using clip()</span>
+lower = df[<span class="st">'salary'</span>].<span class="fn">quantile</span>(<span class="nm">0.05</span>)
+upper = df[<span class="st">'salary'</span>].<span class="fn">quantile</span>(<span class="nm">0.95</span>)
+df[<span class="st">'salary_capped'</span>] = df[<span class="st">'salary'</span>].<span class="fn">clip</span>(lower=lower, upper=upper)</pre>
+
+  <h3>Isolation Forest (Multivariate Outlier Detection)</h3>
+  <p>When you have multiple numeric features, univariate methods check each column independently and miss outliers that are extreme in multiple dimensions simultaneously (e.g., a person with average height AND average weight is not an outlier, but average height and 200 kg weight is).</p>
+  <pre><span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> <span class="cl">IsolationForest</span>
+
+features = [<span class="st">'age'</span>, <span class="st">'salary'</span>, <span class="st">'years_experience'</span>]
+iso_forest = <span class="cl">IsolationForest</span>(contamination=<span class="nm">0.05</span>, random_state=<span class="nm">42</span>)
+<span class="cm"># Returns 1 (inlier) or -1 (outlier)</span>
+df[<span class="st">'outlier_flag'</span>] = iso_forest.<span class="fn">fit_predict</span>(df[features])
+df_clean = df[df[<span class="st">'outlier_flag'</span>] == <span class="nm">1</span>].drop(columns=[<span class="st">'outlier_flag'</span>])</pre>
+</section>
+
+<!-- SECTION 5 -->
+<section id="duplicates">
+  <h2>5. Duplicate & Inconsistency Detection</h2>
+
+  <h3>Handling Exact Duplicates</h3>
+  <pre><span class="cm"># Check for duplicate rows</span>
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Duplicate rows: {df.duplicated().sum()}"</span>)
+
+<span class="cm"># View duplicate rows</span>
+<span class="fn">print</span>(df[df.<span class="fn">duplicated</span>(keep=<span class="kw">False</span>)])  <span class="cm"># keep=False shows all copies</span>
+
+<span class="cm"># Remove duplicates — keep first occurrence</span>
+df_clean = df.<span class="fn">drop_duplicates</span>(keep=<span class="st">'first'</span>)
+
+<span class="cm"># Duplicates based on a subset of columns (business key)</span>
+df_clean = df.<span class="fn">drop_duplicates</span>(subset=[<span class="st">'user_id'</span>, <span class="st">'transaction_date'</span>], keep=<span class="st">'last'</span>)</pre>
+
+  <h3>String Inconsistencies</h3>
+  <pre><span class="cm"># Standardize string case and whitespace</span>
+df[<span class="st">'city'</span>] = df[<span class="st">'city'</span>].<span class="fn">str</span>.<span class="fn">strip</span>().<span class="fn">str</span>.<span class="fn">title</span>()
+
+<span class="cm"># Example: "  new york  " → "New York"</span>
+
+<span class="cm"># Check unique values for inconsistencies</span>
+<span class="fn">print</span>(df[<span class="st">'gender'</span>].<span class="fn">value_counts</span>())
+<span class="cm"># Output might show: M, Male, male, m, MALE — all mean the same thing</span>
+
+<span class="cm"># Map inconsistent values to canonical form</span>
+gender_map = {<span class="st">'m'</span>: <span class="st">'Male'</span>, <span class="st">'male'</span>: <span class="st">'Male'</span>, <span class="st">'M'</span>: <span class="st">'Male'</span>, <span class="st">'MALE'</span>: <span class="st">'Male'</span>,
+              <span class="st">'f'</span>: <span class="st">'Female'</span>, <span class="st">'female'</span>: <span class="st">'Female'</span>, <span class="st">'F'</span>: <span class="st">'Female'</span>}
+df[<span class="st">'gender'</span>] = df[<span class="st">'gender'</span>].<span class="fn">str</span>.<span class="fn">strip</span>().<span class="fn">map</span>(gender_map)
+
+<span class="cm"># Fuzzy matching for near-duplicate strings (e.g., company names)</span>
+<span class="kw">from</span> fuzzywuzzy <span class="kw">import</span> process
+<span class="cm"># process.extract("Google LLC", df['company_name'], limit=5)</span></pre>
+
+  <h3>Data Type Corrections</h3>
+  <pre><span class="cm"># Convert date strings to datetime</span>
+df[<span class="st">'date'</span>] = pd.<span class="fn">to_datetime</span>(df[<span class="st">'date'</span>], format=<span class="st">'%Y-%m-%d'</span>)
+df[<span class="st">'date'</span>] = pd.<span class="fn">to_datetime</span>(df[<span class="st">'date'</span>], infer_datetime_format=<span class="kw">True</span>)  <span class="cm"># auto-detect</span>
+
+<span class="cm"># Convert numeric strings to float (handling commas, $, %)</span>
+df[<span class="st">'revenue'</span>] = df[<span class="st">'revenue'</span>].<span class="fn">str</span>.<span class="fn">replace</span>(<span class="st">r'[\$,]'</span>, <span class="st">''</span>, regex=<span class="kw">True</span>).<span class="fn">astype</span>(<span class="nm">float</span>)
+df[<span class="st">'rate'</span>]    = df[<span class="st">'rate'</span>].<span class="fn">str</span>.<span class="fn">replace</span>(<span class="st">'%'</span>, <span class="st">''</span>).<span class="fn">astype</span>(<span class="nm">float</span>) / <span class="nm">100</span>
+
+<span class="cm"># Convert to memory-efficient categorical dtype</span>
+df[<span class="st">'department'</span>] = df[<span class="st">'department'</span>].<span class="fn">astype</span>(<span class="st">'category'</span>)
+
+<span class="cm"># Validate numeric ranges (domain knowledge constraints)</span>
+df = df[(df[<span class="st">'age'</span>] >= <span class="nm">0</span>) & (df[<span class="st">'age'</span>] <= <span class="nm">120</span>)]
+df = df[df[<span class="st">'probability'</span>].<span class="fn">between</span>(<span class="nm">0</span>, <span class="nm">1</span>)]</pre>
+</section>
+
+<!-- SECTION 6 -->
+<section id="scaling">
+  <h2>6. Feature Scaling & Normalization</h2>
+  <p>Many machine learning algorithms (gradient descent–based models, KNN, SVM, PCA) are sensitive to the scale of input features. A feature ranging from 0–1,000,000 will dominate a feature ranging 0–1 unless scaling is applied. Tree-based models (decision trees, random forests, XGBoost) are <em>not</em> affected by scaling.</p>
+
+  <h3>Min-Max Normalization</h3>
+  <p>Scales all values to a fixed range [0, 1] (or any [a, b]).</p>
+
+  <div class="formula-box">
+    <div class="formula-title">Min-Max Normalization Formula</div>
+    <div class="formula">x_scaled = (x − x_min) / (x_max − x_min)</div>
+  </div>
+
+  <pre><span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> <span class="cl">MinMaxScaler</span>
+
+scaler = <span class="cl">MinMaxScaler</span>()  <span class="cm"># default range [0,1]</span>
+df[<span class="st">'age_scaled'</span>] = scaler.<span class="fn">fit_transform</span>(df[[<span class="st">'age'</span>]])
+
+<span class="cm"># IMPORTANT: fit on TRAINING set only, transform both train and test</span>
+scaler.<span class="fn">fit</span>(X_train)          <span class="cm"># learn min/max from training data only</span>
+X_train_scaled = scaler.<span class="fn">transform</span>(X_train)
+X_test_scaled  = scaler.<span class="fn">transform</span>(X_test)  <span class="cm"># use training min/max on test set!</span></pre>
+
+  <div class="warning">
+    <div class="warn-label">Data Leakage Warning</div>
+    <p>Always fit the scaler on the training set ONLY. If you fit on the full dataset (including test set), the scaler learns information from the test set — this is called <strong>data leakage</strong> and will give overly optimistic model evaluation metrics.</p>
+  </div>
+
+  <h3>Standardization (Z-Score Scaling)</h3>
+  <p>Transforms data to have mean = 0 and standard deviation = 1. Does not bound to a fixed range, so it handles outliers better than min-max.</p>
+
+  <div class="formula-box">
+    <div class="formula-title">Standardization Formula</div>
+    <div class="formula">x_standardized = (x − μ) / σ</div>
+  </div>
+
+  <pre><span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> <span class="cl">StandardScaler</span>
+
+scaler = <span class="cl">StandardScaler</span>()
+X_train_scaled = scaler.<span class="fn">fit_transform</span>(X_train)
+X_test_scaled  = scaler.<span class="fn">transform</span>(X_test)
+
+<span class="cm"># Check: should be ~0 mean, ~1 std on training data</span>
+<span class="fn">print</span>(X_train_scaled.<span class="fn">mean</span>(axis=<span class="nm">0</span>))  <span class="cm"># ≈ [0, 0, 0, ...]</span>
+<span class="fn">print</span>(X_train_scaled.<span class="fn">std</span>(axis=<span class="nm">0</span>))   <span class="cm"># ≈ [1, 1, 1, ...]</span></pre>
+
+  <h3>Robust Scaling</h3>
+  <p>Uses the median and IQR instead of mean and standard deviation. Best when the data contains many outliers.</p>
+
+  <div class="formula-box">
+    <div class="formula-title">Robust Scaler Formula</div>
+    <div class="formula">x_scaled = (x − median) / IQR</div>
+  </div>
+
+  <pre><span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> <span class="cl">RobustScaler</span>
+scaler = <span class="cl">RobustScaler</span>()
+X_scaled = scaler.<span class="fn">fit_transform</span>(X_train)</pre>
+
+  <h3>When to Use Which Scaler</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Scaler</th><th>Assumes</th><th>Handles Outliers</th><th>Best For</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Min-Max</td><td>Bounded data</td><td>No — distorted by outliers</td><td>Neural networks, image pixel values</td></tr>
+        <tr><td>Standard</td><td>Approx. normal distribution</td><td>Somewhat</td><td>Linear/logistic regression, SVM, PCA, KNN</td></tr>
+        <tr><td>Robust</td><td>None</td><td>Yes — robust to outliers</td><td>Data with significant outliers</td></tr>
+        <tr><td>Log Transform</td><td>Positive, right-skewed</td><td>Yes</td><td>Income, sales volume, population</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Log Transformation</h3>
+  <pre><span class="cm"># Log transform for right-skewed distributions</span>
+<span class="cm"># np.log1p(x) = log(1+x) handles x=0 gracefully</span>
+df[<span class="st">'log_income'</span>] = np.<span class="fn">log1p</span>(df[<span class="st">'income'</span>])
+
+<span class="cm"># Box-Cox transformation (generalized power transformation)</span>
+<span class="kw">from</span> scipy.stats <span class="kw">import</span> boxcox
+df[<span class="st">'income_transformed'</span>], lambda_optimal = <span class="fn">boxcox</span>(df[<span class="st">'income'</span>] + <span class="nm">1</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Optimal lambda: {lambda_optimal:.3f}"</span>)
+<span class="cm"># lambda ≈ 0 → log transform; lambda ≈ 1 → no transform; lambda = 0.5 → sqrt</span>
+
+<span class="cm"># Square root transform (less aggressive than log)</span>
+df[<span class="st">'sqrt_age'</span>] = np.<span class="fn">sqrt</span>(df[<span class="st">'age'</span>])</pre>
+</section>
+
+<!-- SECTION 7 -->
+<section id="encoding">
+  <h2>7. Encoding Categorical Variables</h2>
+  <p>Machine learning algorithms require numeric input. Categorical variables must be converted to numbers. The encoding strategy depends on the type of categorical variable and the downstream algorithm.</p>
+
+  <h3>Label Encoding (Ordinal Encoding)</h3>
+  <p>Assigns an integer to each category. Suitable for <strong>ordinal</strong> variables where order matters. Should NOT be used for nominal variables with tree-based models or when passed to linear models (they may infer false ordinal relationships).</p>
+  <pre><span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> <span class="cl">LabelEncoder</span>, <span class="cl">OrdinalEncoder</span>
+
+<span class="cm"># LabelEncoder: for a single target or ordinal column</span>
+le = <span class="cl">LabelEncoder</span>()
+df[<span class="st">'education_encoded'</span>] = le.<span class="fn">fit_transform</span>(df[<span class="st">'education'</span>])
+<span class="cm"># ['High School', 'Bachelor', 'Master', 'PhD'] → [0, 1, 2, 3]</span>
+
+<span class="cm"># OrdinalEncoder: specify the explicit order</span>
+oe = <span class="cl">OrdinalEncoder</span>(categories=[[<span class="st">'Low'</span>, <span class="st">'Medium'</span>, <span class="st">'High'</span>]])
+df[<span class="st">'priority_encoded'</span>] = oe.<span class="fn">fit_transform</span>(df[[<span class="st">'priority'</span>]])</pre>
+
+  <h3>One-Hot Encoding (OHE)</h3>
+  <p>Creates a binary (0/1) column for each category. Standard for <strong>nominal</strong> variables where no order exists. Adds dimensionality.</p>
+  <pre><span class="cm"># pandas get_dummies</span>
+df_encoded = pd.<span class="fn">get_dummies</span>(df, columns=[<span class="st">'city'</span>, <span class="st">'department'</span>], drop_first=<span class="kw">True</span>)
+<span class="cm"># drop_first=True avoids dummy variable trap (perfect multicollinearity)</span>
+<span class="cm"># 'city' with 5 categories → 4 new binary columns</span>
+
+<span class="cm"># sklearn OneHotEncoder (preferred in pipelines)</span>
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> <span class="cl">OneHotEncoder</span>
+ohe = <span class="cl">OneHotEncoder</span>(drop=<span class="st">'first'</span>, sparse_output=<span class="kw">False</span>)
+encoded = ohe.<span class="fn">fit_transform</span>(df[[<span class="st">'city'</span>]])</pre>
+
+  <div class="note">
+    <div class="note-label">Dummy Variable Trap</div>
+    <p>If you one-hot encode a column with k categories into k binary columns, one column is linearly predictable from the others (they sum to 1). This causes perfect multicollinearity. Always drop one category (<code>drop_first=True</code>) to avoid this, unless using tree-based models.</p>
+  </div>
+
+  <h3>Target Encoding (Mean Encoding)</h3>
+  <p>Replaces each category with the mean of the target variable for that category. Very powerful for high-cardinality nominal variables but prone to <strong>target leakage</strong> if not done carefully.</p>
+  <pre><span class="cm"># Manual target encoding (compute on training data only)</span>
+target_means = X_train.<span class="fn">groupby</span>(<span class="st">'city'</span>)[<span class="st">'churn'</span>].<span class="fn">mean</span>()
+X_train[<span class="st">'city_encoded'</span>] = X_train[<span class="st">'city'</span>].<span class="fn">map</span>(target_means)
+X_test[<span class="st">'city_encoded'</span>]  = X_test[<span class="st">'city'</span>].<span class="fn">map</span>(target_means)
+<span class="cm"># Handle unseen categories in test set</span>
+X_test[<span class="st">'city_encoded'</span>].<span class="fn">fillna</span>(target_means.<span class="fn">mean</span>(), inplace=<span class="kw">True</span>)
+
+<span class="cm"># Use category_encoders for robust target encoding with smoothing</span>
+<span class="kw">import</span> category_encoders <span class="kw">as</span> ce
+encoder = ce.<span class="cl">TargetEncoder</span>(cols=[<span class="st">'city'</span>], smoothing=<span class="nm">10</span>)
+X_train_enc = encoder.<span class="fn">fit_transform</span>(X_train, y_train)
+X_test_enc  = encoder.<span class="fn">transform</span>(X_test)</pre>
+
+  <h3>Frequency / Count Encoding</h3>
+  <pre><span class="cm"># Replace category with its frequency in training data</span>
+freq_map = X_train[<span class="st">'city'</span>].<span class="fn">value_counts</span>() / len(X_train)
+X_train[<span class="st">'city_freq'</span>] = X_train[<span class="st">'city'</span>].<span class="fn">map</span>(freq_map)
+X_test[<span class="st">'city_freq'</span>]  = X_test[<span class="st">'city'</span>].<span class="fn">map</span>(freq_map).<span class="fn">fillna</span>(<span class="nm">0</span>)</pre>
+
+  <h3>Summary: Encoding Strategy Selection</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Variable Type</th><th>Cardinality</th><th>Recommended Encoding</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Ordinal (ordered categories)</td><td>Any</td><td>Ordinal / Label Encoding</td></tr>
+        <tr><td>Nominal (no order)</td><td>Low (2–15)</td><td>One-Hot Encoding</td></tr>
+        <tr><td>Nominal (no order)</td><td>High (15+)</td><td>Target Encoding, Frequency Encoding</td></tr>
+        <tr><td>Nominal, tree-based model</td><td>Any</td><td>Label Encoding acceptable</td></tr>
+        <tr><td>Binary</td><td>2</td><td>Label Encoding (0/1)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 8 -->
+<section id="feature-engineering">
+  <h2>8. Feature Engineering</h2>
+
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p><strong>Feature Engineering</strong> is the process of using domain knowledge to transform raw data into features that better represent the underlying patterns to a machine learning model, improving its performance. It is often the most impactful step in a machine learning pipeline.</p>
+  </div>
+
+  <h3>Date/Time Feature Extraction</h3>
+  <pre><span class="cm"># Extract multiple time features from a datetime column</span>
+df[<span class="st">'date'</span>] = pd.<span class="fn">to_datetime</span>(df[<span class="st">'date'</span>])
+
+df[<span class="st">'year'</span>]         = df[<span class="st">'date'</span>].dt.year
+df[<span class="st">'month'</span>]        = df[<span class="st">'date'</span>].dt.month
+df[<span class="st">'day_of_week'</span>]  = df[<span class="st">'date'</span>].dt.dayofweek   <span class="cm"># 0=Monday, 6=Sunday</span>
+df[<span class="st">'day_of_year'</span>]  = df[<span class="st">'date'</span>].dt.dayofyear
+df[<span class="st">'quarter'</span>]      = df[<span class="st">'date'</span>].dt.quarter
+df[<span class="st">'is_weekend'</span>]   = (df[<span class="st">'date'</span>].dt.dayofweek >= <span class="nm">5</span>).<span class="fn">astype</span>(<span class="nm">int</span>)
+df[<span class="st">'is_month_end'</span>] = df[<span class="st">'date'</span>].dt.is_month_end.<span class="fn">astype</span>(<span class="nm">int</span>)
+df[<span class="st">'hour'</span>]         = df[<span class="st">'date'</span>].dt.hour  <span class="cm"># if datetime has time component</span>
+
+<span class="cm"># Cyclical encoding for periodic features (hour, month, day-of-week)</span>
+<span class="cm"># Avoids treating hour 23 and hour 0 as distant (they are adjacent!)</span>
+df[<span class="st">'hour_sin'</span>] = np.<span class="fn">sin</span>(<span class="nm">2</span> * np.pi * df[<span class="st">'hour'</span>] / <span class="nm">24</span>)
+df[<span class="st">'hour_cos'</span>] = np.<span class="fn">cos</span>(<span class="nm">2</span> * np.pi * df[<span class="st">'hour'</span>] / <span class="nm">24</span>)
+
+df[<span class="st">'month_sin'</span>] = np.<span class="fn">sin</span>(<span class="nm">2</span> * np.pi * df[<span class="st">'month'</span>] / <span class="nm">12</span>)
+df[<span class="st">'month_cos'</span>] = np.<span class="fn">cos</span>(<span class="nm">2</span> * np.pi * df[<span class="st">'month'</span>] / <span class="nm">12</span>)</pre>
+
+  <h3>Derived & Interaction Features</h3>
+  <pre><span class="cm"># Ratio features</span>
+df[<span class="st">'profit_margin'</span>]    = df[<span class="st">'profit'</span>] / df[<span class="st">'revenue'</span>]
+df[<span class="st">'revenue_per_user'</span>] = df[<span class="st">'revenue'</span>] / df[<span class="st">'active_users'</span>]
+df[<span class="st">'age_income_ratio'</span>] = df[<span class="st">'age'</span>] / (df[<span class="st">'income'</span>] + <span class="nm">1</span>)
+
+<span class="cm"># Difference features</span>
+df[<span class="st">'days_since_last_purchase'</span>] = (pd.<span class="fn">Timestamp</span>.<span class="fn">today</span>() - df[<span class="st">'last_purchase'</span>]).dt.days
+
+<span class="cm"># Interaction terms (for linear models that can't learn them automatically)</span>
+df[<span class="st">'age_x_income'</span>] = df[<span class="st">'age'</span>] * df[<span class="st">'income'</span>]
+
+<span class="cm"># Polynomial features (for linear models)</span>
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> <span class="cl">PolynomialFeatures</span>
+poly = <span class="cl">PolynomialFeatures</span>(degree=<span class="nm">2</span>, include_bias=<span class="kw">False</span>)
+X_poly = poly.<span class="fn">fit_transform</span>(X[[<span class="st">'age'</span>, <span class="st">'income'</span>]])
+<span class="cm"># Creates: age, income, age², income², age×income</span></pre>
+
+  <h3>Binning / Discretization</h3>
+  <pre><span class="cm"># Equal-width binning</span>
+df[<span class="st">'age_group'</span>] = pd.<span class="fn">cut</span>(
+    df[<span class="st">'age'</span>],
+    bins=[<span class="nm">0</span>, <span class="nm">18</span>, <span class="nm">35</span>, <span class="nm">55</span>, <span class="nm">100</span>],
+    labels=[<span class="st">'Teen'</span>, <span class="st">'Young Adult'</span>, <span class="st">'Middle Age'</span>, <span class="st">'Senior'</span>]
+)
+
+<span class="cm"># Equal-frequency binning (quartiles)</span>
+df[<span class="st">'income_quartile'</span>] = pd.<span class="fn">qcut</span>(df[<span class="st">'income'</span>], q=<span class="nm">4</span>, labels=[<span class="st">'Q1'</span>, <span class="st">'Q2'</span>, <span class="st">'Q3'</span>, <span class="st">'Q4'</span>])
+
+<span class="cm"># KBinsDiscretizer for use in sklearn pipelines</span>
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> <span class="cl">KBinsDiscretizer</span>
+kbd = <span class="cl">KBinsDiscretizer</span>(n_bins=<span class="nm">5</span>, encode=<span class="st">'ordinal'</span>, strategy=<span class="st">'quantile'</span>)
+df[<span class="st">'age_binned'</span>] = kbd.<span class="fn">fit_transform</span>(df[[<span class="st">'age'</span>]])</pre>
+
+  <h3>Text Feature Extraction (Basic)</h3>
+  <pre><span class="cm"># Simple text-derived features</span>
+df[<span class="st">'review_length'</span>]    = df[<span class="st">'review'</span>].<span class="fn">str</span>.<span class="fn">len</span>()
+df[<span class="st">'word_count'</span>]       = df[<span class="st">'review'</span>].<span class="fn">str</span>.<span class="fn">split</span>().<span class="fn">str</span>.<span class="fn">len</span>()
+df[<span class="st">'has_exclamation'</span>]  = df[<span class="st">'review'</span>].<span class="fn">str</span>.<span class="fn">contains</span>(<span class="st">'!'</span>).<span class="fn">astype</span>(<span class="nm">int</span>)
+df[<span class="st">'uppercase_ratio'</span>]  = df[<span class="st">'review'</span>].<span class="fn">apply</span>(<span class="kw">lambda</span> x: <span class="fn">sum</span>(<span class="nm">1</span> <span class="kw">for</span> c <span class="kw">in</span> x <span class="kw">if</span> c.<span class="fn">isupper</span>()) / <span class="fn">len</span>(x))
+
+<span class="cm"># TF-IDF (Term Frequency-Inverse Document Frequency)</span>
+<span class="kw">from</span> sklearn.feature_extraction.text <span class="kw">import</span> <span class="cl">TfidfVectorizer</span>
+tfidf = <span class="cl">TfidfVectorizer</span>(max_features=<span class="nm">500</span>, ngram_range=(<span class="nm">1</span>, <span class="nm">2</span>), stop_words=<span class="st">'english'</span>)
+X_text = tfidf.<span class="fn">fit_transform</span>(df[<span class="st">'review'</span>])</pre>
+</section>
+
+<!-- SECTION 9 -->
+<section id="pipeline">
+  <h2>9. Building a Preprocessing Pipeline</h2>
+  <p>Rather than applying each transformation step manually, scikit-learn's <code>Pipeline</code> and <code>ColumnTransformer</code> allow you to chain all preprocessing steps into a single, reproducible object that handles train/test splits cleanly and prevents data leakage.</p>
+
+  <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> sklearn.pipeline <span class="kw">import</span> <span class="cl">Pipeline</span>
+<span class="kw">from</span> sklearn.compose <span class="kw">import</span> <span class="cl">ColumnTransformer</span>
+<span class="kw">from</span> sklearn.impute <span class="kw">import</span> <span class="cl">SimpleImputer</span>
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> <span class="cl">StandardScaler</span>, <span class="cl">OneHotEncoder</span>
+<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> <span class="cl">LogisticRegression</span>
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+
+<span class="cm"># Define feature groups</span>
+numeric_features = [<span class="st">'age'</span>, <span class="st">'income'</span>, <span class="st">'tenure'</span>]
+categorical_features = [<span class="st">'gender'</span>, <span class="st">'city'</span>, <span class="st">'plan_type'</span>]
+
+<span class="cm"># Numeric pipeline: impute → scale</span>
+numeric_transformer = <span class="cl">Pipeline</span>(steps=[
+    (<span class="st">'imputer'</span>, <span class="cl">SimpleImputer</span>(strategy=<span class="st">'median'</span>)),
+    (<span class="st">'scaler'</span>, <span class="cl">StandardScaler</span>())
+])
+
+<span class="cm"># Categorical pipeline: impute → one-hot encode</span>
+categorical_transformer = <span class="cl">Pipeline</span>(steps=[
+    (<span class="st">'imputer'</span>, <span class="cl">SimpleImputer</span>(strategy=<span class="st">'most_frequent'</span>)),
+    (<span class="st">'ohe'</span>, <span class="cl">OneHotEncoder</span>(handle_unknown=<span class="st">'ignore'</span>, drop=<span class="st">'first'</span>))
+])
+
+<span class="cm"># Combine into a single ColumnTransformer</span>
+preprocessor = <span class="cl">ColumnTransformer</span>(transformers=[
+    (<span class="st">'num'</span>, numeric_transformer, numeric_features),
+    (<span class="st">'cat'</span>, categorical_transformer, categorical_features)
+])
+
+<span class="cm"># Full pipeline: preprocess → model</span>
+full_pipeline = <span class="cl">Pipeline</span>(steps=[
+    (<span class="st">'preprocessor'</span>, preprocessor),
+    (<span class="st">'classifier'</span>, <span class="cl">LogisticRegression</span>(random_state=<span class="nm">42</span>))
+])
+
+<span class="cm"># Train/test split</span>
+X_train, X_test, y_train, y_test = <span class="fn">train_test_split</span>(
+    X, y, test_size=<span class="nm">0.2</span>, random_state=<span class="nm">42</span>
+)
+
+<span class="cm"># Fit pipeline on training data — all steps fit on training data only</span>
+full_pipeline.<span class="fn">fit</span>(X_train, y_train)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Accuracy: {full_pipeline.score(X_test, y_test):.3f}"</span>)
+
+<span class="cm"># Save the fitted pipeline (includes fitted scaler + encoder + model)</span>
+<span class="kw">import</span> joblib
+joblib.<span class="fn">dump</span>(full_pipeline, <span class="st">'churn_model_pipeline.pkl'</span>)
+
+<span class="cm"># Load and predict on new data (no need to re-transform manually)</span>
+pipeline_loaded = joblib.<span class="fn">load</span>(<span class="st">'churn_model_pipeline.pkl'</span>)
+predictions = pipeline_loaded.<span class="fn">predict</span>(new_df)</pre>
+
+  <div class="tip">
+    <div class="tip-label">Pipeline Advantages</div>
+    <p>A <code>Pipeline</code> object (1) prevents data leakage by always fitting transformers on training data; (2) enables cross-validation with <code>cross_val_score</code> correctly; (3) is serializable — saved as one object that includes all preprocessing; (4) makes deployment trivial — call <code>.predict()</code> on raw input data.</p>
+  </div>
+</section>
+
+<!-- SECTION 10: QA -->
+<section id="qa" class="qa-section">
+  <h2>Interview Q&A</h2>
+
+  <div class="qa-item">
+    <div class="qa-q">What is the difference between MCAR, MAR, and MNAR missing data? Why does the distinction matter?</div>
+    <div class="qa-a">
+      <p><strong>MCAR (Missing Completely at Random):</strong> The probability of a value being missing is unrelated to any variable — observed or unobserved. The missing data is a random subset of the full data. Listwise deletion is valid; the remaining dataset is still representative.</p>
+      <p><strong>MAR (Missing at Random):</strong> The probability of missingness depends on <em>observed</em> variables, but not on the missing value itself. Example: survey respondents with lower education are less likely to answer income questions — but conditional on education level, income missingness is random. Model-based imputation (KNN, MICE) is appropriate; listwise deletion biases results.</p>
+      <p><strong>MNAR (Missing Not at Random):</strong> The probability of missingness depends on the <em>value itself</em>. Example: patients with very high blood pressure are more likely to skip follow-up measurements. All imputation methods are potentially biased. You must either model the missingness mechanism explicitly or acknowledge the limitation.</p>
+      <p>The distinction matters because applying the wrong strategy introduces systematic bias. Listwise deletion on MAR data produces a non-representative dataset; mean imputation on MNAR data will systematically underestimate or overestimate the missing values.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What is the difference between normalization and standardization? When would you use each?</div>
+    <div class="qa-a">
+      <p><strong>Normalization (Min-Max Scaling)</strong> scales values to a bounded range, typically [0, 1] using the formula x_scaled = (x − min) / (max − min). It preserves the distribution shape but is sensitive to outliers (a single extreme value compresses all other values into a tiny range).</p>
+      <p><strong>Standardization (Z-Score Scaling)</strong> transforms data to mean = 0, standard deviation = 1 using x_std = (x − μ) / σ. It does not bound values to a range, handles outliers better than min-max, and is the correct choice when the algorithm assumes normally distributed inputs.</p>
+      <p><strong>Use normalization when:</strong> the algorithm requires inputs in a specific range (neural networks often use [0,1] or [-1,1]), image pixel values (0–255 → 0–1), or there are no significant outliers.</p>
+      <p><strong>Use standardization when:</strong> using linear regression, logistic regression, SVM, or PCA (assumes zero-mean features); the distribution is approximately normal; there are outliers (they become values beyond ±3 but don't compress the rest of the data).</p>
+      <p><strong>Neither required:</strong> Tree-based models (decision trees, random forests, XGBoost, LightGBM) split on thresholds and are not sensitive to the scale of features.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What is the dummy variable trap and how do you avoid it?</div>
+    <div class="qa-a">
+      <p>The <strong>dummy variable trap</strong> occurs when one-hot encoding creates k binary columns for a k-category variable, and those columns are perfectly linearly dependent — knowing k−1 of them determines the last one (they all sum to 1 for every observation). This causes <strong>perfect multicollinearity</strong>, which makes the design matrix singular and causes the normal equation for linear regression to be unsolvable (or numerically unstable).</p>
+      <p><strong>Example:</strong> Encoding Gender as [Male, Female] creates two columns. For any row, Male + Female = 1. The Male column is entirely determined by Female.</p>
+      <p><strong>Solution:</strong> Drop one category (the "reference" category) using <code>drop_first=True</code> in <code>pd.get_dummies()</code> or <code>drop='first'</code> in <code>OneHotEncoder</code>. The interpretation of coefficients then becomes relative to the dropped (reference) category.</p>
+      <p><strong>Important:</strong> Tree-based models are not affected by multicollinearity and can handle k columns. The trap specifically affects linear models. Regularized linear models (Ridge, Lasso) also mitigate this issue but it is still best practice to drop one column.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What is data leakage in the context of preprocessing? How does a sklearn Pipeline prevent it?</div>
+    <div class="qa-a">
+      <p><strong>Data leakage</strong> (or target leakage) occurs when information from the test set (or future data) contaminates the training process, resulting in overly optimistic performance estimates that do not generalize to real-world deployment.</p>
+      <p>In preprocessing, leakage happens when you fit a scaler or imputer on the entire dataset before splitting: e.g., computing the mean for imputation from all rows (including test rows) means the mean is slightly "informed" by test data. The model appears to perform better in evaluation than it will in production.</p>
+      <p><strong>Incorrect approach:</strong></p>
+      <pre style="margin:8px 0; font-size:0.82rem;"><span class="cm"># WRONG: scaler sees test data during fit</span>
+scaler = <span class="cl">StandardScaler</span>()
+X_scaled = scaler.<span class="fn">fit_transform</span>(X)  <span class="cm"># includes test rows!</span>
+X_train, X_test = X_scaled[:split], X_scaled[split:]</pre>
+      <p><strong>A sklearn Pipeline prevents leakage</strong> because when you call <code>pipeline.fit(X_train, y_train)</code>, each transformer step calls <code>.fit_transform()</code> only on X_train. When you call <code>pipeline.predict(X_test)</code>, it calls <code>.transform()</code> (not <code>.fit_transform()</code>) on X_test — applying the parameters learned from X_train. This is the correct behavior.</p>
+      <p>The same mechanism works with <code>cross_val_score</code>: each fold fits the pipeline on the training portion and transforms the validation portion independently.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">How would you detect and handle outliers in a salary dataset? Walk through your approach.</div>
+    <div class="qa-a">
+      <p><strong>Step 1 — Visualize:</strong> Plot a histogram and box plot of salary. A right-skewed distribution and visible whisker points indicate outliers. Note the scale — are extreme values physically plausible?</p>
+      <p><strong>Step 2 — Quantify using IQR:</strong> Compute Q1, Q3, and IQR. Flag values below Q1 − 1.5×IQR or above Q3 + 1.5×IQR. Report the count and percentage flagged.</p>
+      <p><strong>Step 3 — Domain investigation:</strong> Are the high-salary outliers real (executives, founders) or data entry errors (e.g., $9,999,999 salary)? The treatment depends on domain knowledge:</p>
+      <ul>
+        <li><strong>Data error:</strong> Set to NaN and impute with group-wise median (by department or level)</li>
+        <li><strong>Real extreme value:</strong> Consider whether the analysis should include all employees or only individual contributors (segment first)</li>
+        <li><strong>Predictive modeling context:</strong> Winsorize (cap) at the 95th percentile to limit influence without discarding real data</li>
+        <li><strong>Reporting context:</strong> Keep outliers but report median instead of mean (the median is robust to outliers); report both with a note</li>
+      </ul>
+      <p><strong>Step 4 — Transform if skewed:</strong> Apply log1p transform to reduce the influence of extreme values before using salary as a feature or target in a linear model.</p>
+      <p><strong>Step 5 — Document:</strong> Record what was flagged, what decision was made, and why. Preserve the original column and create a new treated column.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">When would you use target encoding vs. one-hot encoding for a categorical variable?</div>
+    <div class="qa-a">
+      <p><strong>One-Hot Encoding</strong> is the default choice for low-cardinality nominal categorical variables (fewer than ~15 unique categories). It creates interpretable binary columns, does not introduce target information, and is safe from leakage. However, it fails for high-cardinality variables (e.g., city with 500 unique values → 500 new columns, extreme dimensionality increase, most columns near-zero).</p>
+      <p><strong>Target Encoding</strong> replaces each category with the mean (or other aggregate) of the target variable for that category. For a city column with 500 values, it produces a single numeric column. It is powerful because it directly encodes the relationship between the category and the target.</p>
+      <p><strong>When to use target encoding:</strong> high-cardinality nominal variables; tree-based models (they can exploit the encoded signal); when dimensionality is a concern.</p>
+      <p><strong>Risks of target encoding:</strong></p>
+      <ul>
+        <li><strong>Overfitting:</strong> For rare categories, the mean is computed from very few samples and is noisy. Use smoothing: <code>smoothed_mean = (n × category_mean + k × global_mean) / (n + k)</code> where k is a smoothing factor</li>
+        <li><strong>Data leakage:</strong> If computed on the full training set, the encoder for each fold is slightly biased. Use cross-fold target encoding (compute the mean from all folds except the current one) to mitigate this</li>
+      </ul>
+      <p><strong>Bottom line:</strong> Low cardinality → One-Hot. High cardinality + tree-based model → Target Encoding with smoothing and cross-fold computation.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function toggleTheme() {
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+}
+</script>
+</body>
+</html>

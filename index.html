@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analytics Interview Modules</title>
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg-color: #F3F4F6;
+            --sidebar-bg: #1F2937;
+            --text-light: #F9FAFB;
+            --text-dark: #111827;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-color);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            background-color: rgba(0,0,0,0.2);
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .module-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 0;
+            list-style: none;
+        }
+
+        .module-item {
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+            color: #D1D5DB;
+        }
+
+        .module-item:hover {
+            background-color: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .module-item.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left-color: var(--primary);
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .topbar {
+            height: 64px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 10;
+        }
+
+        .module-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button:disabled {
+            background-color: #9CA3AF;
+            cursor: not-allowed;
+        }
+
+        .iframe-container {
+            flex: 1;
+            background-color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .slide-out-left {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        .slide-out-right {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.4s forwards;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.4s forwards;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            Data Analytics
+        </div>
+        <ul class="module-list" id="moduleList">
+            <!-- Populated by JS -->
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="topbar">
+            <div class="module-title" id="moduleTitle">Loading...</div>
+            <div class="controls">
+                <button id="prevBtn" onclick="prevModule()">
+                    &larr; Previous
+                </button>
+                <button id="nextBtn" onclick="nextModule()">
+                    Next &rarr;
+                </button>
+            </div>
+        </div>
+        <div class="iframe-container" id="iframeContainer">
+            <iframe id="viewer" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        const totalModules = 11;
+        let currentModuleIndex = 1;
+        
+        const moduleList = document.getElementById('moduleList');
+        const viewer = document.getElementById('viewer');
+        const moduleTitle = document.getElementById('moduleTitle');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Initialize sidebar
+        for (let i = 1; i <= totalModules; i++) {
+            const li = document.createElement('li');
+            li.className = 'module-item';
+            li.id = `nav-module-${i}`;
+            li.textContent = `Module ${i}`;
+            li.onclick = () => loadModule(i, i > currentModuleIndex ? 'right' : 'left');
+            moduleList.appendChild(li);
+        }
+
+        function loadModule(index, direction = 'none') {
+            const oldIndex = currentModuleIndex;
+            currentModuleIndex = index;
+            
+            // Update active state in sidebar
+            document.querySelectorAll('.module-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`nav-module-${index}`).classList.add('active');
+
+            // Update title
+            moduleTitle.textContent = `Module ${index}`;
+
+            // Update buttons
+            prevBtn.disabled = index === 1;
+            nextBtn.disabled = index === totalModules;
+
+            // Handle transition
+            if (direction !== 'none') {
+                const oldIframe = document.getElementById('viewer');
+                oldIframe.id = 'old-viewer';
+                
+                if (direction === 'right') {
+                    oldIframe.classList.add('slide-out-left');
+                } else {
+                    oldIframe.classList.add('slide-out-right');
+                }
+
+                setTimeout(() => {
+                    oldIframe.remove();
+                }, 400);
+
+                const newIframe = document.createElement('iframe');
+                newIframe.id = 'viewer';
+                newIframe.src = `module${index}.html`;
+                
+                if (direction === 'right') {
+                    newIframe.classList.add('slide-in-right');
+                } else {
+                    newIframe.classList.add('slide-in-left');
+                }
+
+                document.getElementById('iframeContainer').appendChild(newIframe);
+            } else {
+                viewer.src = `module${index}.html`;
+            }
+        }
+
+        function nextModule() {
+            if (currentModuleIndex < totalModules) {
+                loadModule(currentModuleIndex + 1, 'right');
+            }
+        }
+
+        function prevModule() {
+            if (currentModuleIndex > 1) {
+                loadModule(currentModuleIndex - 1, 'left');
+            }
+        }
+
+        // Initial load
+        loadModule(1);
+    </script>
+</body>
+</html>

@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 2 — Statistics & Probability</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F7F8FC; --surface: #FFFFFF; --surface-2: #EFF2FA;
+  --text: #18202F; --text-muted: #5A6585;
+  --accent: #2B5CE6; --accent-light: #EEF3FF; --border: #DDE3F2;
+  --code-bg: #1A1D2E; --code-text: #C9D1F0;
+  --green: #059669; --green-light: #ECFDF5; --green-border: #6EE7B7;
+  --orange: #D97706; --orange-light: #FFFBEB;
+  --purple: #7C3AED; --purple-light: #F5F3FF;
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1218; --surface: #161C28; --surface-2: #1D2538;
+    --text: #E8EBF7; --text-muted: #8A96C2;
+    --accent: #5079F5; --accent-light: #1A2450; --border: #273050;
+    --code-bg: #080C15; --code-text: #C9D1F0;
+    --green-light: #071A10; --green-border: #065F46;
+    --orange-light: #1C1407; --purple-light: #120D28;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1218; --surface: #161C28; --surface-2: #1D2538;
+  --text: #E8EBF7; --text-muted: #8A96C2;
+  --accent: #5079F5; --accent-light: #1A2450; --border: #273050;
+  --code-bg: #080C15; --code-text: #C9D1F0;
+  --green-light: #071A10; --green-border: #065F46;
+  --orange-light: #1C1407; --purple-light: #120D28;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'IBM Plex Sans', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; padding-inline: 24px; padding-block: 48px 100px; }
+.page-wrap { max-width: 860px; margin: 0 auto; }
+.module-header { border-bottom: 2px solid var(--border); padding-bottom: 36px; margin-bottom: 48px; }
+.module-tag { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; margin-bottom: 20px; }
+.module-header h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 700; line-height: 1.18; color: var(--text); text-wrap: balance; margin-bottom: 14px; }
+.module-header .lead { font-size: 18px; color: var(--text-muted); max-width: 65ch; line-height: 1.65; }
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 56px; }
+.toc-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+.toc ol { list-style: decimal; padding-left: 22px; display: flex; flex-direction: column; gap: 7px; }
+.toc a { color: var(--accent); text-decoration: none; font-size: 15px; }
+.toc a:hover { text-decoration: underline; }
+section { margin-bottom: 64px; }
+h2 { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 22px; padding-bottom: 10px; border-bottom: 2px solid var(--accent); text-wrap: balance; display: block; }
+h3 { font-size: 19px; font-weight: 600; color: var(--text); margin-top: 36px; margin-bottom: 12px; text-wrap: balance; }
+h4 { font-size: 15px; font-weight: 600; color: var(--text); margin-top: 24px; margin-bottom: 8px; }
+p { margin-bottom: 16px; max-width: 72ch; }
+.definition { background: var(--accent-light); border-left: 4px solid var(--accent); padding: 16px 20px; border-radius: 0 var(--radius) var(--radius) 0; margin: 22px 0; }
+.def-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.definition p { margin: 0; font-size: 15px; max-width: none; }
+.example { background: var(--green-light); border: 1px solid var(--green-border); border-radius: var(--radius); padding: 20px 24px; margin: 22px 0; }
+.ex-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+.example p, .example li { font-size: 15px; }
+.example ul { margin-bottom: 0; }
+.note { background: var(--orange-light); border-left: 4px solid var(--orange); padding: 14px 20px; border-radius: 0 var(--radius) var(--radius) 0; margin: 22px 0; }
+.note-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+.note p { margin: 0; font-size: 14px; max-width: none; }
+.formula-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin: 20px 0; font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--text); text-align: center; }
+.formula-box .formula-name { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; text-align: left; }
+.formula-box .formula { font-size: 16px; margin: 8px 0; }
+.formula-box .formula-desc { font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; color: var(--text-muted); margin-top: 10px; text-align: left; }
+.table-wrap { overflow-x: auto; margin: 24px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { background: var(--surface-2); font-weight: 600; text-align: left; padding: 11px 16px; border-bottom: 2px solid var(--border); color: var(--text); white-space: nowrap; }
+td { padding: 11px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface-2); }
+.qa-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-top: 32px; }
+.qa-header { background: var(--accent); color: #fff; padding: 14px 22px; font-weight: 700; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+.qa-item { padding: 22px 24px; border-bottom: 1px solid var(--border); }
+.qa-item:last-child { border-bottom: none; }
+.qa-q { font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 10px; display: flex; gap: 10px; align-items: flex-start; }
+.qa-badge { min-width: 22px; height: 22px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; flex-shrink: 0; }
+.qa-a { font-size: 14.5px; color: var(--text-muted); padding-left: 32px; line-height: 1.72; }
+.qa-a strong { color: var(--text); }
+.qa-a ul { margin: 8px 0 0; }
+code { font-family: 'IBM Plex Mono', monospace; font-size: 13px; background: var(--surface-2); border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; }
+pre { background: var(--code-bg); color: var(--code-text); padding: 20px 24px; border-radius: var(--radius); overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.7; margin: 20px 0; }
+ul, ol { padding-left: 22px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+li { max-width: 72ch; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
+.stat-card h4 { margin: 0 0 8px; font-size: 15px; color: var(--accent); }
+.stat-card p { margin: 0; font-size: 13px; color: var(--text-muted); max-width: none; }
+.stat-card .sc-formula { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--text); background: var(--surface-2); padding: 6px 10px; border-radius: 4px; margin-top: 8px; display: block; }
+.dist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 24px 0; }
+.dist-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
+.dist-card h4 { margin: 0 0 6px; font-size: 15px; color: var(--accent); }
+.dist-card p { margin: 0 0 6px; font-size: 13px; color: var(--text-muted); max-width: none; }
+.dist-card .use { font-size: 12px; font-weight: 600; color: var(--green); }
+.hyp-table td:first-child { font-weight: 600; }
+.page-nav { display: flex; justify-content: space-between; align-items: center; padding-top: 40px; border-top: 1px solid var(--border); margin-top: 60px; font-size: 14px; color: var(--text-muted); }
+.page-nav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+@media (max-width: 600px) {
+  body { padding-inline: 16px; }
+  .two-col { grid-template-columns: 1fr; }
+  .dist-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header class="module-header">
+    <div class="module-tag">Module 02 · Data Analytics Interview Packet</div>
+    <h1>Statistics &amp; Probability</h1>
+    <p class="lead">The mathematical backbone of all data analytics. This module covers descriptive statistics, probability theory, distributions, inference, hypothesis testing, correlation, and regression — with worked examples at every step.</p>
+  </header>
+
+  <nav class="toc">
+    <div class="toc-label">Contents</div>
+    <ol>
+      <li><a href="#descriptive">Descriptive Statistics</a></li>
+      <li><a href="#probability">Probability Theory</a></li>
+      <li><a href="#distributions">Probability Distributions</a></li>
+      <li><a href="#clt">Central Limit Theorem</a></li>
+      <li><a href="#inference">Confidence Intervals &amp; Inference</a></li>
+      <li><a href="#hypothesis">Hypothesis Testing</a></li>
+      <li><a href="#correlation">Correlation</a></li>
+      <li><a href="#regression">Regression Analysis</a></li>
+      <li><a href="#interview">Interview Questions</a></li>
+    </ol>
+  </nav>
+
+  <!-- SECTION 1 -->
+  <section id="descriptive">
+    <h2>1. Descriptive Statistics</h2>
+    <p>Descriptive statistics summarize and describe the features of a dataset. They are the first thing any analyst computes when encountering new data. Understanding their properties deeply — not just their formulas — is what separates strong candidates from weak ones.</p>
+
+    <h3>1.1 Measures of Central Tendency</h3>
+
+    <div class="two-col">
+      <div class="stat-card">
+        <h4>Mean (Arithmetic Mean)</h4>
+        <p>The sum of all values divided by the count. The most commonly used measure of center. Sensitive to outliers.</p>
+        <span class="sc-formula">x̄ = (x₁ + x₂ + … + xₙ) / n = Σxᵢ / n</span>
+      </div>
+      <div class="stat-card">
+        <h4>Median</h4>
+        <p>The middle value when data is sorted. If n is even, average the two middle values. Robust to outliers — preferred for skewed distributions (e.g., income, house prices).</p>
+        <span class="sc-formula">Middle value of sorted dataset</span>
+      </div>
+      <div class="stat-card">
+        <h4>Mode</h4>
+        <p>The most frequently occurring value. A dataset can be unimodal, bimodal, or multimodal. The only valid measure of central tendency for nominal data.</p>
+        <span class="sc-formula">Value(s) with highest frequency</span>
+      </div>
+      <div class="stat-card">
+        <h4>Geometric Mean</h4>
+        <p>The nth root of the product of n values. Used for growth rates, ratios, and multiplicative quantities. Always ≤ arithmetic mean.</p>
+        <span class="sc-formula">GM = (x₁ × x₂ × … × xₙ)^(1/n)</span>
+      </div>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Mean vs. Median</div>
+      <p>Dataset: Employee salaries (in ₹ thousands/month): [30, 32, 35, 35, 38, 40, 42, 250]</p>
+      <p><strong>Mean:</strong> (30+32+35+35+38+40+42+250) / 8 = 502 / 8 = <strong>₹62.75K</strong></p>
+      <p><strong>Median:</strong> Sort → [30,32,35,35,38,40,42,250]. n=8 (even) → average of 4th and 5th values = (35+38)/2 = <strong>₹36.5K</strong></p>
+      <p>The CEO earns ₹250K, which inflates the mean to ₹62.75K — a value that misrepresents the typical employee's salary. The median of ₹36.5K is a much more meaningful summary. This is why median income is reported rather than mean income in economic statistics.</p>
+    </div>
+
+    <h3>1.2 Measures of Spread (Variability)</h3>
+
+    <div class="two-col">
+      <div class="stat-card">
+        <h4>Range</h4>
+        <p>Maximum − Minimum. Simplest measure of spread but ignores all intermediate values and is heavily affected by outliers.</p>
+        <span class="sc-formula">Range = x_max − x_min</span>
+      </div>
+      <div class="stat-card">
+        <h4>Variance</h4>
+        <p>Average squared deviation from the mean. Population variance uses N; sample variance uses (n−1) to correct for bias (Bessel's correction). Units are squared.</p>
+        <span class="sc-formula">s² = Σ(xᵢ − x̄)² / (n−1)</span>
+      </div>
+      <div class="stat-card">
+        <h4>Standard Deviation (SD)</h4>
+        <p>Square root of variance — returns to original units. The most interpretable measure of spread. About 68% of normally distributed data falls within ±1 SD of the mean.</p>
+        <span class="sc-formula">s = √[Σ(xᵢ − x̄)² / (n−1)]</span>
+      </div>
+      <div class="stat-card">
+        <h4>IQR (Interquartile Range)</h4>
+        <p>Q3 − Q1. The spread of the middle 50% of the data. Robust to outliers. Used to define the "fence" for outlier detection: [Q1 − 1.5×IQR, Q3 + 1.5×IQR].</p>
+        <span class="sc-formula">IQR = Q3 − Q1</span>
+      </div>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Variance and SD</div>
+      <p>Dataset: [4, 7, 13, 16] &nbsp;&nbsp; n = 4</p>
+      <p><strong>Step 1 — Mean:</strong> x̄ = (4+7+13+16)/4 = 40/4 = 10</p>
+      <p><strong>Step 2 — Squared deviations:</strong></p>
+      <ul>
+        <li>(4−10)² = (−6)² = 36</li>
+        <li>(7−10)² = (−3)² = 9</li>
+        <li>(13−10)² = 3² = 9</li>
+        <li>(16−10)² = 6² = 36</li>
+      </ul>
+      <p><strong>Step 3 — Sample Variance:</strong> s² = (36+9+9+36) / (4−1) = 90/3 = 30</p>
+      <p><strong>Step 4 — Sample SD:</strong> s = √30 ≈ <strong>5.48</strong></p>
+    </div>
+
+    <h3>1.3 Shape of a Distribution</h3>
+
+    <h4>Skewness</h4>
+    <p>Skewness measures the asymmetry of a distribution around its mean.</p>
+    <ul>
+      <li><strong>Positive skew (right-skewed):</strong> The tail extends to the right. Mean &gt; Median &gt; Mode. Common in income distributions, house prices, claim amounts.</li>
+      <li><strong>Negative skew (left-skewed):</strong> The tail extends to the left. Mean &lt; Median &lt; Mode. Common in exam scores when most students do well but a few score very low.</li>
+      <li><strong>Zero skew:</strong> Symmetric distribution. Mean = Median = Mode (exactly, for a perfect normal distribution).</li>
+    </ul>
+
+    <h4>Kurtosis</h4>
+    <p>Kurtosis measures the "tailedness" — how much of the distribution's variance is due to extreme values.</p>
+    <ul>
+      <li><strong>Mesokurtic (kurtosis = 3, excess kurtosis = 0):</strong> Normal distribution — the reference.</li>
+      <li><strong>Leptokurtic (excess kurtosis &gt; 0):</strong> Heavy tails, sharp peak. Extreme values occur more often than in a normal distribution. Common in financial returns.</li>
+      <li><strong>Platykurtic (excess kurtosis &lt; 0):</strong> Light tails, flat peak. Extreme values occur less often than normal.</li>
+    </ul>
+
+    <h3>1.4 Percentiles and Quartiles</h3>
+    <p>The <strong>pth percentile</strong> is the value below which p% of the data falls. Key percentiles:</p>
+    <ul>
+      <li><strong>Q1 (25th percentile):</strong> Lower quartile — 25% of data falls below this value.</li>
+      <li><strong>Q2 (50th percentile):</strong> Median — 50% of data falls below.</li>
+      <li><strong>Q3 (75th percentile):</strong> Upper quartile — 75% of data falls below.</li>
+      <li><strong>P90, P95, P99:</strong> Commonly used in system performance analysis (latency, response times) to characterize tail behaviour.</li>
+    </ul>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — IQR and Outlier Detection</div>
+      <p>API response times (ms): [120, 135, 140, 145, 150, 155, 160, 162, 165, 900]</p>
+      <p><strong>Q1</strong> = 140 ms, <strong>Q3</strong> = 162 ms &nbsp;&nbsp;→&nbsp;&nbsp; <strong>IQR</strong> = 162 − 140 = 22 ms</p>
+      <p><strong>Lower fence:</strong> Q1 − 1.5 × IQR = 140 − 33 = 107 ms</p>
+      <p><strong>Upper fence:</strong> Q3 + 1.5 × IQR = 162 + 33 = 195 ms</p>
+      <p>The 900ms response time exceeds the upper fence → it is flagged as an <strong>outlier</strong>. The IQR method correctly identifies this extreme value even though the other 9 observations are reasonably clustered.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section id="probability">
+    <h2>2. Probability Theory</h2>
+
+    <div class="definition">
+      <div class="def-label">Definition</div>
+      <p><strong>Probability</strong> is a numerical measure of the likelihood that an event will occur, expressed as a number between 0 (impossible) and 1 (certain). If P(A) = 0.7, then event A is expected to occur in 70% of repeated experiments under identical conditions.</p>
+    </div>
+
+    <h3>2.1 Basic Probability Rules</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rule</th><th>Formula</th><th>Condition</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Complement</strong></td><td>P(Aᶜ) = 1 − P(A)</td><td>Always</td></tr>
+          <tr><td><strong>Addition (mutually exclusive)</strong></td><td>P(A ∪ B) = P(A) + P(B)</td><td>A and B cannot both occur</td></tr>
+          <tr><td><strong>Addition (general)</strong></td><td>P(A ∪ B) = P(A) + P(B) − P(A ∩ B)</td><td>A and B may overlap</td></tr>
+          <tr><td><strong>Multiplication (independent)</strong></td><td>P(A ∩ B) = P(A) × P(B)</td><td>A and B do not influence each other</td></tr>
+          <tr><td><strong>Multiplication (general)</strong></td><td>P(A ∩ B) = P(A) × P(B|A)</td><td>A and B may be dependent</td></tr>
+          <tr><td><strong>Conditional Probability</strong></td><td>P(B|A) = P(A ∩ B) / P(A)</td><td>P(A) &gt; 0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>2.2 Conditional Probability</h3>
+    <div class="definition">
+      <div class="def-label">Definition</div>
+      <p><strong>Conditional probability</strong> P(B|A) is the probability that event B occurs <em>given that</em> event A has already occurred. It narrows the sample space from all outcomes to only those outcomes in which A occurred.</p>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Conditional Probability</div>
+      <p>A company has 200 employees: 120 are engineers, 80 are in sales. Of the engineers, 36 are senior-level. Of the sales team, 20 are senior-level.</p>
+      <p><strong>Q: What is the probability that a randomly selected employee is senior-level, given that they are an engineer?</strong></p>
+      <p>P(Senior | Engineer) = P(Senior ∩ Engineer) / P(Engineer) = (36/200) / (120/200) = 36/120 = <strong>0.30 (30%)</strong></p>
+      <p>Of all engineers, 30% are senior. Compare to the overall senior rate: (36+20)/200 = 28%. Engineering has a slightly higher senior rate than the company average.</p>
+    </div>
+
+    <h3>2.3 Bayes' Theorem</h3>
+    <div class="definition">
+      <div class="def-label">Bayes' Theorem</div>
+      <p>P(A|B) = [P(B|A) × P(A)] / P(B)</p>
+      <p style="margin-top:8px; font-size:14px;">Where: P(A) is the <strong>prior</strong> (our belief about A before observing B), P(B|A) is the <strong>likelihood</strong> (probability of observing B if A is true), P(B) is the <strong>marginal likelihood</strong>, and P(A|B) is the <strong>posterior</strong> (updated belief after observing B).</p>
+    </div>
+
+    <p>Bayes' theorem formalizes how we update our beliefs in light of new evidence. It is the theoretical foundation of Bayesian statistics, spam filters, medical diagnostic tests, and many ML algorithms.</p>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Bayes' Theorem (Medical Test)</div>
+      <p>A disease affects 1% of the population. A test for this disease is 99% sensitive (correctly identifies 99% of sick patients) and 95% specific (correctly identifies 95% of healthy patients, i.e., has a 5% false-positive rate).</p>
+      <p><strong>Q: If a patient tests positive, what is the probability they actually have the disease?</strong></p>
+      <p>Let D = "has disease", T+ = "tests positive".</p>
+      <ul>
+        <li>P(D) = 0.01 (prior: disease prevalence)</li>
+        <li>P(T+|D) = 0.99 (sensitivity)</li>
+        <li>P(T+|Dᶜ) = 0.05 (false-positive rate)</li>
+      </ul>
+      <p><strong>P(T+) = P(T+|D)×P(D) + P(T+|Dᶜ)×P(Dᶜ)</strong><br>
+      = 0.99 × 0.01 + 0.05 × 0.99 = 0.0099 + 0.0495 = 0.0594</p>
+      <p><strong>P(D|T+) = P(T+|D) × P(D) / P(T+)</strong><br>
+      = (0.99 × 0.01) / 0.0594 = 0.0099 / 0.0594 ≈ <strong>16.7%</strong></p>
+      <p><strong>Interpretation:</strong> Despite a positive test result from a highly accurate test, there is only a ~17% chance the patient actually has the disease. This is because the disease is rare (1% prior), so most positives are false alarms. This result, which surprises many people, illustrates the base rate fallacy and the crucial importance of prevalence in interpreting diagnostic tests.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section id="distributions">
+    <h2>3. Probability Distributions</h2>
+    <p>A probability distribution describes how likely each possible value of a random variable is. Knowing which distribution governs a dataset tells you which statistical methods apply and how to interpret results.</p>
+
+    <h3>3.1 Discrete Distributions</h3>
+    <p>Used when the variable can take a countable set of values (usually integers).</p>
+
+    <div class="dist-grid">
+      <div class="dist-card">
+        <h4>Bernoulli</h4>
+        <p>Models a single trial with two outcomes: success (probability p) or failure (probability 1−p).</p>
+        <p><strong>Parameters:</strong> p</p>
+        <p><strong>Mean:</strong> p &nbsp;&nbsp; <strong>Variance:</strong> p(1−p)</p>
+        <div class="use">Use: coin flip, click/no-click, purchase/no-purchase</div>
+      </div>
+      <div class="dist-card">
+        <h4>Binomial</h4>
+        <p>Number of successes in n independent Bernoulli trials.</p>
+        <p><strong>Parameters:</strong> n, p</p>
+        <p><strong>PMF:</strong> P(X=k) = C(n,k) × pᵏ × (1−p)ⁿ⁻ᵏ</p>
+        <p><strong>Mean:</strong> np &nbsp;&nbsp; <strong>Variance:</strong> np(1−p)</p>
+        <div class="use">Use: number of defective items in a batch, email click-throughs</div>
+      </div>
+      <div class="dist-card">
+        <h4>Poisson</h4>
+        <p>Number of events in a fixed time/space interval, given a constant average rate.</p>
+        <p><strong>Parameters:</strong> λ (average rate)</p>
+        <p><strong>PMF:</strong> P(X=k) = (e⁻λ × λᵏ) / k!</p>
+        <p><strong>Mean = Variance = λ</strong></p>
+        <div class="use">Use: website requests per minute, calls to a call centre per hour, rare disease cases per year</div>
+      </div>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Binomial</div>
+      <p>A sales team closes 30% of leads. If 10 leads are contacted this week, what is the probability of closing exactly 4?</p>
+      <p>X ~ Binomial(n=10, p=0.3)</p>
+      <p>P(X=4) = C(10,4) × 0.3⁴ × 0.7⁶ = 210 × 0.0081 × 0.117649 = 210 × 0.0009529 ≈ <strong>0.2001 (20.0%)</strong></p>
+      <p>Expected closures: E[X] = np = 10 × 0.3 = <strong>3 per week</strong></p>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Poisson</div>
+      <p>A customer support system receives an average of 8 tickets per hour. What is the probability of receiving exactly 5 tickets in a given hour?</p>
+      <p>X ~ Poisson(λ=8)</p>
+      <p>P(X=5) = (e⁻⁸ × 8⁵) / 5! = (0.000335 × 32768) / 120 = 10.976 / 120 ≈ <strong>0.0916 (9.16%)</strong></p>
+    </div>
+
+    <h3>3.2 Continuous Distributions</h3>
+
+    <div class="dist-grid">
+      <div class="dist-card">
+        <h4>Uniform</h4>
+        <p>Every value in [a, b] is equally likely. Used as a reference or baseline distribution.</p>
+        <p><strong>Mean:</strong> (a+b)/2 &nbsp;&nbsp; <strong>Variance:</strong> (b−a)²/12</p>
+        <div class="use">Use: random number generation, modelling complete uncertainty over a range</div>
+      </div>
+      <div class="dist-card">
+        <h4>Normal (Gaussian)</h4>
+        <p>Bell-shaped, symmetric, defined by μ and σ. The most important distribution in statistics due to the Central Limit Theorem.</p>
+        <p><strong>68-95-99.7 Rule:</strong> 68% within ±1σ, 95% within ±2σ, 99.7% within ±3σ</p>
+        <div class="use">Use: heights, measurement errors, test scores, many ML model assumptions</div>
+      </div>
+      <div class="dist-card">
+        <h4>Exponential</h4>
+        <p>Time between events in a Poisson process. Memoryless property: P(X&gt;s+t|X&gt;s) = P(X&gt;t).</p>
+        <p><strong>Parameters:</strong> λ (rate) &nbsp;&nbsp; <strong>Mean:</strong> 1/λ</p>
+        <div class="use">Use: time between customer arrivals, machine lifetime, time-to-failure</div>
+      </div>
+      <div class="dist-card">
+        <h4>t-Distribution</h4>
+        <p>Like the normal but with heavier tails; shape depends on degrees of freedom (df). As df→∞, t → standard normal. Used when σ is unknown and sample size is small.</p>
+        <div class="use">Use: t-tests, confidence intervals for small samples</div>
+      </div>
+    </div>
+
+    <h3>3.3 The Standard Normal and Z-Scores</h3>
+    <div class="definition">
+      <div class="def-label">Z-Score Formula</div>
+      <p>z = (x − μ) / σ</p>
+      <p style="margin-top:8px;font-size:14px;">A Z-score measures how many standard deviations a value x is from the mean μ. It transforms any normally distributed variable into a standard normal distribution (mean=0, SD=1), enabling probability lookup in standard tables.</p>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Z-Score</div>
+      <p>Exam scores are normally distributed with μ = 70 and σ = 10. What percentage of students scored above 85?</p>
+      <p><strong>Step 1:</strong> z = (85 − 70) / 10 = 1.5</p>
+      <p><strong>Step 2:</strong> From the Z-table: P(Z ≤ 1.5) = 0.9332</p>
+      <p><strong>Step 3:</strong> P(X &gt; 85) = 1 − 0.9332 = <strong>0.0668 (6.68%)</strong></p>
+      <p>About 6.68% of students scored above 85.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section id="clt">
+    <h2>4. The Central Limit Theorem (CLT)</h2>
+
+    <div class="definition">
+      <div class="def-label">Central Limit Theorem</div>
+      <p>If we take sufficiently large random samples (n ≥ 30 is a common rule of thumb) from <em>any</em> population with finite mean μ and finite variance σ², the distribution of the sample mean x̄ will be approximately normally distributed with mean μ and standard error σ/√n — regardless of the shape of the underlying population distribution.</p>
+    </div>
+
+    <p>The CLT is the reason that so many statistical tests assume normality even when working with non-normal data: as long as the sample is large enough, the distribution of the <em>sample statistic</em> (not the raw data) will be approximately normal.</p>
+
+    <h3>Implications of the CLT</h3>
+    <ul>
+      <li>The <strong>standard error</strong> (SE = σ/√n) tells us how much sample means vary across repeated sampling. As n increases, SE decreases — larger samples give more precise estimates of the population mean.</li>
+      <li>We can use normal-distribution probability calculations even when the underlying data is skewed, bimodal, or otherwise non-normal.</li>
+      <li>This underpins the validity of t-tests, z-tests, confidence intervals, and many other procedures.</li>
+    </ul>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — CLT</div>
+      <p>Daily app session duration follows a right-skewed distribution (many short sessions, a few very long ones) with population mean μ = 12 minutes and σ = 8 minutes. If we sample n = 64 users, what is the probability that the sample mean session duration exceeds 14 minutes?</p>
+      <p><strong>Standard Error:</strong> SE = σ/√n = 8/√64 = 8/8 = 1 minute</p>
+      <p>By the CLT, x̄ ~ Normal(μ=12, SE=1)</p>
+      <p><strong>Z-score:</strong> z = (14 − 12) / 1 = 2.0</p>
+      <p><strong>P(x̄ &gt; 14):</strong> 1 − P(Z ≤ 2.0) = 1 − 0.9772 = <strong>0.0228 (2.28%)</strong></p>
+      <p>There is only a 2.28% chance that a random sample of 64 users has a mean session above 14 minutes, even though the distribution is right-skewed. The CLT makes this calculation valid despite the skewness of the underlying data.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 5 -->
+  <section id="inference">
+    <h2>5. Confidence Intervals &amp; Statistical Inference</h2>
+
+    <div class="definition">
+      <div class="def-label">Definition — Confidence Interval</div>
+      <p>A <strong>confidence interval (CI)</strong> is a range of values, derived from sample data, that is expected to contain the true population parameter with a specified probability (the confidence level, e.g., 95%). A 95% CI means: if we repeated the experiment 100 times and built a CI each time, approximately 95 of those intervals would contain the true parameter.</p>
+    </div>
+
+    <div class="note">
+      <div class="note-label">Common Misconception</div>
+      <p>A 95% CI does NOT mean "there is a 95% probability that the true parameter lies in this specific interval." Once the interval is computed, the true parameter either is or is not in it — it's not a probability statement about this specific interval. The 95% refers to the long-run behavior of the procedure across many repetitions.</p>
+    </div>
+
+    <h3>CI Formula for a Population Mean</h3>
+    <div class="formula-box">
+      <div class="formula-name">Confidence Interval (known σ, large n)</div>
+      <div class="formula">CI = x̄ ± z* × (σ / √n)</div>
+      <div class="formula-desc">Where z* is the critical value from the standard normal distribution corresponding to the desired confidence level: z* = 1.645 for 90%, z* = 1.96 for 95%, z* = 2.576 for 99%.</div>
+    </div>
+    <div class="formula-box">
+      <div class="formula-name">Confidence Interval (unknown σ, small n)</div>
+      <div class="formula">CI = x̄ ± t* × (s / √n)</div>
+      <div class="formula-desc">Where t* is the critical value from the t-distribution with (n−1) degrees of freedom. Use this when σ is unknown and n &lt; 30.</div>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Confidence Interval</div>
+      <p>A random sample of 49 customer transactions has a mean value of ₹1,250 and a sample standard deviation of ₹350. Construct a 95% confidence interval for the true mean transaction value.</p>
+      <p><strong>Given:</strong> x̄ = 1250, s = 350, n = 49, confidence level = 95%</p>
+      <p><strong>Standard Error:</strong> SE = s/√n = 350/√49 = 350/7 = 50</p>
+      <p><strong>Critical value:</strong> For 95% CI with n=49 (use t-distribution, df=48), t* ≈ 2.01 (from t-table)</p>
+      <p><strong>Margin of Error:</strong> ME = t* × SE = 2.01 × 50 = ₹100.5</p>
+      <p><strong>95% CI:</strong> [1250 − 100.5, 1250 + 100.5] = <strong>[₹1,149.5, ₹1,350.5]</strong></p>
+      <p><strong>Interpretation:</strong> We are 95% confident that the true mean transaction value lies between ₹1,149.5 and ₹1,350.5.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 6 -->
+  <section id="hypothesis">
+    <h2>6. Hypothesis Testing</h2>
+    <p>Hypothesis testing is a formal procedure for using sample data to evaluate a claim about a population parameter. It is one of the most commonly tested topics in data analytics interviews.</p>
+
+    <h3>6.1 The Framework</h3>
+    <ol>
+      <li><strong>State H₀ (Null Hypothesis):</strong> The default assumption — "nothing is happening," "no effect," "no difference." H₀ always contains an equality (=, ≤, ≥).</li>
+      <li><strong>State H₁ (Alternative Hypothesis):</strong> The claim we are testing for — "there is an effect," "there is a difference." H₁ contains an inequality (&lt;, &gt;, ≠).</li>
+      <li><strong>Choose significance level α:</strong> Common choices are 0.05 (5%) or 0.01 (1%). This is the probability of incorrectly rejecting H₀ that we're willing to accept.</li>
+      <li><strong>Collect data and compute test statistic.</strong></li>
+      <li><strong>Compute p-value:</strong> The probability of observing data at least as extreme as what we observed, assuming H₀ is true.</li>
+      <li><strong>Decision:</strong> If p-value ≤ α, reject H₀. If p-value &gt; α, fail to reject H₀.</li>
+    </ol>
+
+    <h3>6.2 The p-Value — In Depth</h3>
+    <div class="definition">
+      <div class="def-label">Definition</div>
+      <p>The <strong>p-value</strong> is the probability of observing a test statistic as extreme as (or more extreme than) the one computed from the sample, <em>assuming the null hypothesis is true</em>. A small p-value means the observed data would be very unlikely under H₀, providing evidence against H₀.</p>
+    </div>
+
+    <div class="note">
+      <div class="note-label">What the p-value is NOT</div>
+      <p>The p-value is NOT the probability that H₀ is true. It is NOT the probability that the result occurred by chance. It is NOT a measure of practical significance or effect size. These are the three most common misinterpretations, and interviewers actively probe for them.</p>
+    </div>
+
+    <h3>6.3 Type I and Type II Errors</h3>
+    <div class="table-wrap">
+      <table class="hyp-table">
+        <thead>
+          <tr><th></th><th>H₀ is actually TRUE</th><th>H₀ is actually FALSE</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Reject H₀</strong></td>
+            <td style="background:var(--orange-light);color:var(--orange);font-weight:600;">Type I Error (α)<br>False Positive — we concluded there was an effect when there wasn't</td>
+            <td style="background:var(--green-light);color:var(--green);font-weight:600;">Correct (Power = 1−β)<br>True Positive — we correctly detected a real effect</td>
+          </tr>
+          <tr>
+            <td><strong>Fail to reject H₀</strong></td>
+            <td style="background:var(--green-light);color:var(--green);font-weight:600;">Correct (1−α)<br>True Negative — we correctly found no effect</td>
+            <td style="background:var(--orange-light);color:var(--orange);font-weight:600;">Type II Error (β)<br>False Negative — we missed a real effect</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li><strong>α (Type I error rate)</strong> = The significance level. Set before the test. Typically 0.05.</li>
+      <li><strong>β (Type II error rate)</strong> = The probability of failing to detect a real effect. Depends on sample size, effect size, and α.</li>
+      <li><strong>Power (1−β)</strong> = The probability that the test correctly rejects a false H₀. Typically targeted at 0.80 (80%).</li>
+    </ul>
+
+    <h3>6.4 Common Statistical Tests</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Test</th><th>Use Case</th><th>Assumptions</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>One-sample t-test</strong></td>
+            <td>Test whether a sample mean differs from a known/hypothesized value</td>
+            <td>Data is approx. normally distributed; σ unknown</td>
+          </tr>
+          <tr>
+            <td><strong>Two-sample t-test (independent)</strong></td>
+            <td>Compare means of two independent groups</td>
+            <td>Both groups approx. normal; equal or unequal variances (Welch's)</td>
+          </tr>
+          <tr>
+            <td><strong>Paired t-test</strong></td>
+            <td>Compare means before and after a treatment on the same subjects</td>
+            <td>Paired differences are approx. normally distributed</td>
+          </tr>
+          <tr>
+            <td><strong>Chi-square (χ²) test</strong></td>
+            <td>Test association between two categorical variables (goodness of fit or independence)</td>
+            <td>Expected frequencies ≥ 5 in each cell; independent observations</td>
+          </tr>
+          <tr>
+            <td><strong>ANOVA (F-test)</strong></td>
+            <td>Compare means across 3 or more groups simultaneously</td>
+            <td>Groups are independent; normally distributed with equal variances (homoscedasticity)</td>
+          </tr>
+          <tr>
+            <td><strong>z-test</strong></td>
+            <td>Test whether a sample mean differs from μ when σ is known and n is large</td>
+            <td>σ known; n ≥ 30</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Two-Sample t-Test</div>
+      <p>A product team believes that redesigning a checkout button from grey to blue increases purchase completion rate. They run a test: 500 users see the grey button (control), 500 see the blue button (variant). Results: control mean completion = 68.2%, variant mean = 71.4%, pooled SE = 1.82%.</p>
+      <p><strong>H₀:</strong> μ_blue = μ_grey (no difference in completion rate)</p>
+      <p><strong>H₁:</strong> μ_blue ≠ μ_grey (two-tailed test)</p>
+      <p><strong>Test statistic:</strong> t = (71.4 − 68.2) / 1.82 = 3.2 / 1.82 ≈ 1.76</p>
+      <p><strong>p-value</strong> for t = 1.76, df ≈ 998: p ≈ 0.079</p>
+      <p><strong>Decision (α = 0.05):</strong> p = 0.079 &gt; 0.05 → <strong>Fail to reject H₀</strong>. The 3.2 percentage point difference is not statistically significant at the 5% level — we cannot conclude the blue button causes a real improvement with this sample size.</p>
+    </div>
+
+    <h3>6.5 One-Tailed vs. Two-Tailed Tests</h3>
+    <ul>
+      <li><strong>Two-tailed test:</strong> H₁ is "the parameter is different" (either direction). Reject if the test statistic is extreme in either tail. More conservative. Use when you have no prior reason to expect a direction.</li>
+      <li><strong>One-tailed test:</strong> H₁ is "the parameter is larger (or smaller)." More statistical power in the specified direction but cannot detect effects in the opposite direction. Use only when there is a strong theoretical reason to test a specific direction.</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 7 -->
+  <section id="correlation">
+    <h2>7. Correlation</h2>
+
+    <div class="definition">
+      <div class="def-label">Definition</div>
+      <p><strong>Correlation</strong> measures the strength and direction of the linear relationship between two variables. It ranges from −1 (perfect negative linear relationship) through 0 (no linear relationship) to +1 (perfect positive linear relationship).</p>
+    </div>
+
+    <div class="note">
+      <div class="note-label">Fundamental Principle</div>
+      <p><strong>Correlation does not imply causation.</strong> Two variables can be strongly correlated for many reasons: a causal relationship in either direction, a shared common cause (confounding variable), or pure chance (spurious correlation). Establishing causation requires experimental design (randomized controlled trials) or advanced causal inference methods.</p>
+    </div>
+
+    <h3>7.1 Pearson Correlation Coefficient (r)</h3>
+    <p>Measures the linear relationship between two <em>continuous</em> variables. Assumes that both variables are normally distributed and the relationship is linear.</p>
+
+    <div class="formula-box">
+      <div class="formula-name">Pearson r</div>
+      <div class="formula">r = Σ[(xᵢ − x̄)(yᵢ − ȳ)] / [√Σ(xᵢ − x̄)² × √Σ(yᵢ − ȳ)²]</div>
+      <div class="formula-desc">Equivalently: r = Cov(X,Y) / (σ_X × σ_Y). Ranges from −1 to +1.</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>|r| value</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td>0.00 – 0.19</td><td>Negligible / No correlation</td></tr>
+          <tr><td>0.20 – 0.39</td><td>Weak correlation</td></tr>
+          <tr><td>0.40 – 0.59</td><td>Moderate correlation</td></tr>
+          <tr><td>0.60 – 0.79</td><td>Strong correlation</td></tr>
+          <tr><td>0.80 – 1.00</td><td>Very strong correlation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>7.2 Spearman Rank Correlation (ρ)</h3>
+    <p>Measures the monotonic relationship between two variables by computing the Pearson correlation of the <em>ranks</em> of the values rather than the values themselves. Does not assume linearity or normality. Appropriate for ordinal data or when the relationship is monotonic but not linear.</p>
+
+    <div class="formula-box">
+      <div class="formula-name">Spearman ρ (simplified formula for no ties)</div>
+      <div class="formula">ρ = 1 − [6 × Σdᵢ²] / [n × (n² − 1)]</div>
+      <div class="formula-desc">Where dᵢ = rank(xᵢ) − rank(yᵢ) is the difference in ranks for observation i.</div>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Spearman Correlation</div>
+      <p>Five students are ranked on Math and English ability:</p>
+      <div class="table-wrap" style="margin:12px 0;">
+        <table>
+          <thead><tr><th>Student</th><th>Math Rank</th><th>English Rank</th><th>d = M−E</th><th>d²</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>1</td><td>2</td><td>−1</td><td>1</td></tr>
+            <tr><td>B</td><td>2</td><td>1</td><td>1</td><td>1</td></tr>
+            <tr><td>C</td><td>3</td><td>4</td><td>−1</td><td>1</td></tr>
+            <tr><td>D</td><td>4</td><td>3</td><td>1</td><td>1</td></tr>
+            <tr><td>E</td><td>5</td><td>5</td><td>0</td><td>0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Σd² = 4, n = 5</p>
+      <p>ρ = 1 − (6 × 4) / (5 × (25−1)) = 1 − 24/120 = 1 − 0.2 = <strong>0.80</strong></p>
+      <p>A strong positive monotonic relationship: students who rank highly in Math also tend to rank highly in English.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 8 -->
+  <section id="regression">
+    <h2>8. Regression Analysis</h2>
+    <p>Regression analysis models the relationship between a dependent variable (the outcome we want to predict or explain) and one or more independent variables (predictors). It is the workhorse of both descriptive analysis and predictive modelling.</p>
+
+    <h3>8.1 Simple Linear Regression</h3>
+    <div class="definition">
+      <div class="def-label">Model</div>
+      <p>ŷ = β₀ + β₁x + ε</p>
+      <p style="margin-top:8px;font-size:14px;">Where ŷ is the predicted value of y, β₀ is the intercept (value of y when x=0), β₁ is the slope (change in y for a one-unit increase in x), and ε is the error term (residual).</p>
+    </div>
+
+    <h4>Estimating Coefficients (OLS — Ordinary Least Squares)</h4>
+    <p>OLS finds β₀ and β₁ that minimize the sum of squared residuals: SSR = Σ(yᵢ − ŷᵢ)²</p>
+    <div class="formula-box">
+      <div class="formula-name">OLS Estimates</div>
+      <div class="formula">β₁ = Σ[(xᵢ−x̄)(yᵢ−ȳ)] / Σ(xᵢ−x̄)² = Cov(X,Y) / Var(X)</div>
+      <div class="formula" style="margin-top:8px;">β₀ = ȳ − β₁ × x̄</div>
+    </div>
+
+    <h4>Goodness of Fit: R²</h4>
+    <div class="definition">
+      <div class="def-label">R² (Coefficient of Determination)</div>
+      <p>R² = 1 − (SSR / SST) = 1 − [Σ(yᵢ−ŷᵢ)²] / [Σ(yᵢ−ȳ)²]</p>
+      <p style="margin-top:8px;font-size:14px;">R² measures the proportion of variance in y explained by x. R²=0.72 means the model explains 72% of the variance in y; the remaining 28% is unexplained (residual variance). R² ranges from 0 to 1 (and can be negative for very poor models). It does NOT indicate whether the model is correctly specified or whether coefficients are statistically significant.</p>
+    </div>
+
+    <h4>Assumptions of Linear Regression (LINE)</h4>
+    <ul>
+      <li><strong>L — Linearity:</strong> The relationship between x and y is linear.</li>
+      <li><strong>I — Independence:</strong> Observations are independent of each other.</li>
+      <li><strong>N — Normality:</strong> Residuals are normally distributed (important for inference, not for prediction).</li>
+      <li><strong>E — Equal variance (Homoscedasticity):</strong> The variance of residuals is constant across all values of x. If it varies (heteroscedasticity), standard errors are biased.</li>
+    </ul>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Simple Linear Regression</div>
+      <p>Data: advertising spend (₹ lakhs) and monthly revenue (₹ crores) for 5 months:</p>
+      <div class="table-wrap" style="margin:12px 0;">
+        <table>
+          <thead><tr><th>x (Spend)</th><th>y (Revenue)</th><th>x−x̄</th><th>y−ȳ</th><th>(x−x̄)(y−ȳ)</th><th>(x−x̄)²</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>2</td><td>−2</td><td>−2</td><td>4</td><td>4</td></tr>
+            <tr><td>2</td><td>3</td><td>−1</td><td>−1</td><td>1</td><td>1</td></tr>
+            <tr><td>3</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>4</td><td>5</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+            <tr><td>5</td><td>6</td><td>2</td><td>2</td><td>4</td><td>4</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>x̄ = 3, ȳ = 4, Σ(x−x̄)(y−ȳ) = 10, Σ(x−x̄)² = 10</p>
+      <p><strong>β₁ = 10/10 = 1.0</strong> &nbsp;&nbsp;→ For every ₹1 lakh increase in advertising, revenue increases by ₹1 crore (on average).</p>
+      <p><strong>β₀ = 4 − 1.0 × 3 = 1.0</strong></p>
+      <p><strong>Model: ŷ = 1.0 + 1.0x</strong></p>
+      <p>Predicted revenue for a spend of ₹6 lakhs: ŷ = 1.0 + 1.0(6) = <strong>₹7 crores</strong></p>
+    </div>
+
+    <h3>8.2 Logistic Regression</h3>
+    <p>Used when the dependent variable is binary (0/1, Yes/No, True/False). Instead of predicting the raw value, it predicts the <em>probability</em> that the outcome equals 1, using the sigmoid function to keep predictions in [0,1].</p>
+
+    <div class="formula-box">
+      <div class="formula-name">Logistic (Sigmoid) Function</div>
+      <div class="formula">P(y=1|x) = 1 / (1 + e^(−(β₀ + β₁x)))</div>
+      <div class="formula-desc">The log-odds (logit): log[P/(1−P)] = β₀ + β₁x. A one-unit increase in x changes the log-odds by β₁. Interpreting the exponent: e^β₁ is the odds ratio — the multiplicative change in odds for a one-unit increase in x.</div>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Logistic Regression</div>
+      <p>A model predicts customer churn based on number of support calls in the last 30 days. Fitted model: P(churn) = 1 / (1 + e^(−(−2.1 + 0.8 × calls)))</p>
+      <p><strong>For a customer with 3 support calls:</strong></p>
+      <p>Log-odds = −2.1 + 0.8 × 3 = −2.1 + 2.4 = 0.3</p>
+      <p>P(churn) = 1 / (1 + e^(−0.3)) = 1 / (1 + 0.741) = 1 / 1.741 ≈ <strong>0.574 (57.4%)</strong></p>
+      <p>This customer has a 57.4% predicted probability of churning. Using a 0.5 decision threshold, they would be flagged as likely to churn.</p>
+      <p>The odds ratio for "calls": e^0.8 ≈ 2.23. Each additional support call multiplies the odds of churn by 2.23.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 9 — Interview Q&A -->
+  <section id="interview">
+    <h2>9. Interview Questions</h2>
+
+    <div class="qa-section">
+      <div class="qa-header">Statistics &amp; Probability — Q&amp;A</div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the difference between variance and standard deviation? When would you use each?</div>
+        <div class="qa-a">
+          <strong>Variance</strong> is the average squared deviation from the mean: s² = Σ(xᵢ−x̄)²/(n−1). Its units are the square of the original units (e.g., ₹² for revenue data), which makes it hard to interpret directly.<br><br>
+          <strong>Standard deviation</strong> is the square root of variance, returning to the original units (e.g., ₹). It is interpretable alongside the data — "average spread around the mean."<br><br>
+          Use variance in mathematical derivations and proofs (it has nicer algebraic properties — variances of independent variables add directly, standard deviations do not). Use standard deviation when communicating to stakeholders or interpreting spread in context, as the units are meaningful.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the p-value? What does it mean when p = 0.03?</div>
+        <div class="qa-a">
+          The p-value is the probability of obtaining a test statistic as extreme as (or more extreme than) the one computed from the sample data, <em>assuming the null hypothesis is true</em>.<br><br>
+          p = 0.03 means: if H₀ were true, there is only a 3% chance of observing data as extreme as what we observed. Since this is below the conventional threshold of α = 0.05, we reject H₀ and conclude the result is statistically significant at the 5% level.<br><br>
+          <strong>What p = 0.03 does NOT mean:</strong> It does not mean H₀ has a 3% chance of being true. It does not mean the result is practically significant or large in magnitude. Statistical significance and practical significance are separate concepts — a tiny effect can be statistically significant with a large enough sample.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the difference between Type I and Type II errors? Which is worse?</div>
+        <div class="qa-a">
+          A <strong>Type I error (α)</strong> is a false positive: we reject H₀ when it is actually true. Example: concluding a new drug works when it has no real effect.<br><br>
+          A <strong>Type II error (β)</strong> is a false negative: we fail to reject H₀ when it is actually false. Example: concluding a new drug has no effect when it actually does.<br><br>
+          <strong>Which is worse depends entirely on context:</strong> In drug trials, a Type I error means approving an ineffective (or dangerous) drug — potentially very harmful; Type I errors are therefore controlled very tightly (α = 0.01 or 0.001). In cancer screening, a Type II error means missing a cancer case — the consequences of false negatives are severe, so tests are designed to minimize β even at the cost of more false positives (which are resolved by follow-up testing). There is always a tradeoff: reducing α (Type I) increases β (Type II) for a fixed sample size. The only way to reduce both simultaneously is to increase sample size.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>When would you use a t-test vs. a z-test?</div>
+        <div class="qa-a">
+          Use a <strong>z-test</strong> when the population standard deviation (σ) is known and the sample size is large (n ≥ 30). In practice, σ is rarely known, so z-tests are most common in textbook examples or when working with proportions from large samples.<br><br>
+          Use a <strong>t-test</strong> when σ is unknown (the typical case) and you are estimating it from the sample standard deviation (s). The t-distribution has heavier tails than the normal to account for the added uncertainty of estimating σ. As n increases, the t-distribution converges to the normal, so for large n the distinction becomes negligible. The t-test is the standard choice for most real-world mean comparisons.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the Central Limit Theorem and why is it important?</div>
+        <div class="qa-a">
+          The CLT states that the sampling distribution of the sample mean x̄ approaches a normal distribution with mean μ and standard error σ/√n as n increases, regardless of the shape of the underlying population distribution.<br><br>
+          Its importance is profound: virtually all classical statistical inference (confidence intervals, t-tests, z-tests, regression) relies on normality assumptions — but not on the raw data being normally distributed. The CLT guarantees that <em>sample statistics</em> are approximately normally distributed for large samples, making these methods valid even when the underlying data is skewed, bimodal, or otherwise non-normal. Without the CLT, classical inference would be restricted to populations that are normally distributed, which would cover very few real-world phenomena.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is R² and what are its limitations?</div>
+        <div class="qa-a">
+          R² (coefficient of determination) measures the proportion of variance in the dependent variable explained by the model. R² = 0.82 means the model accounts for 82% of the variability in y; the remaining 18% is unexplained.<br><br>
+          <strong>Limitations:</strong><ul>
+            <li><strong>R² always increases (or stays the same) when predictors are added</strong> — even useless ones. This inflates R² in models with many predictors. Adjusted R² (which penalizes for number of predictors) is a fairer comparison.</li>
+            <li>A high R² does not mean the model is well-specified or that the assumptions are met.</li>
+            <li>A high R² does not establish causation.</li>
+            <li>R² can be misleading for non-linear relationships — a perfectly curved dataset can have R²=0 for a linear fit even though the relationship is deterministic.</li>
+            <li>For prediction tasks, out-of-sample metrics (cross-validated RMSE, MAE) are more relevant than in-sample R².</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>Explain the concept of statistical power.</div>
+        <div class="qa-a">
+          <strong>Statistical power</strong> is the probability that a test will correctly reject H₀ when H₀ is false — i.e., the probability of detecting a real effect when one exists. Power = 1 − β (where β is the Type II error rate).<br><br>
+          Power is affected by four factors: <strong>(1) Sample size n</strong> — more data means more power (the most controllable factor); <strong>(2) Effect size</strong> — larger real effects are easier to detect; <strong>(3) Significance level α</strong> — a higher α gives more power but at the cost of more Type I errors; <strong>(4) Variability in the data</strong> — higher variance means lower power.<br><br>
+          The standard target for power is <strong>80% (0.80)</strong> — meaning if there is a real effect of the specified size, the test has an 80% chance of detecting it. In practice, a power analysis (conducted before the study) determines the required sample size to achieve target power.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>A normally distributed dataset has mean 100 and standard deviation 15. What percentage of values fall between 70 and 130?</div>
+        <div class="qa-a">
+          <strong>Step 1:</strong> Compute Z-scores for both bounds.<br>
+          Z for 70: z = (70−100)/15 = −2.0<br>
+          Z for 130: z = (130−100)/15 = +2.0<br><br>
+          <strong>Step 2:</strong> Look up probabilities.<br>
+          P(Z ≤ 2.0) = 0.9772; P(Z ≤ −2.0) = 0.0228<br><br>
+          <strong>Step 3:</strong> P(70 ≤ X ≤ 130) = 0.9772 − 0.0228 = <strong>0.9544 ≈ 95.44%</strong><br><br>
+          This is the "2-sigma rule" — approximately 95% of a normal distribution falls within ±2 standard deviations of the mean (exact figure: 95.44%).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="page-nav">
+    <a href="#">← Module 1: Foundations</a>
+    <a href="#">Module 3: SQL →</a>
+  </nav>
+
+</div>
+</body>
+</html>

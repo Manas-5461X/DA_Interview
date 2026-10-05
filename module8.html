@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 8: A/B Testing & Experimentation — Data Analytics Interview Packet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F7F8FC; --surface: #FFFFFF; --surface-2: #EFF2FA;
+  --text: #18202F; --text-muted: #5A6585;
+  --accent: #2B5CE6; --accent-light: #EEF3FF; --border: #DDE3F2;
+  --code-bg: #1A1D2E; --code-text: #C9D1F0;
+  --green: #059669; --green-light: #ECFDF5;
+  --orange: #D97706; --orange-light: #FFFBEB;
+  --red: #DC2626; --red-light: #FEF2F2;
+  --purple: #7C3AED; --purple-light: #F5F3FF;
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1117; --surface: #1A1D2E; --surface-2: #222639;
+    --text: #E8EAF6; --text-muted: #8892B0;
+    --accent: #5B8AF0; --accent-light: #1A2140; --border: #2E3356;
+    --code-bg: #0D0F1A; --code-text: #C9D1F0;
+    --green: #34D399; --green-light: #064E3B;
+    --orange: #FBBF24; --orange-light: #451A03;
+    --red: #F87171; --red-light: #450A0A;
+    --purple: #A78BFA; --purple-light: #2E1065;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1117; --surface: #1A1D2E; --surface-2: #222639;
+  --text: #E8EAF6; --text-muted: #8892B0;
+  --accent: #5B8AF0; --accent-light: #1A2140; --border: #2E3356;
+  --code-bg: #0D0F1A; --code-text: #C9D1F0;
+  --green: #34D399; --green-light: #064E3B;
+  --orange: #FBBF24; --orange-light: #451A03;
+  --red: #F87171; --red-light: #450A0A;
+  --purple: #A78BFA; --purple-light: #2E1065;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'IBM Plex Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px; padding-inline: 16px; padding-block: 40px; }
+.container { max-width: 860px; margin-inline: auto; }
+.module-header { background: var(--accent); color: #fff; border-radius: 12px; padding: 40px 48px; margin-bottom: 48px; position: relative; overflow: hidden; }
+.module-header::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%); }
+.module-tag { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; margin-bottom: 12px; }
+.module-header h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.2; margin-bottom: 12px; text-wrap: balance; }
+.module-header p { font-size: 1rem; opacity: 0.85; max-width: 580px; line-height: 1.6; }
+.theme-toggle { position: fixed; top: 20px; right: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 50%; width: 40px; height: 40px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 48px; }
+.toc h2 { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+.toc ol { padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.toc a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+.toc a:hover { text-decoration: underline; }
+section { margin-bottom: 56px; }
+h2 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); text-wrap: balance; }
+h3 { font-size: 1.15rem; font-weight: 600; color: var(--text); margin-top: 28px; margin-bottom: 12px; }
+h4 { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-top: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+p { margin-bottom: 14px; }
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { margin-bottom: 6px; line-height: 1.6; }
+.definition { background: var(--accent-light); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.definition .def-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.definition p { margin: 0; font-size: 0.97rem; }
+.example { background: var(--green-light); border-left: 4px solid var(--green); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.example .ex-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 6px; }
+.example p, .example li { font-size: 0.95rem; }
+.note { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.note .note-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+.note p { margin: 0; font-size: 0.95rem; }
+.warning { background: var(--red-light); border-left: 4px solid var(--red); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.warning .warn-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+.warning p { margin: 0; font-size: 0.95rem; }
+.tip { background: var(--purple-light); border-left: 4px solid var(--purple); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.tip .tip-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--purple); margin-bottom: 6px; }
+.tip p { margin: 0; font-size: 0.95rem; }
+pre { background: var(--code-bg); border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 16px 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; line-height: 1.65; color: var(--code-text); }
+code { font-family: 'IBM Plex Mono', monospace; font-size: 0.875em; background: var(--surface-2); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
+pre code { background: none; padding: 0; font-size: inherit; color: inherit; border-radius: 0; }
+.kw { color: #82AAFF; } .fn { color: #C3E88D; } .st { color: #F78C6C; } .cm { color: #546E7A; font-style: italic; } .cl { color: #FFCB6B; } .nm { color: #F07178; }
+.table-wrap { overflow-x: auto; margin: 20px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th { background: var(--surface-2); color: var(--text); font-weight: 600; text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+tr:nth-child(even) td { background: var(--surface-2); }
+.formula-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin: 20px 0; }
+.formula-box .formula-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+.formula-box .formula { color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 0.98rem; font-weight: 500; line-height: 1.9; }
+.step-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin: 12px 0; display: flex; gap: 16px; align-items: flex-start; }
+.step-num { width: 36px; height: 36px; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; }
+.step-content h4 { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 4px; text-transform: none; letter-spacing: 0; }
+.step-content p { font-size: 0.92rem; color: var(--text-muted); margin: 0; }
+.pitfall-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--red); border-radius: 0 var(--radius) var(--radius) 0; padding: 20px 24px; margin: 14px 0; }
+.pitfall-card h4 { font-size: 1rem; font-weight: 700; color: var(--red); margin-bottom: 6px; text-transform: none; letter-spacing: 0; }
+.pitfall-card p { font-size: 0.92rem; margin: 0; }
+.qa-section { margin-top: 40px; }
+.qa-section h2 { color: var(--accent); }
+.qa-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 20px; overflow: hidden; }
+.qa-q { background: var(--accent-light); padding: 14px 20px; font-weight: 600; font-size: 0.97rem; color: var(--accent); display: flex; gap: 10px; align-items: flex-start; }
+.qa-q::before { content: 'Q'; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; flex-shrink: 0; margin-top: 1px; }
+.qa-a { padding: 16px 20px; font-size: 0.95rem; line-height: 1.7; }
+.qa-a p:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+<div class="container">
+
+<div class="module-header">
+  <div class="module-tag">Module 08 · Data Analytics Interview Packet</div>
+  <h1>A/B Testing & Experimentation</h1>
+  <p>The rigorous framework for causal inference in product and business decisions — experimental design, statistical power, sample size calculation, and common pitfalls like p-hacking, novelty effects, and Simpson's Paradox.</p>
+</div>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#fundamentals">Why A/B Testing? Correlation vs. Causation</a></li>
+    <li><a href="#framework">The A/B Testing Framework</a></li>
+    <li><a href="#hypothesis">Hypothesis Testing in A/B Tests</a></li>
+    <li><a href="#sample-size">Statistical Power & Sample Size</a></li>
+    <li><a href="#statistical-tests">Choosing the Right Statistical Test</a></li>
+    <li><a href="#analysis">Running the Analysis in Python</a></li>
+    <li><a href="#pitfalls">Common Pitfalls & How to Avoid Them</a></li>
+    <li><a href="#simpsons">Simpson's Paradox</a></li>
+    <li><a href="#bayesian">Bayesian A/B Testing (Overview)</a></li>
+    <li><a href="#qa">Interview Q&A</a></li>
+  </ol>
+</nav>
+
+<!-- SECTION 1 -->
+<section id="fundamentals">
+  <h2>1. Why A/B Testing? Correlation vs. Causation</h2>
+  <p>Observational analysis can identify correlations, but it cannot establish causality. Without a controlled experiment, confounders — variables that affect both the treatment assignment and the outcome — make it impossible to attribute an effect to a specific change.</p>
+
+  <div class="example">
+    <div class="ex-label">Motivating Example</div>
+    <p>An analyst observes that users who use the mobile app's dark mode have 40% higher retention than light mode users. Can we conclude that enabling dark mode increases retention?</p>
+    <p><strong>No.</strong> Dark mode users are a self-selected group — they are likely more engaged, tech-savvy, or power users to begin with. The higher retention may be entirely due to these pre-existing differences (confounders), not the dark mode feature itself. If we roll out forced dark mode to all users, retention may not change at all.</p>
+    <p><strong>Only a randomized controlled experiment</strong> — randomly assigning some users to dark mode and others to light mode — allows us to attribute any difference in retention to the treatment (dark mode), because randomization balances all confounders (both observed and unobserved) between groups.</p>
+  </div>
+
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p>An <strong>A/B Test</strong> (also called a randomized controlled trial or split test) is an experiment in which users are randomly assigned to one of two or more groups: the <strong>control</strong> group (A, the current experience) and the <strong>treatment</strong> group (B, the new experience). The difference in outcomes between groups is measured and subjected to statistical hypothesis testing to determine whether the effect is real or could be due to chance.</p>
+  </div>
+</section>
+
+<!-- SECTION 2 -->
+<section id="framework">
+  <h2>2. The A/B Testing Framework</h2>
+
+  <div class="step-card">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h4>Define the Hypothesis</h4>
+      <p>State a clear, falsifiable hypothesis before the experiment. "Changing the checkout button from blue to green will increase the purchase conversion rate." Define the null (H₀: no effect) and alternative (H₁: there is an effect).</p>
+    </div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h4>Define the Primary Metric</h4>
+      <p>Choose ONE primary metric (the OEC — Overall Evaluation Criterion). Be specific: not "engagement" but "7-day purchase rate per user". Also define guardrail metrics — secondary metrics that should not regress (e.g., page load time, error rate).</p>
+    </div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h4>Define Significance Level (α) and Power (1−β)</h4>
+      <p>Choose α (typical: 0.05) and power (typical: 0.8 or 0.9) before running the experiment. These drive the sample size calculation.</p>
+    </div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">4</div>
+    <div class="step-content">
+      <h4>Calculate Required Sample Size</h4>
+      <p>Use baseline rate, minimum detectable effect (MDE), α, and power to determine how many users per group are needed. Run the experiment for at least this duration.</p>
+    </div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">5</div>
+    <div class="step-content">
+      <h4>Randomize & Run the Experiment</h4>
+      <p>Randomly assign users to control or treatment. Check SRM (Sample Ratio Mismatch) immediately — the ratio of users in each group should match the intended split. Collect data for the full planned duration.</p>
+    </div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">6</div>
+    <div class="step-content">
+      <h4>Analyze Results</h4>
+      <p>Run the appropriate statistical test. Report: effect size (absolute and relative lift), p-value, and confidence interval. Do NOT just report "statistically significant" — report the magnitude.</p>
+    </div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">7</div>
+    <div class="step-content">
+      <h4>Decide & Document</h4>
+      <p>Make a ship/no-ship decision based on statistical significance AND practical significance (is the effect large enough to matter?). Document the experiment, its results, and the decision rationale for institutional knowledge.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3 -->
+<section id="hypothesis">
+  <h2>3. Hypothesis Testing in A/B Tests</h2>
+
+  <h3>Null and Alternative Hypotheses</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Hypothesis</th><th>Symbol</th><th>Statement</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Null Hypothesis</strong></td><td>H₀</td><td>There is no difference between control and treatment. Any observed difference is due to random chance. H₀: μ_treatment = μ_control (or p_treatment = p_control)</td></tr>
+        <tr><td><strong>Alternative Hypothesis</strong></td><td>H₁</td><td>There is a real difference. H₁: μ_treatment ≠ μ_control (two-tailed) or μ_treatment > μ_control (one-tailed)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The Four Decision Outcomes</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th></th><th>H₀ is True (No Real Effect)</th><th>H₁ is True (Real Effect Exists)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Reject H₀</strong></td>
+          <td style="background:var(--red-light);"><strong>Type I Error (α)</strong><br>False Positive. We conclude there is an effect when there is none. Rate = α (significance level)</td>
+          <td style="background:var(--green-light);"><strong>Correct Detection ✓</strong><br>True Positive. Power = 1−β. We correctly detect a real effect.</td>
+        </tr>
+        <tr>
+          <td><strong>Fail to Reject H₀</strong></td>
+          <td style="background:var(--green-light);"><strong>Correct Retention ✓</strong><br>True Negative. Correctly conclude no effect.</td>
+          <td style="background:var(--orange-light);"><strong>Type II Error (β)</strong><br>False Negative. We miss a real effect. Rate = β. Power = 1−β.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Key Concepts</h3>
+
+  <div class="definition">
+    <div class="def-label">P-Value</div>
+    <p>The <strong>p-value</strong> is the probability of observing a test statistic as extreme as (or more extreme than) the one calculated, <em>assuming the null hypothesis is true</em>. A small p-value (e.g., p &lt; 0.05) means the observed data would be very unlikely if there were no real effect. It does NOT mean there is a 95% probability that your hypothesis is correct.</p>
+  </div>
+
+  <div class="definition">
+    <div class="def-label">Significance Level (α)</div>
+    <p>The <strong>significance level α</strong> is the pre-specified threshold for rejecting the null hypothesis. α = 0.05 means: if the null hypothesis is true, we accept a 5% probability of incorrectly rejecting it (Type I error rate). α must be chosen BEFORE seeing the data — changing it after looking at results is p-hacking.</p>
+  </div>
+
+  <div class="definition">
+    <div class="def-label">Statistical Power (1−β)</div>
+    <p><strong>Power</strong> is the probability that the test correctly detects a real effect of a given size. Power = 1 − β, where β is the Type II error rate. Conventionally, power = 0.8 (80%) is the minimum — meaning a 20% chance of missing a real effect. Higher power requires larger sample size.</p>
+  </div>
+
+  <div class="definition">
+    <div class="def-label">Effect Size (MDE)</div>
+    <p>The <strong>Minimum Detectable Effect (MDE)</strong> is the smallest effect size that the experiment is designed to detect with the given power and significance level. If you need to detect a 2% lift in conversion rate and you only have a small sample, you may lack the power to detect it.</p>
+  </div>
+
+  <h3>One-Tailed vs Two-Tailed Tests</h3>
+  <p>A <strong>two-tailed test</strong> tests whether the treatment differs from control in either direction (better or worse). Use this as the default — you want to detect regressions too, not just improvements. A <strong>one-tailed test</strong> tests only one direction (e.g., treatment &gt; control). It has more power to detect effects in that direction, but it assumes you only care about improvements and are willing to ignore regressions. One-tailed tests are rarely appropriate in practice.</p>
+</section>
+
+<!-- SECTION 4 -->
+<section id="sample-size">
+  <h2>4. Statistical Power & Sample Size</h2>
+
+  <div class="formula-box">
+    <div class="formula-title">Sample Size Formula for Proportions (Two-Sided)</div>
+    <div class="formula">
+      n = (z_{α/2} + z_β)² × [p₁(1−p₁) + p₂(1−p₂)] / (p₁ − p₂)²<br><br>
+      For standard α=0.05, power=0.80:<br>
+      z_{α/2} = z_{0.025} = 1.96<br>
+      z_β     = z_{0.20}  = 0.84<br>
+      (z_{α/2} + z_β)² ≈ 7.85<br><br>
+      Simplified (equal variance approximation):<br>
+      n ≈ 16 × σ² / δ²   (for means)<br>
+      n ≈ 16 × p(1−p) / δ²   (for proportions)<br>
+      where δ = p₂ − p₁ (MDE)
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="ex-label">Worked Example: E-Commerce Checkout</div>
+    <p><strong>Setup:</strong> Current checkout conversion rate (control): p₁ = 5.0%. We want to detect an improvement to p₂ = 5.5% (MDE = 0.5 percentage points = 10% relative lift). α = 0.05, Power = 0.80.</p>
+    <p><strong>Calculation:</strong><br>
+    n ≈ 16 × 0.05 × 0.95 / (0.005)²<br>
+    n ≈ 16 × 0.0475 / 0.000025<br>
+    n ≈ 30,400 users per group → ~60,800 total users needed.</p>
+    <p><strong>Duration estimate:</strong> If you get 5,000 daily visitors and split 50/50, each group gets 2,500/day. Duration = 30,400 / 2,500 ≈ 12.2 days. Run for at least 2 full weeks (to capture weekly seasonality).</p>
+    <p><strong>Insight:</strong> Smaller MDE = larger required sample size. If you want to detect a 0.1 percentage point lift, you would need ~100× more users.</p>
+  </div>
+
+  <pre><span class="kw">from</span> statsmodels.stats.power <span class="kw">import</span> <span class="cl">NormalIndPower</span>, <span class="cl">TTestIndPower</span>
+<span class="kw">from</span> statsmodels.stats.proportion <span class="kw">import</span> proportion_effectsize
+<span class="kw">import</span> scipy.stats <span class="kw">as</span> stats
+
+<span class="cm"># ── SAMPLE SIZE FOR PROPORTIONS ─────────────────────────</span>
+p_control   = <span class="nm">0.05</span>   <span class="cm"># baseline conversion rate</span>
+p_treatment = <span class="nm">0.055</span>  <span class="cm"># target conversion rate (MDE)</span>
+alpha       = <span class="nm">0.05</span>
+power       = <span class="nm">0.80</span>
+
+<span class="cm"># Effect size (Cohen's h for proportions)</span>
+effect_size = <span class="fn">proportion_effectsize</span>(p_treatment, p_control)
+
+analysis = <span class="cl">NormalIndPower</span>()
+n_per_group = analysis.<span class="fn">solve_power</span>(
+    effect_size=effect_size,
+    alpha=alpha,
+    power=power,
+    alternative=<span class="st">'two-sided'</span>
+)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Sample size per group: {n_per_group:.0f}"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Total: {2 * n_per_group:.0f}"</span>)
+
+<span class="cm"># ── SAMPLE SIZE FOR MEANS (continuous metric) ─────────────</span>
+baseline_mean = <span class="nm">120</span>   <span class="cm"># e.g., average order value in $</span>
+std_dev       = <span class="nm">45</span>    <span class="cm"># standard deviation of AOV</span>
+mde_absolute  = <span class="nm">5</span>     <span class="cm"># want to detect $5 lift</span>
+
+effect_size_d = mde_absolute / std_dev  <span class="cm"># Cohen's d</span>
+t_analysis = <span class="cl">TTestIndPower</span>()
+n_per_group_t = t_analysis.<span class="fn">solve_power</span>(
+    effect_size=effect_size_d,
+    alpha=alpha,
+    power=power,
+    alternative=<span class="st">'two-sided'</span>
+)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Sample size per group (AOV): {n_per_group_t:.0f}"</span>)
+
+<span class="cm"># ── POWER GIVEN SAMPLE SIZE ────────────────────────────────</span>
+<span class="cm"># If you only have n=5000 per group, what's your power?</span>
+achieved_power = t_analysis.<span class="fn">solve_power</span>(
+    effect_size=effect_size_d,
+    alpha=alpha,
+    nobs1=<span class="nm">5000</span>,
+    alternative=<span class="st">'two-sided'</span>
+)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Power with n=5000 per group: {achieved_power:.3f}"</span>)</pre>
+</section>
+
+<!-- SECTION 5 -->
+<section id="statistical-tests">
+  <h2>5. Choosing the Right Statistical Test</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Metric Type</th><th>Test</th><th>When to Use</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Binary (conversion rate, click rate)</td>
+          <td><strong>Two-Proportion Z-Test</strong></td>
+          <td>Large samples (n &gt; 30); comparing p₁ vs p₂</td>
+        </tr>
+        <tr>
+          <td>Binary with small samples</td>
+          <td><strong>Fisher's Exact Test</strong></td>
+          <td>Small cell counts; exact p-value</td>
+        </tr>
+        <tr>
+          <td>Continuous (average order value, revenue, time)</td>
+          <td><strong>Two-Sample t-Test (Welch)</strong></td>
+          <td>Normal or large samples; does not assume equal variance</td>
+        </tr>
+        <tr>
+          <td>Continuous with non-normal distribution</td>
+          <td><strong>Mann-Whitney U Test</strong></td>
+          <td>Ordinal or skewed continuous data; non-parametric</td>
+        </tr>
+        <tr>
+          <td>Multiple variants (&gt;2 groups)</td>
+          <td><strong>ANOVA + post-hoc tests</strong></td>
+          <td>Compare 3+ groups; use Bonferroni or Tukey for pairwise</td>
+        </tr>
+        <tr>
+          <td>Count data / ratios</td>
+          <td><strong>Chi-Square Test</strong></td>
+          <td>Categorical outcomes; contingency tables</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 6 -->
+<section id="analysis">
+  <h2>6. Running the Analysis in Python</h2>
+
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">from</span> scipy <span class="kw">import</span> stats
+
+<span class="cm"># === BINARY METRIC: CONVERSION RATE ===</span>
+<span class="cm"># Observed data</span>
+n_control   = <span class="nm">12500</span>
+n_treatment = <span class="nm">12300</span>
+conv_control   = <span class="nm">625</span>   <span class="cm"># conversions in control</span>
+conv_treatment = <span class="nm">680</span>   <span class="cm"># conversions in treatment</span>
+
+p_ctrl  = conv_control   / n_control    <span class="cm"># 0.0500 = 5.00%</span>
+p_treat = conv_treatment / n_treatment  <span class="cm"># 0.0553 = 5.53%</span>
+abs_lift = p_treat - p_ctrl             <span class="cm"># 0.0053 = 0.53 pp</span>
+rel_lift = abs_lift / p_ctrl            <span class="cm"># 10.6% relative lift</span>
+
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Control rate:   {p_ctrl:.4f} ({p_ctrl*100:.2f}%)"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Treatment rate: {p_treat:.4f} ({p_treat*100:.2f}%)"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Absolute lift: +{abs_lift*100:.3f} pp"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Relative lift: +{rel_lift*100:.1f}%"</span>)
+
+<span class="cm"># Two-proportion Z-test</span>
+<span class="kw">from</span> statsmodels.stats.proportion <span class="kw">import</span> proportions_ztest
+count = np.<span class="fn">array</span>([conv_treatment, conv_control])
+nobs  = np.<span class="fn">array</span>([n_treatment, n_control])
+z_stat, p_value = <span class="fn">proportions_ztest</span>(count, nobs, alternative=<span class="st">'two-sided'</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Z-statistic: {z_stat:.4f}"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"P-value: {p_value:.4f}"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Statistically significant (α=0.05): {p_value < 0.05}"</span>)
+
+<span class="cm"># 95% Confidence Interval for the difference</span>
+p_pool = (conv_control + conv_treatment) / (n_control + n_treatment)
+se_diff = np.<span class="fn">sqrt</span>(p_ctrl*(1-p_ctrl)/n_control + p_treat*(1-p_treat)/n_treatment)
+ci_lower = abs_lift - <span class="nm">1.96</span> * se_diff
+ci_upper = abs_lift + <span class="nm">1.96</span> * se_diff
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"95% CI for lift: [{ci_lower*100:.3f}%, {ci_upper*100:.3f}%]"</span>)
+
+<span class="cm"># === CONTINUOUS METRIC: AVERAGE ORDER VALUE ===</span>
+<span class="cm"># Simulate data</span>
+np.random.<span class="fn">seed</span>(<span class="nm">42</span>)
+aov_control   = np.random.<span class="fn">lognormal</span>(mean=<span class="nm">4.5</span>, sigma=<span class="nm">0.8</span>, size=<span class="nm">5000</span>)
+aov_treatment = np.random.<span class="fn">lognormal</span>(mean=<span class="nm">4.6</span>, sigma=<span class="nm">0.8</span>, size=<span class="nm">5000</span>)
+
+t_stat, p_val = stats.<span class="fn">ttest_ind</span>(aov_treatment, aov_control, equal_var=<span class="kw">False</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Control AOV:   ${aov_control.mean():.2f}"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Treatment AOV: ${aov_treatment.mean():.2f}"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"T-stat: {t_stat:.4f}, P-value: {p_val:.4f}"</span>)
+
+<span class="cm"># Mann-Whitney U (non-parametric, good for skewed revenue data)</span>
+u_stat, mw_p = stats.<span class="fn">mannwhitneyu</span>(aov_treatment, aov_control, alternative=<span class="st">'two-sided'</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Mann-Whitney p-value: {mw_p:.4f}"</span>)
+
+<span class="cm"># === SRM CHECK: SAMPLE RATIO MISMATCH ===</span>
+<span class="cm"># Expected 50/50 split. If SRM detected, do not interpret results!</span>
+chi2, srm_p = stats.<span class="fn">chisquare</span>([n_control, n_treatment])
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"SRM p-value: {srm_p:.4f}"</span>)
+<span class="kw">if</span> srm_p < <span class="nm">0.01</span>:
+    <span class="fn">print</span>(<span class="st">"WARNING: Sample Ratio Mismatch detected! Investigate before analyzing."</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="st">"SRM check passed."</span>)</pre>
+</section>
+
+<!-- SECTION 7 -->
+<section id="pitfalls">
+  <h2>7. Common Pitfalls & How to Avoid Them</h2>
+
+  <div class="pitfall-card">
+    <h4>🎯 P-Hacking (Multiple Testing Problem)</h4>
+    <p><strong>What it is:</strong> Running the test until p &lt; 0.05 and then stopping, or testing many metrics/segments and reporting only the significant ones. With 20 independent tests at α=0.05, you expect one false positive even if no effect exists.</p>
+    <p><strong>Fix:</strong> Pre-register the primary metric and test before running. Apply Bonferroni correction (α/k for k tests) or use FDR control (Benjamini-Hochberg) for multiple comparisons. For continuous monitoring, use sequential testing methods (SPRT, mSPRT) designed for this purpose.</p>
+  </div>
+
+  <div class="pitfall-card">
+    <h4>⏱️ Peeking (Early Stopping)</h4>
+    <p><strong>What it is:</strong> Looking at results before the experiment reaches its planned sample size and stopping early if p &lt; 0.05. This dramatically inflates the Type I error rate — if you peek 5 times, your actual α can be 15–20% instead of 5%.</p>
+    <p><strong>Fix:</strong> Determine the sample size before the experiment. Do not analyze results until the experiment is complete. If real-time monitoring is needed, use sequential testing methods with proper alpha-spending functions (O'Brien-Fleming, Pocock boundaries).</p>
+  </div>
+
+  <div class="pitfall-card">
+    <h4>🆕 Novelty Effect (Primacy vs Novelty)</h4>
+    <p><strong>What it is:</strong> Users behave differently simply because the experience is new (novelty effect) or conversely because they miss the familiar interface (primacy effect). Either can cause the treatment to show a temporary lift or dip that doesn't persist.</p>
+    <p><strong>Fix:</strong> Run the experiment long enough (at least 2–4 weeks) for novelty effects to dissipate. Analyze separately for new vs. returning users. Look at whether the treatment effect is decreasing over time (novelty wearing off).</p>
+  </div>
+
+  <div class="pitfall-card">
+    <h4>🔀 Network Effects & Interference (SUTVA Violation)</h4>
+    <p><strong>What it is:</strong> The Stable Unit Treatment Value Assumption (SUTVA) requires that a unit's outcome depends only on its own treatment, not others'. In social networks, marketplaces, or referral programs, treating one user affects others in their network.</p>
+    <p><strong>Fix:</strong> Use cluster-based randomization (assign entire social graph clusters to the same group). For marketplace experiments, use time-based randomization or geographically isolated markets.</p>
+  </div>
+
+  <div class="pitfall-card">
+    <h4>📊 Sample Ratio Mismatch (SRM)</h4>
+    <p><strong>What it is:</strong> The actual ratio of users in control vs. treatment differs significantly from the intended ratio (e.g., you target 50/50 but observe 52/48). This indicates a bug in the randomization or logging that introduces systematic bias.</p>
+    <p><strong>Fix:</strong> Always run a chi-square test for SRM at the start of analysis. If SRM is detected (p &lt; 0.01), <strong>do not interpret the results</strong>. Find and fix the underlying bug first.</p>
+  </div>
+
+  <div class="pitfall-card">
+    <h4>📅 Seasonality & Timing</h4>
+    <p><strong>What it is:</strong> Running an experiment only on weekdays misses weekend behavior. Running during a holiday means effects cannot be generalized to normal periods. Running for only 1–2 days misses weekly cycles.</p>
+    <p><strong>Fix:</strong> Run experiments for full weeks (at minimum 2 weeks). Avoid starting experiments during major holidays, sales events, or product launches. Use holdout groups to measure long-term effects.</p>
+  </div>
+
+  <div class="pitfall-card">
+    <h4>📉 Underpowered Experiments</h4>
+    <p><strong>What it is:</strong> Running an experiment that is too small to detect the effect you care about. A "negative" result from an underpowered experiment is uninformative — it doesn't mean there's no effect, just that you couldn't detect it.</p>
+    <p><strong>Fix:</strong> Always calculate sample size before running. A negative result from a properly powered experiment is informative; a negative result from an underpowered one is not.</p>
+  </div>
+
+  <div class="pitfall-card">
+    <h4>🔀 Survivorship Bias in Analysis</h4>
+    <p><strong>What it is:</strong> Filtering users (e.g., "analyze only users who made at least one purchase") after randomization. Post-randomization filters make the groups non-comparable — the filter itself may be affected by the treatment.</p>
+    <p><strong>Fix:</strong> Any filters must be pre-treatment (apply before the experiment starts) or use the intent-to-treat (ITT) analysis: keep all randomized users in their assigned group for the analysis, regardless of actual treatment exposure.</p>
+  </div>
+</section>
+
+<!-- SECTION 8 -->
+<section id="simpsons">
+  <h2>8. Simpson's Paradox</h2>
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p><strong>Simpson's Paradox</strong> occurs when a trend present in several different groups reverses or disappears when the groups are combined. It arises because of a <strong>lurking (confounding) variable</strong> that is unequally distributed between groups and affects the outcome.</p>
+  </div>
+
+  <div class="example">
+    <div class="ex-label">Classic Example: University Admissions</div>
+    <p>Consider two departments at a university:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Department</th><th>Male Accept Rate</th><th>Female Accept Rate</th></tr></thead>
+        <tbody>
+          <tr><td>Engineering</td><td>80/200 = 40%</td><td>10/20 = 50%</td></tr>
+          <tr><td>Humanities</td><td>20/100 = 20%</td><td>80/300 = 27%</td></tr>
+          <tr><td><strong>Overall Combined</strong></td><td><strong>100/300 = 33%</strong></td><td><strong>90/320 = 28%</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Within every department, women have a higher acceptance rate. But overall, men appear to have a higher rate. The paradox arises because women disproportionately apply to the more competitive Humanities department (lower acceptance rate for both genders), while men disproportionately apply to the easier Engineering department. The <strong>department</strong> is the confounding variable.</p>
+  </div>
+
+  <div class="example">
+    <div class="ex-label">A/B Testing Context</div>
+    <p>You run an A/B test on a checkout flow. Overall, the treatment converts at 4.5% vs. control at 5.0% — seems like a negative result. But when segmented:</p>
+    <ul>
+      <li>Mobile users: Treatment 4.0%, Control 3.5% → Treatment wins</li>
+      <li>Desktop users: Treatment 7.0%, Control 6.0% → Treatment wins</li>
+    </ul>
+    <p>The paradox: more treatment users are on mobile (which has lower baseline conversion), pulling down the aggregate. In reality, the treatment is better for both groups. <strong>Fix:</strong> segment your analysis and check for heterogeneous effects. Use regression to control for confounders.</p>
+  </div>
+
+  <pre><span class="kw">import</span> pandas <span class="kw">as</span> np
+
+<span class="cm"># Detecting and handling Simpson's Paradox</span>
+<span class="cm"># Stratified analysis: compute effect separately per subgroup</span>
+subgroups = df.<span class="fn">groupby</span>([<span class="st">'variant'</span>, <span class="st">'device_type'</span>]).<span class="fn">agg</span>(
+    conversions=(<span class="st">'converted'</span>, <span class="st">'sum'</span>),
+    users=(<span class="st">'user_id'</span>, <span class="st">'count'</span>)
+).<span class="fn">reset_index</span>()
+subgroups[<span class="st">'rate'</span>] = subgroups[<span class="st">'conversions'</span>] / subgroups[<span class="st">'users'</span>]
+<span class="fn">print</span>(subgroups.<span class="fn">pivot</span>(index=<span class="st">'device_type'</span>, columns=<span class="st">'variant'</span>, values=<span class="st">'rate'</span>))
+
+<span class="cm"># Cochran-Mantel-Haenszel test: stratified analysis across device types</span>
+<span class="cm"># Tests whether there is a common odds ratio across strata</span></pre>
+</section>
+
+<!-- SECTION 9 -->
+<section id="bayesian">
+  <h2>9. Bayesian A/B Testing (Overview)</h2>
+  <p>The frequentist (p-value) approach asks: "What is the probability of observing this data if there is no effect?" The Bayesian approach asks: "Given the data, what is the probability that treatment is better than control?"</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Property</th><th>Frequentist (p-value)</th><th>Bayesian</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Interpretation</td><td>P(data | H₀) — probability of data under null</td><td>P(H₁ | data) — probability treatment is better given data</td></tr>
+        <tr><td>Prior knowledge</td><td>Not incorporated</td><td>Incorporated via prior distribution</td></tr>
+        <tr><td>Output</td><td>p-value + binary decision (reject/fail to reject)</td><td>Posterior distribution; probability that B &gt; A; expected loss</td></tr>
+        <tr><td>Peeking</td><td>Invalidates results (inflates α)</td><td>Valid to update continuously (with proper prior)</td></tr>
+        <tr><td>Interpretability</td><td>Counterintuitive (p-value is often misunderstood)</td><td>Direct: "There's 97% probability treatment is better"</td></tr>
+        <tr><td>When to use</td><td>Regulated industries, standard practice, many stakeholders expect it</td><td>Faster decisions needed, sequential monitoring, business analysts</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> scipy.stats <span class="kw">import</span> beta
+
+<span class="cm"># Bayesian A/B test for conversion rates</span>
+<span class="cm"># Prior: Beta(1,1) = Uniform (uninformative prior)</span>
+<span class="cm"># Posterior after data: Beta(alpha + successes, beta + failures)</span>
+
+alpha_prior = beta_prior = <span class="nm">1</span>  <span class="cm"># uninformative prior</span>
+
+<span class="cm"># Control: 625 conversions out of 12500</span>
+alpha_ctrl = alpha_prior + <span class="nm">625</span>
+beta_ctrl  = beta_prior  + (<span class="nm">12500</span> - <span class="nm">625</span>)
+
+<span class="cm"># Treatment: 680 conversions out of 12300</span>
+alpha_treat = alpha_prior + <span class="nm">680</span>
+beta_treat  = beta_prior  + (<span class="nm">12300</span> - <span class="nm">680</span>)
+
+<span class="cm"># Monte Carlo: probability that treatment > control</span>
+n_samples = <span class="nm">100_000</span>
+ctrl_samples  = beta.<span class="fn">rvs</span>(alpha_ctrl, beta_ctrl, size=n_samples)
+treat_samples = beta.<span class="fn">rvs</span>(alpha_treat, beta_treat, size=n_samples)
+
+prob_treat_better = (treat_samples > ctrl_samples).<span class="fn">mean</span>()
+expected_lift = (treat_samples - ctrl_samples).<span class="fn">mean</span>()
+
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"P(Treatment > Control): {prob_treat_better:.4f} ({prob_treat_better*100:.1f}%)"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Expected lift: {expected_lift*100:.3f}%"</span>)
+
+<span class="cm"># 95% credible interval for treatment rate</span>
+ci = beta.<span class="fn">interval</span>(<span class="nm">0.95</span>, alpha_treat, beta_treat)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Treatment 95% credible interval: [{ci[0]*100:.2f}%, {ci[1]*100:.2f}%]"</span>)</pre>
+</section>
+
+<!-- SECTION 10: QA -->
+<section id="qa" class="qa-section">
+  <h2>Interview Q&A</h2>
+
+  <div class="qa-item">
+    <div class="qa-q">An A/B test shows p = 0.03. What does this mean, and can you conclude the treatment is better?</div>
+    <div class="qa-a">
+      <p>A p-value of 0.03 means: <strong>if the null hypothesis were true</strong> (no real difference between control and treatment), the probability of observing a test statistic as extreme as the one we observed is 3%. Since 0.03 &lt; α = 0.05, we reject the null hypothesis.</p>
+      <p><strong>Common misinterpretations to avoid:</strong></p>
+      <ul>
+        <li>It does NOT mean there is a 97% probability the treatment is better</li>
+        <li>It does NOT tell you the size of the effect — only that the effect is unlikely to be zero</li>
+        <li>It does NOT mean the result is practically significant — a 0.01% lift with p=0.03 is statistically significant but may be meaningless for business</li>
+      </ul>
+      <p><strong>What you should also report:</strong></p>
+      <ul>
+        <li>Effect size: what is the absolute and relative lift?</li>
+        <li>95% confidence interval: what is the range of plausible effects?</li>
+        <li>Practical significance: is this lift large enough to justify the engineering cost and opportunity cost of launching?</li>
+        <li>Guardrail metrics: did any negative secondary effects emerge?</li>
+        <li>SRM check: was the sample ratio as expected?</li>
+      </ul>
+      <p>A statistically significant result is necessary but not sufficient to ship a feature. You need both statistical and practical significance, plus confidence that no guardrail metrics were harmed.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">You run an A/B test for 2 days and see a big positive effect. Should you ship it?</div>
+    <div class="qa-a">
+      <p>Almost certainly not — and there are several reasons to be very cautious:</p>
+      <p><strong>1. Insufficient power:</strong> Your sample size was probably calculated for a longer duration. Stopping early means the test may be underpowered — the result may not be reproducible with more data.</p>
+      <p><strong>2. Peeking / alpha inflation:</strong> If you ran the test planning to evaluate it at 2 days, that's fine. But if you looked after 2 days because it looked promising and the original plan was 2 weeks, you've peeked. The actual Type I error rate is much higher than α = 0.05.</p>
+      <p><strong>3. Novelty effect:</strong> Users may behave differently simply because something is new. This effect typically dissipates within 1–2 weeks. A 2-day result may show a short-term spike that disappears completely after a week.</p>
+      <p><strong>4. Weekly seasonality:</strong> 2 days doesn't capture the full weekly cycle of user behavior. Monday–Tuesday behavior is different from Friday–weekend. A proper test needs at least 1–2 full weeks.</p>
+      <p><strong>What to do:</strong> Continue the experiment to the planned duration. If you genuinely cannot wait, use a sequential testing method (like SPRT) that accounts for continuous monitoring, but note that the result still needs to be validated over a proper time period before shipping.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What is the difference between statistical significance and practical significance?</div>
+    <div class="qa-a">
+      <p><strong>Statistical significance</strong> asks: "Is this effect unlikely to be zero?" It is a function of the sample size, effect size, and variance. With a large enough sample, even a tiny, meaningless effect will be statistically significant. With a small sample, even a large effect may not be statistically significant.</p>
+      <p><strong>Practical significance</strong> asks: "Is this effect large enough to matter for the business?" It is a function of the effect size relative to business constraints — cost, effort, user experience impact, and strategic priority.</p>
+      <p><strong>Illustrative examples:</strong></p>
+      <ul>
+        <li>Statistical significance without practical significance: With 10M users, you detect a 0.001% increase in conversion. p &lt; 0.001, but the revenue impact is negligible and the engineering cost exceeds the benefit. Don't ship.</li>
+        <li>Practical significance without statistical significance: A change appears to increase revenue by 15%, but you only have 500 users per group and p = 0.12. The effect size matters, but the test is underpowered. Don't ship yet — run longer to get a conclusive answer.</li>
+      </ul>
+      <p>Good decision-making requires both. A useful framework: define the MDE (minimum effect you care about) before the experiment. If the observed effect exceeds the MDE AND is statistically significant, ship. If it's below the MDE, it may not be worth shipping even if statistically significant.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">How do you handle an A/B test where the metric is highly skewed (e.g., revenue per user)?</div>
+    <div class="qa-a">
+      <p>Revenue per user is often extremely right-skewed: most users spend nothing, some spend a little, and a few high-value users spend a lot. This violates the normality assumption of the t-test and makes the variance estimate unstable.</p>
+      <p><strong>Option 1: Non-parametric test (Mann-Whitney U).</strong> Does not assume normality. Tests whether treatment users tend to have higher values than control users. Appropriate for ordinal or heavily skewed data.</p>
+      <p><strong>Option 2: Log transformation.</strong> If revenue is log-normally distributed, apply log(1+x) to normalize it, then run a t-test on the transformed data. Report the effect as a percentage change in geometric mean.</p>
+      <p><strong>Option 3: Bootstrap confidence intervals.</strong> Non-parametric: resample your data with replacement 10,000 times, compute the mean difference each time, and use the empirical distribution to construct confidence intervals. No distributional assumptions.</p>
+      <p><strong>Option 4: CUPED (Controlled-experiment Using Pre-Experiment Data).</strong> Reduce variance by using pre-experiment data (user revenue from the prior period) as a covariate. Adjust the metric: Y_adjusted = Y − θ × (X − E[X]), where X is the pre-experiment covariate. Reduces variance by 30–70%, dramatically improving power. Used extensively at Microsoft, LinkedIn.</p>
+      <p><strong>Option 5: Separate the metric.</strong> Decompose revenue = conversion rate × revenue per purchaser. Run the test on conversion rate (a proportion, amenable to Z-test) and revenue per purchaser separately. You can combine the CIs to reason about total revenue impact.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">Explain Simpson's Paradox with a real-world example relevant to product analytics.</div>
+    <div class="qa-a">
+      <p>Simpson's Paradox occurs when an aggregate trend reverses when the data is broken down by a confounding variable. In product analytics, it commonly appears in A/B tests or reporting when different user segments have very different baseline rates AND are unequally distributed between groups.</p>
+      <p><strong>Product example:</strong> You launch a new onboarding flow (treatment) and measure 30-day retention. Overall: treatment 38%, control 42% — treatment appears worse. But:</p>
+      <ul>
+        <li>New users (70% of treatment, 30% of control): treatment 35%, control 30% → treatment better</li>
+        <li>Returning users (30% of treatment, 70% of control): treatment 55%, control 50% → treatment better</li>
+      </ul>
+      <p>The treatment was better for both segments, but the aggregate was misleading because the treatment group had more new users (who have lower baseline retention), which pulled down the aggregate number. The confounding variable is "user type."</p>
+      <p><strong>Resolution:</strong></p>
+      <ul>
+        <li>Always segment your A/B test results by key user characteristics (new vs. returning, platform, region)</li>
+        <li>Check for SRM by segment to ensure randomization worked</li>
+        <li>Use regression-based analysis to control for confounders</li>
+        <li>Be suspicious of aggregate results that contradict every segment-level result</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</div>
+<script>
+function toggleTheme() {
+  const root = document.documentElement;
+  root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+}
+</script>
+</body>
+</html>

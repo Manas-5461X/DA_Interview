@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 4 — Python for Data Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F7F8FC; --surface: #FFFFFF; --surface-2: #EFF2FA;
+  --text: #18202F; --text-muted: #5A6585;
+  --accent: #2B5CE6; --accent-light: #EEF3FF; --border: #DDE3F2;
+  --code-bg: #1A1D2E; --code-text: #C9D1F0;
+  --kw: #82AAFF; --fn: #C3E88D; --str: #F78C6C; --cmt: #546E7A; --num: #F78C6C; --cls: #FFCB6B;
+  --green: #059669; --green-light: #ECFDF5; --green-border: #6EE7B7;
+  --orange: #D97706; --orange-light: #FFFBEB;
+  --purple: #7C3AED; --purple-light: #F5F3FF;
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1218; --surface: #161C28; --surface-2: #1D2538;
+    --text: #E8EBF7; --text-muted: #8A96C2;
+    --accent: #5079F5; --accent-light: #1A2450; --border: #273050;
+    --code-bg: #080C15; --code-text: #C9D1F0;
+    --green-light: #071A10; --green-border: #065F46;
+    --orange-light: #1C1407; --purple-light: #120D28;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1218; --surface: #161C28; --surface-2: #1D2538;
+  --text: #E8EBF7; --text-muted: #8A96C2;
+  --accent: #5079F5; --accent-light: #1A2450; --border: #273050;
+  --code-bg: #080C15; --code-text: #C9D1F0;
+  --green-light: #071A10; --green-border: #065F46;
+  --orange-light: #1C1407; --purple-light: #120D28;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'IBM Plex Sans', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; padding-inline: 24px; padding-block: 48px 100px; }
+.page-wrap { max-width: 860px; margin: 0 auto; }
+.module-header { border-bottom: 2px solid var(--border); padding-bottom: 36px; margin-bottom: 48px; }
+.module-tag { display: inline-flex; align-items: center; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; margin-bottom: 20px; }
+.module-header h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 700; line-height: 1.18; color: var(--text); text-wrap: balance; margin-bottom: 14px; }
+.module-header .lead { font-size: 18px; color: var(--text-muted); max-width: 65ch; line-height: 1.65; }
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 56px; }
+.toc-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+.toc ol { list-style: decimal; padding-left: 22px; display: flex; flex-direction: column; gap: 7px; }
+.toc a { color: var(--accent); text-decoration: none; font-size: 15px; }
+.toc a:hover { text-decoration: underline; }
+section { margin-bottom: 64px; }
+h2 { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 22px; padding-bottom: 10px; border-bottom: 2px solid var(--accent); text-wrap: balance; display: block; }
+h3 { font-size: 19px; font-weight: 600; color: var(--text); margin-top: 36px; margin-bottom: 12px; text-wrap: balance; }
+h4 { font-size: 15px; font-weight: 600; color: var(--text); margin-top: 24px; margin-bottom: 8px; }
+p { margin-bottom: 16px; max-width: 72ch; }
+.definition { background: var(--accent-light); border-left: 4px solid var(--accent); padding: 16px 20px; border-radius: 0 var(--radius) var(--radius) 0; margin: 22px 0; }
+.def-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.definition p { margin: 0; font-size: 15px; max-width: none; }
+.example { background: var(--green-light); border: 1px solid var(--green-border); border-radius: var(--radius); padding: 20px 24px; margin: 22px 0; }
+.ex-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+.example p { font-size: 15px; margin-bottom: 10px; }
+.example p:last-child { margin-bottom: 0; }
+.note { background: var(--orange-light); border-left: 4px solid var(--orange); padding: 14px 20px; border-radius: 0 var(--radius) var(--radius) 0; margin: 22px 0; }
+.note-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+.note p { margin: 0; font-size: 14px; max-width: none; }
+pre { background: var(--code-bg); color: var(--code-text); padding: 20px 24px; border-radius: var(--radius); overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.8; margin: 16px 0; tab-size: 4; }
+.kw { color: var(--kw); } .fn { color: var(--fn); } .str { color: var(--str); } .cmt { color: var(--cmt); font-style: italic; } .num { color: var(--num); } .cls { color: var(--cls); font-weight: 600; }
+code { font-family: 'IBM Plex Mono', monospace; font-size: 13px; background: var(--surface-2); border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; }
+.table-wrap { overflow-x: auto; margin: 24px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { background: var(--surface-2); font-weight: 600; text-align: left; padding: 11px 16px; border-bottom: 2px solid var(--border); color: var(--text); }
+td { padding: 10px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface-2); }
+.qa-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-top: 32px; }
+.qa-header { background: var(--accent); color: #fff; padding: 14px 22px; font-weight: 700; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+.qa-item { padding: 22px 24px; border-bottom: 1px solid var(--border); }
+.qa-item:last-child { border-bottom: none; }
+.qa-q { font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 10px; display: flex; gap: 10px; align-items: flex-start; }
+.qa-badge { min-width: 22px; height: 22px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; flex-shrink: 0; }
+.qa-a { font-size: 14.5px; color: var(--text-muted); padding-left: 32px; line-height: 1.72; }
+.qa-a strong { color: var(--text); }
+ul, ol { padding-left: 22px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+li { max-width: 72ch; }
+.output { background: var(--surface-2); border: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius); padding: 14px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--text-muted); margin-top: -16px; margin-bottom: 16px; }
+.output-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+.page-nav { display: flex; justify-content: space-between; align-items: center; padding-top: 40px; border-top: 1px solid var(--border); margin-top: 60px; font-size: 14px; color: var(--text-muted); }
+.page-nav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+@media (max-width: 600px) { body { padding-inline: 16px; } }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header class="module-header">
+    <div class="module-tag">Module 04 · Data Analytics Interview Packet</div>
+    <h1>Python for Data Analytics</h1>
+    <p class="lead">NumPy and Pandas are the two indispensable libraries for data analytics in Python. This module covers both comprehensively — arrays, vectorized computation, DataFrames, data manipulation, merging, grouping, and real-world data cleaning patterns, with executable code throughout.</p>
+  </header>
+
+  <nav class="toc">
+    <div class="toc-label">Contents</div>
+    <ol>
+      <li><a href="#numpy">NumPy — Arrays and Vectorized Operations</a></li>
+      <li><a href="#pandas-basics">Pandas — Series and DataFrames</a></li>
+      <li><a href="#indexing">Indexing, Selection, and Filtering</a></li>
+      <li><a href="#transformation">Transformation and Feature Engineering</a></li>
+      <li><a href="#groupby">GroupBy and Aggregation</a></li>
+      <li><a href="#merging">Merging, Joining, and Concatenation</a></li>
+      <li><a href="#cleaning">Data Cleaning Patterns</a></li>
+      <li><a href="#interview">Interview Questions</a></li>
+    </ol>
+  </nav>
+
+  <!-- ─── SECTION 1 ─── -->
+  <section id="numpy">
+    <h2>1. NumPy — Arrays and Vectorized Operations</h2>
+
+    <div class="definition">
+      <div class="def-label">What is NumPy?</div>
+      <p><strong>NumPy (Numerical Python)</strong> is Python's foundational package for numerical computation. Its core data structure is the <code>ndarray</code> — a fixed-type, contiguous-memory, multi-dimensional array that enables vectorized operations: applying a computation to an entire array at once rather than element-by-element in a Python loop. NumPy operations run at C-speed, making them 10–100× faster than equivalent Python loops for numerical work.</p>
+    </div>
+
+    <h3>1.1 Creating Arrays</h3>
+<pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cmt"># From Python lists</span>
+a = np.<span class="fn">array</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])          <span class="cmt"># 1-D array, dtype=int64</span>
+b = np.<span class="fn">array</span>([[<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>],[<span class="num">4</span>,<span class="num">5</span>,<span class="num">6</span>]])        <span class="cmt"># 2-D array, shape=(2,3)</span>
+
+<span class="cmt"># Factory functions</span>
+np.<span class="fn">zeros</span>((<span class="num">3</span>,<span class="num">4</span>))           <span class="cmt"># 3×4 array of zeros</span>
+np.<span class="fn">ones</span>((<span class="num">2</span>,<span class="num">3</span>))            <span class="cmt"># 2×3 array of ones</span>
+np.<span class="fn">arange</span>(<span class="num">0</span>, <span class="num">10</span>, <span class="num">2</span>)      <span class="cmt"># [0, 2, 4, 6, 8]</span>
+np.<span class="fn">linspace</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">5</span>)     <span class="cmt"># [0.0, 0.25, 0.5, 0.75, 1.0]</span>
+np.<span class="fn">eye</span>(<span class="num">3</span>)                 <span class="cmt"># 3×3 identity matrix</span>
+np.random.<span class="fn">rand</span>(<span class="num">4</span>, <span class="num">3</span>)     <span class="cmt"># random floats in [0, 1), shape (4,3)</span>
+np.random.<span class="fn">randn</span>(<span class="num">1000</span>)    <span class="cmt"># 1000 standard normal draws</span>
+
+<span class="cmt"># Key attributes</span>
+a.shape       <span class="cmt"># (5,)  — dimensions</span>
+a.ndim        <span class="cmt"># 1     — number of dimensions</span>
+a.dtype       <span class="cmt"># dtype('int64')</span>
+a.size        <span class="cmt"># 5     — total elements</span></pre>
+
+    <h3>1.2 Vectorized Operations (No Loops Needed)</h3>
+<pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+prices  = np.<span class="fn">array</span>([<span class="num">100</span>, <span class="num">200</span>, <span class="num">150</span>, <span class="num">300</span>, <span class="num">250</span>])  <span class="cmt"># prices in ₹</span>
+discounts = np.<span class="fn">array</span>([<span class="num">0.1</span>, <span class="num">0.2</span>, <span class="num">0.15</span>, <span class="num">0.0</span>, <span class="num">0.05</span>])
+
+<span class="cmt"># Arithmetic — applied element-wise automatically</span>
+final_prices = prices * (<span class="num">1</span> - discounts)
+<span class="cmt"># [ 90. 160. 127.5  300. 237.5 ]</span>
+
+<span class="cmt"># Universal functions (ufuncs)</span>
+np.<span class="fn">sqrt</span>(prices)       <span class="cmt"># square root of each element</span>
+np.<span class="fn">log</span>(prices)        <span class="cmt"># natural log (useful for log-transforming skewed data)</span>
+np.<span class="fn">abs</span>(prices - <span class="num">200</span>) <span class="cmt"># absolute deviation from 200</span>
+
+<span class="cmt"># Reduction functions</span>
+np.<span class="fn">sum</span>(prices)         <span class="cmt"># 1000</span>
+np.<span class="fn">mean</span>(prices)        <span class="cmt"># 200.0</span>
+np.<span class="fn">std</span>(prices)         <span class="cmt"># 70.71</span>
+np.<span class="fn">median</span>(prices)      <span class="cmt"># 200.0</span>
+np.<span class="fn">min</span>(prices), np.<span class="fn">max</span>(prices)  <span class="cmt"># 100, 300</span>
+np.<span class="fn">percentile</span>(prices, [<span class="num">25</span>, <span class="num">50</span>, <span class="num">75</span>])  <span class="cmt"># [137.5, 200.0, 262.5]</span></pre>
+
+    <h3>1.3 Boolean Indexing and Masking</h3>
+<pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+scores = np.<span class="fn">array</span>([<span class="num">45</span>, <span class="num">72</span>, <span class="num">88</span>, <span class="num">60</span>, <span class="num">95</span>, <span class="num">38</span>, <span class="num">77</span>])
+
+<span class="cmt"># Boolean mask — each element evaluates to True/False</span>
+passed = scores >= <span class="num">60</span>           <span class="cmt"># [F, T, T, T, T, F, T]</span>
+
+<span class="cmt"># Use mask to filter</span>
+passing_scores = scores[passed]  <span class="cmt"># [72, 88, 60, 95, 77]</span>
+
+<span class="cmt"># Combine conditions</span>
+high_pass = scores[(scores >= <span class="num">75</span>) &amp; (scores &lt; <span class="num">90</span>)]  <span class="cmt"># [88, 77]</span>
+
+<span class="cmt"># Count and proportion</span>
+np.<span class="fn">sum</span>(passed)         <span class="cmt"># 5 students passed</span>
+np.<span class="fn">mean</span>(passed)        <span class="cmt"># 0.714 — 71.4% pass rate</span>
+
+<span class="cmt"># np.where — vectorized if-else</span>
+grade = np.<span class="fn">where</span>(scores >= <span class="num">60</span>, <span class="str">'Pass'</span>, <span class="str">'Fail'</span>)
+<span class="cmt"># ['Fail', 'Pass', 'Pass', 'Pass', 'Pass', 'Fail', 'Pass']</span></pre>
+
+    <h3>1.4 Broadcasting</h3>
+    <p>Broadcasting is NumPy's mechanism for performing arithmetic between arrays of different shapes. Rather than requiring the same shape, NumPy stretches smaller arrays to match larger ones — without copying data.</p>
+<pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cmt"># Standardize a matrix (each column to mean=0, std=1)</span>
+data = np.<span class="fn">array</span>([[<span class="num">10</span>, <span class="num">200</span>, <span class="num">1.5</span>],
+                  [<span class="num">12</span>, <span class="num">250</span>, <span class="num">2.1</span>],
+                  [<span class="num">8</span>,  <span class="num">180</span>, <span class="num">0.9</span>]])   <span class="cmt"># shape (3, 3)</span>
+
+col_mean = data.<span class="fn">mean</span>(axis=<span class="num">0</span>)          <span class="cmt"># shape (3,) — mean of each column</span>
+col_std  = data.<span class="fn">std</span>(axis=<span class="num">0</span>)           <span class="cmt"># shape (3,)</span>
+
+<span class="cmt"># Broadcasting: (3,3) - (3,) → (3,3) - (1,3) expanded → works</span>
+standardized = (data - col_mean) / col_std
+<span class="cmt"># Each column now has mean≈0 and std≈1</span></pre>
+  </section>
+
+  <!-- ─── SECTION 2 ─── -->
+  <section id="pandas-basics">
+    <h2>2. Pandas — Series and DataFrames</h2>
+
+    <div class="definition">
+      <div class="def-label">Core Data Structures</div>
+      <p>Pandas provides two primary data structures: a <strong>Series</strong> (a 1-D labelled array — like a single table column with an index) and a <strong>DataFrame</strong> (a 2-D labelled table of columns, analogous to a spreadsheet or SQL table). Every DataFrame column is a Series.</p>
+    </div>
+
+    <h3>2.1 Creating DataFrames</h3>
+<pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cmt"># From a dictionary</span>
+df = pd.<span class="cls">DataFrame</span>({
+    <span class="str">'customer_id'</span>: [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>],
+    <span class="str">'name'</span>:        [<span class="str">'Alice'</span>, <span class="str">'Bob'</span>, <span class="str">'Carol'</span>, <span class="str">'Dave'</span>],
+    <span class="str">'spend'</span>:       [<span class="num">1200.0</span>, <span class="num">800.0</span>, np.nan, <span class="num">2500.0</span>],
+    <span class="str">'city'</span>:        [<span class="str">'Mumbai'</span>, <span class="str">'Delhi'</span>, <span class="str">'Mumbai'</span>, <span class="str">'Pune'</span>],
+    <span class="str">'active'</span>:      [<span class="kw">True</span>, <span class="kw">True</span>, <span class="kw">False</span>, <span class="kw">True</span>]
+})
+
+<span class="cmt"># From CSV / Excel</span>
+df = pd.<span class="fn">read_csv</span>(<span class="str">'orders.csv'</span>, parse_dates=[<span class="str">'order_date'</span>])
+df = pd.<span class="fn">read_excel</span>(<span class="str">'report.xlsx'</span>, sheet_name=<span class="str">'Q1'</span>)
+
+<span class="cmt"># Inspect</span>
+df.<span class="fn">head</span>(<span class="num">5</span>)         <span class="cmt"># first 5 rows</span>
+df.<span class="fn">tail</span>(<span class="num">3</span>)         <span class="cmt"># last 3 rows</span>
+df.<span class="fn">info</span>()          <span class="cmt"># dtypes, non-null counts</span>
+df.<span class="fn">describe</span>()      <span class="cmt"># count, mean, std, min, quartiles, max for numeric cols</span>
+df.shape           <span class="cmt"># (rows, cols)</span>
+df.dtypes          <span class="cmt"># dtype of each column</span>
+df.columns         <span class="cmt"># Index of column names</span>
+df.<span class="fn">isnull</span>().<span class="fn">sum</span>() <span class="cmt"># count nulls per column</span></pre>
+
+    <h3>2.2 Series Operations</h3>
+<pre><span class="cmt"># A Series is a labelled array</span>
+s = pd.<span class="cls">Series</span>([<span class="num">100</span>, <span class="num">200</span>, <span class="num">300</span>], index=[<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>])
+
+s[<span class="str">'b'</span>]                <span class="cmt"># 200  — label access</span>
+s[s > <span class="num">150</span>]            <span class="cmt"># b→200, c→300 — boolean filter</span>
+s.<span class="fn">map</span>(<span class="kw">lambda</span> x: x*<span class="num">1.1</span>) <span class="cmt"># 110, 220, 330 — element-wise transform</span>
+s.<span class="fn">value_counts</span>()      <span class="cmt"># frequency table</span>
+s.<span class="fn">describe</span>()          <span class="cmt"># stats summary</span>
+
+<span class="cmt"># DateTime Series operations</span>
+dates = pd.<span class="fn">to_datetime</span>(df[<span class="str">'order_date'</span>])
+dates.dt.year          <span class="cmt"># extract year</span>
+dates.dt.month         <span class="cmt"># extract month</span>
+dates.dt.day_name()    <span class="cmt"># 'Monday', 'Tuesday', etc.</span>
+dates.dt.quarter       <span class="cmt"># 1, 2, 3, or 4</span></pre>
+  </section>
+
+  <!-- ─── SECTION 3 ─── -->
+  <section id="indexing">
+    <h2>3. Indexing, Selection, and Filtering</h2>
+    <p>Pandas provides multiple ways to select data. Understanding the difference between <code>.loc</code> and <code>.iloc</code> is one of the most commonly tested Pandas concepts in interviews.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Method</th><th>Selection by</th><th>Row input</th><th>Column input</th></tr></thead>
+        <tbody>
+          <tr><td><code>.loc[rows, cols]</code></td><td>Labels (index names, column names)</td><td>Label or boolean mask</td><td>Column name or list</td></tr>
+          <tr><td><code>.iloc[rows, cols]</code></td><td>Integer positions (0-based)</td><td>Integer or slice</td><td>Integer or slice</td></tr>
+          <tr><td><code>df['col']</code></td><td>Column name</td><td>—</td><td>Single column → Series</td></tr>
+          <tr><td><code>df[['c1','c2']]</code></td><td>Column names</td><td>—</td><td>Multiple columns → DataFrame</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+<pre><span class="cmt"># Assume df has index 0,1,2,3 and columns: customer_id, name, spend, city</span>
+
+<span class="cmt">── .loc — label-based ──────────────────────────────────────</span>
+df.<span class="fn">loc</span>[<span class="num">0</span>]                       <span class="cmt"># row with index label 0</span>
+df.<span class="fn">loc</span>[<span class="num">0</span>:<span class="num">2</span>]                    <span class="cmt"># rows with labels 0,1,2 (INCLUSIVE end)</span>
+df.<span class="fn">loc</span>[<span class="num">0</span>:<span class="num">2</span>, <span class="str">'name'</span>:<span class="str">'spend'</span>]  <span class="cmt"># rows 0-2, columns 'name' to 'spend'</span>
+df.<span class="fn">loc</span>[df[<span class="str">'spend'</span>] > <span class="num">1000</span>]    <span class="cmt"># boolean mask — high spenders</span>
+
+<span class="cmt">── .iloc — position-based ──────────────────────────────────</span>
+df.<span class="fn">iloc</span>[<span class="num">0</span>]                      <span class="cmt"># first row</span>
+df.<span class="fn">iloc</span>[<span class="num">0</span>:<span class="num">2</span>]                   <span class="cmt"># rows 0,1 (EXCLUSIVE end, like Python slices)</span>
+df.<span class="fn">iloc</span>[:<span class="num">3</span>, <span class="num">1</span>:<span class="num">3</span>]              <span class="cmt"># first 3 rows, columns at positions 1 and 2</span>
+df.<span class="fn">iloc</span>[-<span class="num">1</span>]                    <span class="cmt"># last row</span>
+
+<span class="cmt">── Multi-condition filtering ────────────────────────────────</span>
+mask = (df[<span class="str">'city'</span>] == <span class="str">'Mumbai'</span>) &amp; (df[<span class="str">'active'</span>] == <span class="kw">True</span>)
+df[mask]
+
+<span class="cmt"># .query() — readable alternative to boolean masks</span>
+df.<span class="fn">query</span>(<span class="str">"city == 'Mumbai' and spend > 500"</span>)
+
+<span class="cmt"># .isin() — multiple value filter</span>
+df[df[<span class="str">'city'</span>].<span class="fn">isin</span>([<span class="str">'Mumbai'</span>, <span class="str">'Delhi'</span>])]</pre>
+  </section>
+
+  <!-- ─── SECTION 4 ─── -->
+  <section id="transformation">
+    <h2>4. Transformation and Feature Engineering</h2>
+
+    <h3>4.1 apply(), map(), and applymap()</h3>
+<pre><span class="cmt"># .map() — Series only, element-wise transform or dict lookup</span>
+df[<span class="str">'city_code'</span>] = df[<span class="str">'city'</span>].<span class="fn">map</span>({<span class="str">'Mumbai'</span>: <span class="str">'MUM'</span>, <span class="str">'Delhi'</span>: <span class="str">'DEL'</span>, <span class="str">'Pune'</span>: <span class="str">'PUN'</span>})
+
+<span class="cmt"># .apply() — apply function along axis (row or column)</span>
+df[<span class="str">'spend_category'</span>] = df[<span class="str">'spend'</span>].<span class="fn">apply</span>(<span class="kw">lambda</span> x:
+    <span class="str">'High'</span>   <span class="kw">if</span> x >= <span class="num">2000</span> <span class="kw">else</span>
+    <span class="str">'Medium'</span> <span class="kw">if</span> x >= <span class="num">1000</span> <span class="kw">else</span>
+    <span class="str">'Low'</span>
+)
+
+<span class="cmt"># .apply() on a row (axis=1) — access multiple columns</span>
+<span class="kw">def</span> <span class="fn">full_label</span>(row):
+    <span class="kw">return</span> <span class="str">f"{row['name']} ({row['city']})"</span>
+
+df[<span class="str">'label'</span>] = df.<span class="fn">apply</span>(full_label, axis=<span class="num">1</span>)
+
+<span class="cmt"># np.where() for vectorized conditional (faster than .apply for simple conditions)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+df[<span class="str">'high_value'</span>] = np.<span class="fn">where</span>(df[<span class="str">'spend'</span>] > <span class="num">1500</span>, <span class="str">'Yes'</span>, <span class="str">'No'</span>)</pre>
+
+    <h3>4.2 Creating New Columns</h3>
+<pre><span class="cmt"># Arithmetic between columns</span>
+orders[<span class="str">'revenue'</span>] = orders[<span class="str">'qty'</span>] * orders[<span class="str">'unit_price'</span>]
+orders[<span class="str">'revenue_with_gst'</span>] = orders[<span class="str">'revenue'</span>] * <span class="num">1.18</span>
+
+<span class="cmt"># Date-derived features</span>
+df[<span class="str">'year'</span>]    = df[<span class="str">'order_date'</span>].dt.year
+df[<span class="str">'month'</span>]   = df[<span class="str">'order_date'</span>].dt.month
+df[<span class="str">'weekday'</span>] = df[<span class="str">'order_date'</span>].dt.day_name()
+df[<span class="str">'is_weekend'</span>] = df[<span class="str">'order_date'</span>].dt.dayofweek >= <span class="num">5</span>
+
+<span class="cmt"># Binning with pd.cut() — equal-width bins</span>
+df[<span class="str">'age_group'</span>] = pd.<span class="fn">cut</span>(df[<span class="str">'age'</span>],
+                         bins=[<span class="num">0</span>, <span class="num">18</span>, <span class="num">35</span>, <span class="num">55</span>, <span class="num">100</span>],
+                         labels=[<span class="str">'Teen'</span>, <span class="str">'Young Adult'</span>, <span class="str">'Adult'</span>, <span class="str">'Senior'</span>])
+
+<span class="cmt"># Quantile binning with pd.qcut() — equal-frequency bins</span>
+df[<span class="str">'spend_quartile'</span>] = pd.<span class="fn">qcut</span>(df[<span class="str">'spend'</span>], q=<span class="num">4</span>,
+                                labels=[<span class="str">'Q1'</span>, <span class="str">'Q2'</span>, <span class="str">'Q3'</span>, <span class="str">'Q4'</span>])</pre>
+  </section>
+
+  <!-- ─── SECTION 5 ─── -->
+  <section id="groupby">
+    <h2>5. GroupBy and Aggregation</h2>
+    <p>Pandas <code>groupby</code> is the Python equivalent of SQL's GROUP BY. It follows a Split-Apply-Combine pattern: split the DataFrame into groups by a key, apply a function to each group, and combine the results.</p>
+
+<pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cmt"># Basic aggregation</span>
+summary = df.<span class="fn">groupby</span>(<span class="str">'city'</span>)[<span class="str">'spend'</span>].<span class="fn">agg</span>([<span class="str">'count'</span>, <span class="str">'sum'</span>, <span class="str">'mean'</span>, <span class="str">'std'</span>])
+
+<span class="cmt"># Multiple columns, named aggregations (Pandas ≥ 0.25)</span>
+summary = df.<span class="fn">groupby</span>(<span class="str">'city'</span>).<span class="fn">agg</span>(
+    total_customers = (<span class="str">'customer_id'</span>, <span class="str">'count'</span>),
+    total_spend     = (<span class="str">'spend'</span>, <span class="str">'sum'</span>),
+    avg_spend       = (<span class="str">'spend'</span>, <span class="str">'mean'</span>),
+    max_spend       = (<span class="str">'spend'</span>, <span class="str">'max'</span>)
+).<span class="fn">reset_index</span>()
+
+<span class="cmt"># Group by multiple columns</span>
+df.<span class="fn">groupby</span>([<span class="str">'city'</span>, <span class="str">'year'</span>])[<span class="str">'spend'</span>].<span class="fn">sum</span>().<span class="fn">reset_index</span>()
+
+<span class="cmt"># transform() — returns same-length Series (like SQL window functions)</span>
+<span class="cmt"># Adds each user's city-average spend back to the original row</span>
+df[<span class="str">'city_avg_spend'</span>] = df.<span class="fn">groupby</span>(<span class="str">'city'</span>)[<span class="str">'spend'</span>].<span class="fn">transform</span>(<span class="str">'mean'</span>)
+df[<span class="str">'spend_vs_city_avg'</span>] = df[<span class="str">'spend'</span>] - df[<span class="str">'city_avg_spend'</span>]
+
+<span class="cmt"># Pivot tables — two-dimensional groupby with optional margins</span>
+pivot = df.<span class="fn">pivot_table</span>(
+    values  = <span class="str">'spend'</span>,
+    index   = <span class="str">'city'</span>,
+    columns = <span class="str">'spend_category'</span>,
+    aggfunc = <span class="str">'sum'</span>,
+    margins = <span class="kw">True</span>   <span class="cmt"># adds row/column totals</span>
+)</pre>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Cohort Analysis Setup</div>
+      <p>Find each customer's first purchase month and compute how many customers from each cohort are still active in month 3:</p>
+<pre><span class="cmt"># Step 1: find each customer's first order date</span>
+first_order = (
+    orders.<span class="fn">groupby</span>(<span class="str">'customer_id'</span>)[<span class="str">'order_date'</span>]
+          .<span class="fn">min</span>()
+          .<span class="fn">reset_index</span>()
+          .<span class="fn">rename</span>(columns={<span class="str">'order_date'</span>: <span class="str">'cohort_date'</span>})
+)
+first_order[<span class="str">'cohort_month'</span>] = first_order[<span class="str">'cohort_date'</span>].dt.to_period(<span class="str">'M'</span>)
+
+<span class="cmt"># Step 2: merge back onto orders and compute months since first order</span>
+orders = orders.<span class="fn">merge</span>(first_order[[<span class="str">'customer_id'</span>, <span class="str">'cohort_month'</span>, <span class="str">'cohort_date'</span>]],
+                       on=<span class="str">'customer_id'</span>)
+orders[<span class="str">'months_since'</span>] = (
+    (orders[<span class="str">'order_date'</span>].dt.to_period(<span class="str">'M'</span>) - orders[<span class="str">'cohort_month'</span>]).apply(<span class="kw">lambda</span> x: x.n)
+)
+
+<span class="cmt"># Step 3: cohort table — unique customers per cohort-month pair</span>
+cohort_table = (
+    orders.<span class="fn">groupby</span>([<span class="str">'cohort_month'</span>, <span class="str">'months_since'</span>])[<span class="str">'customer_id'</span>]
+          .<span class="fn">nunique</span>()
+          .<span class="fn">reset_index</span>()
+)</pre>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 6 ─── -->
+  <section id="merging">
+    <h2>6. Merging, Joining, and Concatenation</h2>
+
+    <h3>6.1 merge() — SQL-style Joins</h3>
+<pre><span class="cmt"># INNER JOIN (default): only matching rows</span>
+merged = pd.<span class="fn">merge</span>(orders, customers, on=<span class="str">'customer_id'</span>, how=<span class="str">'inner'</span>)
+
+<span class="cmt"># LEFT JOIN: all orders, customer info where available</span>
+merged = pd.<span class="fn">merge</span>(orders, customers, on=<span class="str">'customer_id'</span>, how=<span class="str">'left'</span>)
+
+<span class="cmt"># Join on differently-named keys</span>
+merged = pd.<span class="fn">merge</span>(orders, customers,
+                   left_on=<span class="str">'cust_id'</span>, right_on=<span class="str">'customer_id'</span>,
+                   how=<span class="str">'left'</span>)
+
+<span class="cmt"># Join on multiple keys</span>
+merged = pd.<span class="fn">merge</span>(df1, df2,
+                   on=[<span class="str">'user_id'</span>, <span class="str">'date'</span>],
+                   how=<span class="str">'inner'</span>)
+
+<span class="cmt"># Handling duplicate column names (suffix)</span>
+merged = pd.<span class="fn">merge</span>(left, right, on=<span class="str">'id'</span>,
+                   suffixes=(<span class="str">'_left'</span>, <span class="str">'_right'</span>))</pre>
+
+    <h3>6.2 concat() — Stacking DataFrames</h3>
+<pre><span class="cmt"># Stack rows vertically (append multiple DFs with same schema)</span>
+all_months = pd.<span class="fn">concat</span>([jan, feb, mar], axis=<span class="num">0</span>, ignore_index=<span class="kw">True</span>)
+
+<span class="cmt"># Stack columns horizontally</span>
+combined = pd.<span class="fn">concat</span>([df_features, df_labels], axis=<span class="num">1</span>)</pre>
+  </section>
+
+  <!-- ─── SECTION 7 ─── -->
+  <section id="cleaning">
+    <h2>7. Data Cleaning Patterns</h2>
+    <p>This section covers the most common real-world data quality operations. These patterns appear both in practice and as interview tasks.</p>
+
+    <h3>7.1 Handling Missing Values</h3>
+<pre><span class="cmt"># Detect nulls</span>
+df.<span class="fn">isnull</span>().<span class="fn">sum</span>()             <span class="cmt"># null count per column</span>
+df.<span class="fn">isnull</span>().<span class="fn">mean</span>() * <span class="num">100</span>      <span class="cmt"># null percentage per column</span>
+df[df[<span class="str">'spend'</span>].<span class="fn">isnull</span>()]      <span class="cmt"># rows where spend is null</span>
+
+<span class="cmt"># Drop rows / columns with nulls</span>
+df.<span class="fn">dropna</span>()                    <span class="cmt"># drop any row with at least one null</span>
+df.<span class="fn">dropna</span>(subset=[<span class="str">'spend'</span>, <span class="str">'city'</span>])  <span class="cmt"># only if these columns are null</span>
+df.<span class="fn">dropna</span>(axis=<span class="num">1</span>, thresh=<span class="num">0.5</span>*<span class="fn">len</span>(df))  <span class="cmt"># drop col if >50% null</span>
+
+<span class="cmt"># Fill nulls — imputation strategies</span>
+df[<span class="str">'spend'</span>].<span class="fn">fillna</span>(<span class="num">0</span>)                       <span class="cmt"># fill with constant</span>
+df[<span class="str">'spend'</span>].<span class="fn">fillna</span>(df[<span class="str">'spend'</span>].<span class="fn">mean</span>())       <span class="cmt"># fill with mean</span>
+df[<span class="str">'spend'</span>].<span class="fn">fillna</span>(df[<span class="str">'spend'</span>].<span class="fn">median</span>())     <span class="cmt"># fill with median (better for skewed)</span>
+df[<span class="str">'spend'</span>].<span class="fn">fillna</span>(method=<span class="str">'ffill'</span>)           <span class="cmt"># forward-fill (time-series)</span>
+df[<span class="str">'city'</span>].<span class="fn">fillna</span>(df[<span class="str">'city'</span>].<span class="fn">mode</span>()[<span class="num">0</span>])       <span class="cmt"># fill categorical with mode</span>
+
+<span class="cmt"># Group-wise imputation (fill with group median — better than global median)</span>
+df[<span class="str">'spend'</span>] = df.<span class="fn">groupby</span>(<span class="str">'city'</span>)[<span class="str">'spend'</span>].<span class="fn">transform</span>(<span class="kw">lambda</span> x: x.<span class="fn">fillna</span>(x.<span class="fn">median</span>()))</pre>
+
+    <h3>7.2 Handling Duplicates</h3>
+<pre><span class="cmt"># Detect duplicates</span>
+df.<span class="fn">duplicated</span>().<span class="fn">sum</span>()                  <span class="cmt"># count of duplicate rows</span>
+df.<span class="fn">duplicated</span>(subset=[<span class="str">'customer_id'</span>])  <span class="cmt"># duplicate on specific column</span>
+
+<span class="cmt"># Remove duplicates</span>
+df.<span class="fn">drop_duplicates</span>(inplace=<span class="kw">True</span>)       <span class="cmt"># removes exact duplicate rows</span>
+df.<span class="fn">drop_duplicates</span>(subset=[<span class="str">'customer_id'</span>], keep=<span class="str">'last'</span>)
+<span class="cmt"># keep='first' (default), 'last', or False (drop all duplicates)</span></pre>
+
+    <h3>7.3 Data Type Conversion</h3>
+<pre><span class="cmt"># Convert column types</span>
+df[<span class="str">'customer_id'</span>] = df[<span class="str">'customer_id'</span>].<span class="fn">astype</span>(<span class="str">'int64'</span>)
+df[<span class="str">'spend'</span>]       = df[<span class="str">'spend'</span>].<span class="fn">astype</span>(<span class="str">'float64'</span>)
+df[<span class="str">'city'</span>]        = df[<span class="str">'city'</span>].<span class="fn">astype</span>(<span class="str">'category'</span>)  <span class="cmt"># memory-efficient</span>
+
+<span class="cmt"># Parse dates robustly</span>
+df[<span class="str">'order_date'</span>] = pd.<span class="fn">to_datetime</span>(df[<span class="str">'order_date'</span>], errors=<span class="str">'coerce'</span>)
+<span class="cmt"># errors='coerce' turns unparseable strings into NaT instead of crashing</span>
+
+<span class="cmt"># Convert numeric columns stored as strings</span>
+df[<span class="str">'revenue'</span>] = pd.<span class="fn">to_numeric</span>(df[<span class="str">'revenue'</span>], errors=<span class="str">'coerce'</span>)</pre>
+
+    <h3>7.4 String Cleaning</h3>
+<pre><span class="cmt"># .str accessor — vectorized string operations on Series</span>
+df[<span class="str">'email'</span>] = df[<span class="str">'email'</span>].str.<span class="fn">strip</span>().<span class="fn">str</span>.<span class="fn">lower</span>()
+df[<span class="str">'city'</span>]  = df[<span class="str">'city'</span>].str.<span class="fn">strip</span>().<span class="fn">str</span>.<span class="fn">title</span>()
+
+<span class="cmt"># Extract patterns with regex</span>
+df[<span class="str">'area_code'</span>] = df[<span class="str">'phone'</span>].str.<span class="fn">extract</span>(r<span class="str">'(\d{3})'</span>)
+
+<span class="cmt"># Replace with regex</span>
+df[<span class="str">'cleaned'</span>] = df[<span class="str">'text'</span>].str.<span class="fn">replace</span>(r<span class="str">'[^a-zA-Z0-9\s]'</span>, <span class="str">''</span>, regex=<span class="kw">True</span>)
+
+<span class="cmt"># Check for patterns</span>
+df[df[<span class="str">'email'</span>].str.<span class="fn">contains</span>(<span class="str">'@gmail.com'</span>, na=<span class="kw">False</span>)]</pre>
+
+    <h3>7.5 Outlier Detection in Pandas</h3>
+<pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cmt"># IQR method</span>
+Q1  = df[<span class="str">'spend'</span>].<span class="fn">quantile</span>(<span class="num">0.25</span>)
+Q3  = df[<span class="str">'spend'</span>].<span class="fn">quantile</span>(<span class="num">0.75</span>)
+IQR = Q3 - Q1
+
+lower_fence = Q1 - <span class="num">1.5</span> * IQR
+upper_fence = Q3 + <span class="num">1.5</span> * IQR
+
+outliers = df[(df[<span class="str">'spend'</span>] &lt; lower_fence) | (df[<span class="str">'spend'</span>] > upper_fence)]
+clean_df  = df[(df[<span class="str">'spend'</span>] >= lower_fence) &amp; (df[<span class="str">'spend'</span>] &lt;= upper_fence)]
+
+<span class="cmt"># Z-score method</span>
+from scipy import stats
+z_scores = np.<span class="fn">abs</span>(stats.<span class="fn">zscore</span>(df[<span class="str">'spend'</span>].<span class="fn">dropna</span>()))
+clean_df  = df[z_scores &lt; <span class="num">3</span>]  <span class="cmt"># keep only within ±3 SDs of mean</span></pre>
+  </section>
+
+  <!-- ─── SECTION 8 ─── -->
+  <section id="interview">
+    <h2>8. Interview Questions</h2>
+    <div class="qa-section">
+      <div class="qa-header">Python / Pandas — Q&amp;A</div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the difference between .loc and .iloc in Pandas?</div>
+        <div class="qa-a">
+          <strong>.loc</strong> selects rows and columns by <em>labels</em> — the index labels for rows, and column names for columns. The end of a slice is <em>inclusive</em>: <code>df.loc[2:5]</code> returns rows with index labels 2, 3, 4, and 5.<br><br>
+          <strong>.iloc</strong> selects by <em>integer positions</em> (0-based). The end of a slice is <em>exclusive</em> (like Python lists): <code>df.iloc[2:5]</code> returns rows at positions 2, 3, and 4 — not 5.<br><br>
+          The difference is most important when the DataFrame has a non-default index (e.g., customer_id as the index). <code>df.loc[2]</code> fetches the row with <em>label</em> 2, while <code>df.iloc[2]</code> fetches the <em>third</em> row regardless of its label.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>When would you use .apply() vs. a vectorized NumPy operation? Which is faster?</div>
+        <div class="qa-a">
+          <strong>Vectorized NumPy operations</strong> operate on entire arrays simultaneously using compiled C/Fortran code. They are 10–100× faster than Python loops or <code>.apply()</code> for numerical operations. Whenever the transformation can be expressed as arithmetic, comparison, or a built-in NumPy ufunc, vectorization is always the right choice.<br><br>
+          <strong>.apply()</strong> calls a Python function row-by-row (or column-by-column), which means Python-level overhead on every call. Use <code>.apply()</code> when the transformation cannot be expressed as a vectorized operation — for example, accessing multiple columns with custom logic, calling an external API per row, or performing conditional logic that requires if-elif-else branching with multiple column references.<br><br>
+          Rule of thumb: if you can write it with <code>np.where()</code>, arithmetic operators, or built-in Series methods (like <code>.str.contains()</code>), do that. Reach for <code>.apply()</code> only when those options don't cover the logic.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>How do you handle missing values in Pandas? What are the different strategies?</div>
+        <div class="qa-a">
+          <strong>Detection:</strong> <code>df.isnull().sum()</code> gives the null count per column; <code>df.isnull().mean()</code> gives the proportion.<br><br>
+          <strong>Strategies depend on the nature of the missingness and the data type:</strong><ul>
+            <li><strong>Deletion:</strong> <code>dropna()</code> — appropriate when nulls are few (e.g., &lt;5%) and appear to be missing completely at random (MCAR). Deleting too many rows reduces power and can introduce bias.</li>
+            <li><strong>Mean imputation:</strong> <code>fillna(mean)</code> — for symmetric numerical data. Preserves the mean but reduces variance and can distort correlations.</li>
+            <li><strong>Median imputation:</strong> <code>fillna(median)</code> — better for skewed data (e.g., income, order amounts). More robust to outliers than mean.</li>
+            <li><strong>Mode imputation:</strong> <code>fillna(mode()[0])</code> — for categorical columns.</li>
+            <li><strong>Forward/backward fill:</strong> <code>fillna(method='ffill')</code> — appropriate for time-series data where the last known value is a reasonable estimate.</li>
+            <li><strong>Group-wise imputation:</strong> <code>groupby().transform()</code> — fill with the group's mean/median (e.g., fill missing salary with department-level median). More accurate than global imputation.</li>
+            <li><strong>Model-based imputation:</strong> Predict missing values using a ML model (KNN imputation, iterative imputer). Most accurate but computationally expensive.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the difference between merge() and concat() in Pandas?</div>
+        <div class="qa-a">
+          <strong>merge()</strong> is analogous to a SQL JOIN. It combines two DataFrames based on a common key column (or multiple key columns). It is used when the DataFrames share a meaningful relationship and you want to match records — for example, joining orders to customers by customer_id. The <code>how</code> parameter controls the join type: 'inner', 'left', 'right', 'outer'.<br><br>
+          <strong>concat()</strong> stacks DataFrames along an axis without matching on a key. It is used to combine DataFrames with the same schema — for example, appending monthly export files (<code>axis=0</code>, stack rows) or combining feature sets side by side (<code>axis=1</code>, stack columns). There is no join condition: it is simple stacking.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What does groupby().transform() do, and how is it different from groupby().agg()?</div>
+        <div class="qa-a">
+          <strong>groupby().agg()</strong> collapses each group into one row — the output has one row per group. You lose the original row structure; all you have is the aggregated summary.<br><br>
+          <strong>groupby().transform()</strong> computes the aggregation for each group but then <em>broadcasts</em> the result back to the original row-level index — the output has the same number of rows as the input. Every row in a group gets the same group-level value added as a new column.<br><br>
+          This is the Pandas equivalent of a SQL window function without PARTITION BY losing the individual rows. Example use: adding a column showing each customer's spending as a percentage of their city's total spend — <code>df['spend_pct_of_city'] = df['spend'] / df.groupby('city')['spend'].transform('sum')</code>. This is impossible with <code>.agg()</code> alone without a subsequent merge.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="page-nav">
+    <a href="#">← Module 3: SQL</a>
+    <a href="#">Module 5: Data Cleaning →</a>
+  </nav>
+
+</div>
+</body>
+</html>

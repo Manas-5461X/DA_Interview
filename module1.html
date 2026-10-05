@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 — Foundations of Data Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F7F8FC;
+  --surface: #FFFFFF;
+  --surface-2: #EFF2FA;
+  --text: #18202F;
+  --text-muted: #5A6585;
+  --accent: #2B5CE6;
+  --accent-light: #EEF3FF;
+  --border: #DDE3F2;
+  --code-bg: #1A1D2E;
+  --code-text: #C9D1F0;
+  --green: #059669;
+  --green-light: #ECFDF5;
+  --green-border: #6EE7B7;
+  --orange: #D97706;
+  --orange-light: #FFFBEB;
+  --purple: #7C3AED;
+  --purple-light: #F5F3FF;
+  --shadow-sm: 0 1px 3px rgba(24,32,47,0.07);
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1218;
+    --surface: #161C28;
+    --surface-2: #1D2538;
+    --text: #E8EBF7;
+    --text-muted: #8A96C2;
+    --accent: #5079F5;
+    --accent-light: #1A2450;
+    --border: #273050;
+    --code-bg: #080C15;
+    --code-text: #C9D1F0;
+    --green-light: #071A10;
+    --green-border: #065F46;
+    --orange-light: #1C1407;
+    --purple-light: #120D28;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1218;
+  --surface: #161C28;
+  --surface-2: #1D2538;
+  --text: #E8EBF7;
+  --text-muted: #8A96C2;
+  --accent: #5079F5;
+  --accent-light: #1A2450;
+  --border: #273050;
+  --code-bg: #080C15;
+  --code-text: #C9D1F0;
+  --green-light: #071A10;
+  --green-border: #065F46;
+  --orange-light: #1C1407;
+  --purple-light: #120D28;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 16px;
+  padding-inline: 24px;
+  padding-block: 48px 100px;
+}
+.page-wrap { max-width: 860px; margin: 0 auto; }
+
+/* ── Module header ── */
+.module-header { border-bottom: 2px solid var(--border); padding-bottom: 36px; margin-bottom: 48px; }
+.module-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent); color: #fff;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 4px; margin-bottom: 20px;
+}
+.module-header h1 {
+  font-size: clamp(28px, 4vw, 42px); font-weight: 700; line-height: 1.18;
+  color: var(--text); text-wrap: balance; margin-bottom: 14px;
+}
+.module-header .lead { font-size: 18px; color: var(--text-muted); max-width: 65ch; line-height: 1.65; }
+
+/* ── TOC ── */
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 56px; }
+.toc-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+.toc ol { list-style: decimal; padding-left: 22px; display: flex; flex-direction: column; gap: 7px; }
+.toc a { color: var(--accent); text-decoration: none; font-size: 15px; }
+.toc a:hover { text-decoration: underline; }
+
+/* ── Section headings ── */
+section { margin-bottom: 64px; }
+h2 {
+  font-size: 24px; font-weight: 700; color: var(--text);
+  margin-bottom: 22px; padding-bottom: 10px;
+  border-bottom: 2px solid var(--accent);
+  text-wrap: balance; display: block;
+}
+h3 { font-size: 19px; font-weight: 600; color: var(--text); margin-top: 36px; margin-bottom: 12px; text-wrap: balance; }
+h4 { font-size: 15px; font-weight: 600; color: var(--text); margin-top: 24px; margin-bottom: 8px; }
+p { margin-bottom: 16px; max-width: 72ch; }
+
+/* ── Definition ── */
+.definition {
+  background: var(--accent-light); border-left: 4px solid var(--accent);
+  padding: 16px 20px; border-radius: 0 var(--radius) var(--radius) 0; margin: 22px 0;
+}
+.def-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.definition p { margin: 0; font-size: 15px; max-width: none; }
+
+/* ── Example ── */
+.example {
+  background: var(--green-light); border: 1px solid var(--green-border);
+  border-radius: var(--radius); padding: 20px 24px; margin: 22px 0;
+}
+.ex-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+.example p, .example li { font-size: 15px; }
+.example ul { margin-bottom: 0; }
+
+/* ── Note / callout ── */
+.note {
+  background: var(--orange-light); border-left: 4px solid var(--orange);
+  padding: 14px 20px; border-radius: 0 var(--radius) var(--radius) 0; margin: 22px 0;
+}
+.note-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+.note p { margin: 0; font-size: 14px; max-width: none; }
+
+/* ── Analytics type grid ── */
+.analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin: 24px 0; }
+.analytics-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.analytics-card .type-tier {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted);
+}
+.analytics-card h4 { margin: 0; font-size: 15px; color: var(--accent); }
+.analytics-card .type-q { font-size: 13px; font-style: italic; color: var(--text-muted); }
+.analytics-card p { font-size: 13px; color: var(--text-muted); margin: 0; max-width: none; }
+
+/* ── Data type grid ── */
+.dtype-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px 0; }
+.dtype-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px;
+}
+.dtype-card h4 { margin: 0 0 6px; font-size: 15px; color: var(--text); }
+.dtype-card p { margin: 0; font-size: 13px; color: var(--text-muted); max-width: none; }
+.dtype-card .dtype-eg { margin-top: 8px; font-size: 12px; color: var(--accent); font-weight: 600; }
+
+/* ── Tables ── */
+.table-wrap { overflow-x: auto; margin: 24px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { background: var(--surface-2); font-weight: 600; text-align: left; padding: 11px 16px; border-bottom: 2px solid var(--border); color: var(--text); white-space: nowrap; }
+td { padding: 11px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface-2); }
+
+/* ── Role cards ── */
+.roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 24px 0; }
+.role-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; }
+.role-card h4 { margin: 0 0 10px; font-size: 15px; font-weight: 700; color: var(--text); }
+.role-card ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.role-card li { font-size: 13px; color: var(--text-muted); padding-left: 14px; position: relative; }
+.role-card li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 11px; top: 2px; }
+.role-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; }
+.tag-analyst { background: var(--accent-light); color: var(--accent); }
+.tag-scientist { background: var(--purple-light); color: var(--purple); }
+.tag-engineer { background: var(--green-light); color: var(--green); }
+.tag-bi { background: var(--orange-light); color: var(--orange); }
+
+/* ── Pipeline steps ── */
+.pipeline { display: flex; flex-wrap: wrap; gap: 0; margin: 24px 0; }
+.pipeline-step {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 16px 20px; flex: 1 1 120px; position: relative;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.pipeline-step:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.pipeline-step:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+.pipeline-step::after {
+  content: '→'; position: absolute; right: -12px; top: 50%; transform: translateY(-50%);
+  color: var(--accent); font-weight: 700; font-size: 14px; z-index: 1;
+}
+.pipeline-step:last-child::after { display: none; }
+.step-num { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.08em; }
+.step-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.step-desc { font-size: 12px; color: var(--text-muted); }
+
+/* ── Interview Q&A ── */
+.qa-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-top: 32px; }
+.qa-header { background: var(--accent); color: #fff; padding: 14px 22px; font-weight: 700; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+.qa-item { padding: 22px 24px; border-bottom: 1px solid var(--border); }
+.qa-item:last-child { border-bottom: none; }
+.qa-q { font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 10px; display: flex; gap: 10px; align-items: flex-start; }
+.qa-badge { min-width: 22px; height: 22px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; flex-shrink: 0; }
+.qa-a { font-size: 14.5px; color: var(--text-muted); padding-left: 32px; line-height: 1.72; }
+.qa-a strong { color: var(--text); }
+.qa-a ul { margin: 8px 0 0; }
+
+/* ── Code ── */
+code { font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 13px; background: var(--surface-2); border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; }
+pre { background: var(--code-bg); color: var(--code-text); padding: 20px 24px; border-radius: var(--radius); overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.7; margin: 20px 0; }
+
+/* ── Lists ── */
+ul, ol { padding-left: 22px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+li { max-width: 72ch; }
+
+/* ── Page nav ── */
+.page-nav { display: flex; justify-content: flex-end; align-items: center; padding-top: 40px; border-top: 1px solid var(--border); margin-top: 60px; font-size: 14px; }
+.page-nav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+@media (max-width: 600px) {
+  body { padding-inline: 16px; }
+  .analytics-grid, .dtype-grid, .roles-grid { grid-template-columns: 1fr; }
+  .pipeline { flex-direction: column; }
+  .pipeline-step { border-radius: 0 !important; border-bottom: 1px solid var(--border); }
+  .pipeline-step::after { content: '↓'; right: auto; left: 20px; top: auto; bottom: -14px; transform: none; }
+  .pipeline-step:last-child { border-bottom: none; }
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header class="module-header">
+    <div class="module-tag">Module 01 · Data Analytics Interview Packet</div>
+    <h1>Foundations of Data Analytics</h1>
+    <p class="lead">A rigorous grounding in what data analytics is, how it is classified, what kinds of data exist, the lifecycle data travels through, and the professional roles that work with it — the conceptual bedrock every interview builds on.</p>
+  </header>
+
+  <nav class="toc">
+    <div class="toc-label">Contents</div>
+    <ol>
+      <li><a href="#what-is">What is Data Analytics?</a></li>
+      <li><a href="#types">The Four Types of Analytics</a></li>
+      <li><a href="#data-types">Types and Classifications of Data</a></li>
+      <li><a href="#measurement">Scales of Measurement</a></li>
+      <li><a href="#lifecycle">The Data Lifecycle</a></li>
+      <li><a href="#roles">Roles in the Data Ecosystem</a></li>
+      <li><a href="#interview">Interview Questions</a></li>
+    </ol>
+  </nav>
+
+  <!-- SECTION 1 -->
+  <section id="what-is">
+    <h2>1. What is Data Analytics?</h2>
+
+    <div class="definition">
+      <div class="def-label">Definition</div>
+      <p><strong>Data Analytics</strong> is the systematic process of examining, cleaning, transforming, and modelling data with the goal of discovering useful information, drawing conclusions, and supporting decision-making. It is distinct from mere data collection in that its output is always actionable insight — a recommendation, a prediction, an explanation, or a measurement that changes how an organization acts.</p>
+    </div>
+
+    <p>Organizations generate enormous volumes of data every second — transaction logs, sensor readings, clickstreams, survey responses, social media posts. Raw data alone has no value; it is the <em>interpretation</em> of data that creates value. Data analytics is the discipline that closes this gap between raw data and business decisions.</p>
+
+    <p>The field sits at the intersection of mathematics (especially statistics), computer science (especially databases and programming), and domain knowledge. A strong data analyst must be competent in all three areas.</p>
+
+    <h3>Why Data Analytics Matters</h3>
+    <p>A few representative use cases illustrate the breadth of impact:</p>
+    <ul>
+      <li><strong>Retail:</strong> A supermarket chain analyses purchase histories to determine optimal shelf placement and run targeted promotions, increasing basket size by 12%.</li>
+      <li><strong>Healthcare:</strong> A hospital system analyses patient readmission data to identify at-risk patients before discharge, reducing 30-day readmissions by 18%.</li>
+      <li><strong>Finance:</strong> A bank analyses transaction patterns in real time to flag fraudulent activity with a false-positive rate below 0.1%.</li>
+      <li><strong>Technology:</strong> A streaming platform analyses watch-time and skip-rate data to inform which original content to commission next.</li>
+    </ul>
+
+    <div class="note">
+      <div class="note-label">Key Interview Point</div>
+      <p>Interviewers often ask candidates to distinguish data analytics from data science and business intelligence. Keep in mind: analytics is broadly about deriving insight from data; data science additionally builds predictive models at scale; BI focuses on reporting historical performance through dashboards. The boundaries blur in practice, so frame your answer around emphasis rather than hard borders.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section id="types">
+    <h2>2. The Four Types of Analytics</h2>
+    <p>Analytics is commonly categorized into four types arranged in a hierarchy of complexity and value. Each type answers a fundamentally different question and requires progressively more sophisticated methods.</p>
+
+    <div class="analytics-grid">
+      <div class="analytics-card">
+        <div class="type-tier">Type 1 · Simplest</div>
+        <h4>Descriptive</h4>
+        <p class="type-q">"What happened?"</p>
+        <p>Summarizes historical data to understand past performance. Uses aggregation, grouping, and visualization. Produces reports, dashboards, and summaries.</p>
+      </div>
+      <div class="analytics-card">
+        <div class="type-tier">Type 2</div>
+        <h4>Diagnostic</h4>
+        <p class="type-q">"Why did it happen?"</p>
+        <p>Investigates root causes of observed outcomes. Uses drill-down analysis, correlation, and data mining to find factors that explain patterns.</p>
+      </div>
+      <div class="analytics-card">
+        <div class="type-tier">Type 3</div>
+        <h4>Predictive</h4>
+        <p class="type-q">"What will happen?"</p>
+        <p>Uses statistical models and machine learning to forecast future events. Requires labelled historical data and model validation. Output is a probability or a predicted value.</p>
+      </div>
+      <div class="analytics-card">
+        <div class="type-tier">Type 4 · Most Complex</div>
+        <h4>Prescriptive</h4>
+        <p class="type-q">"What should we do?"</p>
+        <p>Recommends specific actions to achieve a desired outcome. Combines predictive models with optimization algorithms and domain rules.</p>
+      </div>
+    </div>
+
+    <h3>Detailed Breakdown with Examples</h3>
+
+    <h4>Descriptive Analytics</h4>
+    <p>Descriptive analytics is the most widely practised type. Every business dashboard, monthly report, and KPI scorecard is a form of descriptive analytics. The core operations are:</p>
+    <ul>
+      <li>Counting and aggregating (total revenue, average order value, count of users)</li>
+      <li>Grouping and segmentation (revenue by region, churn rate by acquisition channel)</li>
+      <li>Time-series summarization (weekly active users, month-over-month growth)</li>
+      <li>Visualization (bar charts, line graphs, heat maps)</li>
+    </ul>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Descriptive</div>
+      <p>An e-commerce company wants to understand last quarter's performance. The analytics team queries the orders database and produces: total revenue = ₹4.2 Cr, average order value = ₹1,840, top-selling category = Electronics (38% of revenue), return rate = 7.2%. This is descriptive analytics — it tells leadership <em>what</em> happened, with no attempt to explain why or predict what comes next.</p>
+    </div>
+
+    <h4>Diagnostic Analytics</h4>
+    <p>Once a descriptive analysis surfaces something interesting or alarming (e.g., revenue dropped 15% in July), diagnostic analytics asks <em>why</em>. Common techniques include:</p>
+    <ul>
+      <li><strong>Drill-down analysis:</strong> Decomposing aggregates into sub-groups to find where the anomaly originates.</li>
+      <li><strong>Correlation analysis:</strong> Identifying variables that move together with the outcome of interest.</li>
+      <li><strong>Data mining:</strong> Systematically exploring the data for patterns that explain the observed phenomenon.</li>
+      <li><strong>Funnel analysis:</strong> Tracing where users drop off in a multi-step process.</li>
+    </ul>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Diagnostic</div>
+      <p>Revenue dropped 15% in July. Drilling down by channel reveals the drop is concentrated in mobile (−28%) while desktop grew 4%. Drilling further into mobile reveals the drop occurred after the 12th of July. The team checks the deployment log and finds a mobile app update on July 11th that introduced a checkout bug. The diagnostic analysis identified the root cause: a software defect, not a market-wide decline.</p>
+    </div>
+
+    <h4>Predictive Analytics</h4>
+    <p>Predictive analytics uses historical data to build a model that estimates future outcomes. The model is trained on labelled examples where both the input features and the outcome are known. Key characteristics:</p>
+    <ul>
+      <li>Output is always probabilistic — "70% likelihood of churn in the next 30 days," not "this customer will churn."</li>
+      <li>Requires clean, representative training data.</li>
+      <li>Models must be validated on held-out data to assess generalization.</li>
+      <li>Common algorithms: linear/logistic regression, decision trees, random forests, gradient boosting, neural networks.</li>
+    </ul>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Predictive</div>
+      <p>A telecom company wants to predict which customers are likely to cancel their subscription next month. Features used: tenure, number of support calls in the last 30 days, recent data usage trend, contract type. A logistic regression model trained on 12 months of historical data achieves 82% AUC. The model scores all current customers monthly, and those with churn probability &gt; 0.7 are flagged for a retention offer. This is predictive analytics: a forward-looking probability estimate derived from patterns in historical data.</p>
+    </div>
+
+    <h4>Prescriptive Analytics</h4>
+    <p>Prescriptive analytics is the most advanced type. It not only predicts what will happen but also recommends what action to take and, in automated systems, takes that action. It integrates:</p>
+    <ul>
+      <li>Predictive models (to estimate outcomes of different choices)</li>
+      <li>Optimization algorithms (linear programming, constraint satisfaction, reinforcement learning) to find the best action</li>
+      <li>Business rules and constraints (budget limits, regulatory requirements, ethical guidelines)</li>
+    </ul>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Prescriptive</div>
+      <p>An airline uses prescriptive analytics for dynamic pricing. For each unsold seat, a model predicts the probability of selling at each price point given current demand signals (days until departure, competitor prices, seat class, historical fill rates). An optimization layer then selects the price that maximizes expected revenue subject to constraints (floor price, alignment with fare classes). The system updates prices across thousands of flights thousands of times per day — fully automated prescriptive analytics.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Key Question</th>
+            <th>Techniques</th>
+            <th>Output</th>
+            <th>Complexity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Descriptive</strong></td>
+            <td>What happened?</td>
+            <td>Aggregation, grouping, visualization</td>
+            <td>Reports, dashboards</td>
+            <td>Low</td>
+          </tr>
+          <tr>
+            <td><strong>Diagnostic</strong></td>
+            <td>Why did it happen?</td>
+            <td>Drill-down, correlation, root cause analysis</td>
+            <td>Explanation, causal hypothesis</td>
+            <td>Medium</td>
+          </tr>
+          <tr>
+            <td><strong>Predictive</strong></td>
+            <td>What will happen?</td>
+            <td>ML models, regression, forecasting</td>
+            <td>Probability scores, forecasts</td>
+            <td>High</td>
+          </tr>
+          <tr>
+            <td><strong>Prescriptive</strong></td>
+            <td>What should we do?</td>
+            <td>Optimization, simulation, reinforcement learning</td>
+            <td>Recommended actions</td>
+            <td>Very High</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section id="data-types">
+    <h2>3. Types and Classifications of Data</h2>
+    <p>Before any analysis can begin, the analyst must understand the <em>nature</em> of the data they are working with. Data can be classified along multiple axes, and the correct statistical technique depends entirely on the classification.</p>
+
+    <h3>By Structure</h3>
+    <div class="dtype-grid">
+      <div class="dtype-card">
+        <h4>Structured Data</h4>
+        <p>Organized in rows and columns with a fixed schema. Every field has a defined data type. Stored in relational databases (SQL). Easy to query and analyse.</p>
+        <div class="dtype-eg">Examples: Order tables, employee records, sensor readings in a time-series DB</div>
+      </div>
+      <div class="dtype-card">
+        <h4>Semi-Structured Data</h4>
+        <p>Has some organizational properties but does not conform to a rigid tabular schema. Contains tags or markers to separate fields but allows variable structure.</p>
+        <div class="dtype-eg">Examples: JSON, XML, email (headers structured, body unstructured), CSV with variable columns</div>
+      </div>
+      <div class="dtype-card">
+        <h4>Unstructured Data</h4>
+        <p>Has no predefined schema. Requires preprocessing (NLP, computer vision, audio processing) before analysis. Accounts for ~80% of enterprise data.</p>
+        <div class="dtype-eg">Examples: Images, audio recordings, video, free-text reviews, social media posts</div>
+      </div>
+    </div>
+
+    <h3>By Nature: Quantitative vs. Qualitative</h3>
+    <div class="dtype-grid">
+      <div class="dtype-card">
+        <h4>Quantitative (Numerical)</h4>
+        <p>Represents measurable quantities. Can be meaningfully added, subtracted, averaged, and ordered. Subdivided into <em>discrete</em> (countable: number of orders, number of defects) and <em>continuous</em> (measurable: temperature, revenue, duration).</p>
+        <div class="dtype-eg">Examples: Age (29), Revenue (₹14,200), Number of page views (3,847)</div>
+      </div>
+      <div class="dtype-card">
+        <h4>Qualitative (Categorical)</h4>
+        <p>Represents categories or labels. Cannot be meaningfully added or averaged. Subdivided into <em>nominal</em> (no natural order: city, gender, product colour) and <em>ordinal</em> (natural order exists: star rating, education level, satisfaction score).</p>
+        <div class="dtype-eg">Examples: City ("Mumbai"), Product colour ("Red"), Customer tier ("Gold")</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section id="measurement">
+    <h2>4. Scales of Measurement</h2>
+    <p>The statistician Stanley Smith Stevens (1946) formalized four levels of measurement that determine which statistical operations are valid on a given variable. This is foundational knowledge — getting it wrong means applying the wrong test and drawing invalid conclusions.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Scale</th>
+            <th>Properties</th>
+            <th>Operations Permitted</th>
+            <th>Central Tendency</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Nominal</strong></td>
+            <td>Identity only. Categories are distinct but have no order or magnitude.</td>
+            <td>= ≠ (equality only)</td>
+            <td>Mode</td>
+            <td>Blood type (A/B/O/AB), Country, Gender identity</td>
+          </tr>
+          <tr>
+            <td><strong>Ordinal</strong></td>
+            <td>Identity + order. Ranks are meaningful but intervals between ranks are not necessarily equal.</td>
+            <td>= ≠ &lt; &gt;</td>
+            <td>Median, Mode</td>
+            <td>Survey ratings (1–5 stars), Education level, Race position (1st, 2nd, 3rd)</td>
+          </tr>
+          <tr>
+            <td><strong>Interval</strong></td>
+            <td>Identity + order + equal intervals. Differences are meaningful, but there is no true zero (zero does not mean "none of the quantity").</td>
+            <td>= ≠ &lt; &gt; + −</td>
+            <td>Mean, Median, Mode</td>
+            <td>Temperature in °C or °F, Calendar year, IQ score</td>
+          </tr>
+          <tr>
+            <td><strong>Ratio</strong></td>
+            <td>Identity + order + equal intervals + true zero. All arithmetic is meaningful. Zero means complete absence.</td>
+            <td>= ≠ &lt; &gt; + − × ÷</td>
+            <td>Mean, Median, Mode, Geometric Mean</td>
+            <td>Height, Weight, Revenue, Duration, Number of items</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Why This Matters — A Common Mistake</div>
+      <p>A team rates customer satisfaction on a 1–5 scale. They calculate the <em>average</em> rating as 3.4. Is this valid? The scale is <strong>ordinal</strong> — the difference between 1 and 2 may not be the same human experience as between 4 and 5. Strictly, means should not be computed on ordinal data; the median (the middle value when sorted) is the correct central tendency. In practice, treating Likert-scale data as interval is common and often defensible — but an interviewer who asks "what is the appropriate measure of central tendency for a 1–5 rating scale?" expects you to say <em>median</em> and to know <em>why</em>.</p>
+    </div>
+
+    <div class="note">
+      <div class="note-label">Rule of Thumb</div>
+      <p>Each higher scale subsumes the properties of those below it. Ratio data can be analysed with any technique appropriate for interval data, which can be analysed with any technique for ordinal data, which can be analysed with any technique for nominal data. The reverse is not true — do not compute means on nominal data (the mean of {A, B, A, C} is meaningless).</p>
+    </div>
+  </section>
+
+  <!-- SECTION 5 -->
+  <section id="lifecycle">
+    <h2>5. The Data Lifecycle</h2>
+    <p>Raw data moves through a predictable sequence of stages before it becomes a decision-enabling insight. Understanding this lifecycle helps analysts understand where problems originate and how to intervene.</p>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">01</div>
+        <div class="step-name">Collection</div>
+        <div class="step-desc">Gathering from sources: surveys, databases, APIs, sensors, web scraping, logs</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">02</div>
+        <div class="step-name">Storage</div>
+        <div class="step-desc">Persisting data in structured (SQL), semi-structured (JSON), or unstructured (object store) systems</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">03</div>
+        <div class="step-name">Processing</div>
+        <div class="step-desc">Cleaning, transforming, and enriching: handling nulls, deduplication, joins, normalization</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">04</div>
+        <div class="step-name">Analysis</div>
+        <div class="step-desc">Applying statistical and computational methods to extract patterns and test hypotheses</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">05</div>
+        <div class="step-name">Visualization</div>
+        <div class="step-desc">Translating findings into charts, dashboards, and reports that communicate clearly</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">06</div>
+        <div class="step-name">Decision</div>
+        <div class="step-desc">Insights are used to drive actions, which generate new data and restart the cycle</div>
+      </div>
+    </div>
+
+    <h3>Stage-by-Stage Detail</h3>
+
+    <h4>1. Data Collection</h4>
+    <p>Data originates from many sources. The quality of downstream analysis is bounded by the quality of what is collected. Collection methods include:</p>
+    <ul>
+      <li><strong>Transactional systems:</strong> Orders, payments, logins — captured automatically as business operations occur.</li>
+      <li><strong>Event tracking:</strong> Clickstream data, app events, page views — instrumented explicitly into products.</li>
+      <li><strong>Surveys and forms:</strong> Self-reported data; subject to response bias and sampling bias.</li>
+      <li><strong>External APIs and data providers:</strong> Weather, financial data, census data, third-party enrichment.</li>
+      <li><strong>Sensors and IoT:</strong> Continuous readings from physical devices (temperature, location, vibration).</li>
+    </ul>
+
+    <div class="note">
+      <div class="note-label">Garbage In, Garbage Out (GIGO)</div>
+      <p>The most sophisticated analysis cannot rescue fundamentally flawed data. Analysts spend 50–80% of their time on data quality tasks (collection, cleaning, validation) — a proportion that surprises many new practitioners but reflects reality in every production analytics environment.</p>
+    </div>
+
+    <h4>2. Data Storage</h4>
+    <p>Where data lives determines how it can be accessed. Common storage paradigms:</p>
+    <ul>
+      <li><strong>Relational databases (RDBMS):</strong> Structured, ACID-compliant, optimized for transactional workloads (OLTP). Examples: PostgreSQL, MySQL, Oracle.</li>
+      <li><strong>Data warehouses:</strong> Optimized for analytical queries (OLAP) on large, historical datasets. Examples: BigQuery, Redshift, Snowflake.</li>
+      <li><strong>Data lakes:</strong> Store raw data in any format (structured, semi-structured, unstructured) at low cost until needed. Examples: S3, Azure Data Lake.</li>
+      <li><strong>NoSQL databases:</strong> Designed for specific access patterns — document stores (MongoDB), key-value (Redis), column-family (Cassandra), graph (Neo4j).</li>
+    </ul>
+
+    <h4>3. Data Processing</h4>
+    <p>Raw collected data is rarely analysis-ready. Processing transforms it into a usable state:</p>
+    <ul>
+      <li><strong>Cleaning:</strong> Handling missing values, removing duplicates, correcting formatting errors.</li>
+      <li><strong>Transformation:</strong> Converting data types, normalizing scales, encoding categorical variables.</li>
+      <li><strong>Integration:</strong> Joining data from multiple sources into a unified view.</li>
+      <li><strong>Aggregation:</strong> Pre-computing summaries for performance (e.g., daily totals from event-level data).</li>
+    </ul>
+    <p>Processing may be done as <strong>batch</strong> (processing large accumulated datasets periodically, e.g., nightly ETL jobs) or as <strong>streaming</strong> (processing events in real time as they arrive, e.g., fraud detection).</p>
+
+    <h4>4–6. Analysis, Visualization, and Decision</h4>
+    <p>These are covered in depth in subsequent modules (Statistics, Visualization, Business Analytics). The key point here is that analysis and visualization are not endpoints — they exist to inform decisions. An analyst who produces beautiful charts that no one acts on has produced no business value. The measure of analytics work is always the quality of the decisions it enables.</p>
+  </section>
+
+  <!-- SECTION 6 -->
+  <section id="roles">
+    <h2>6. Roles in the Data Ecosystem</h2>
+    <p>The data profession encompasses several distinct roles that are frequently confused, especially in interviews. Understanding where each role sits in the pipeline and what skills it requires is essential both for self-positioning and for cross-functional collaboration.</p>
+
+    <div class="roles-grid">
+      <div class="role-card">
+        <div class="role-tag tag-analyst">Data Analyst</div>
+        <h4>Data Analyst</h4>
+        <ul>
+          <li>Translates business questions into analytical queries</li>
+          <li>Uses SQL, Excel, Python/R for analysis</li>
+          <li>Builds dashboards and reports (BI tools)</li>
+          <li>Communicates findings to non-technical stakeholders</li>
+          <li>Focuses on historical and current data</li>
+          <li>Primary output: insights, reports, dashboards</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-tag tag-scientist">Data Scientist</div>
+        <h4>Data Scientist</h4>
+        <ul>
+          <li>Builds predictive and prescriptive models</li>
+          <li>Deep statistical and ML expertise</li>
+          <li>Uses Python/R, Spark, ML frameworks</li>
+          <li>Designs experiments (A/B testing)</li>
+          <li>Works on future-oriented, probabilistic outputs</li>
+          <li>Primary output: models, algorithms, predictions</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-tag tag-engineer">Data Engineer</div>
+        <h4>Data Engineer</h4>
+        <ul>
+          <li>Builds and maintains data pipelines</li>
+          <li>Designs schemas, warehouses, and lakes</li>
+          <li>Ensures data quality, availability, and reliability</li>
+          <li>Works with distributed systems (Spark, Kafka)</li>
+          <li>Enables analysts and scientists to do their work</li>
+          <li>Primary output: pipelines, infrastructure, data products</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-tag tag-bi">BI Analyst / BI Developer</div>
+        <h4>BI Analyst / Developer</h4>
+        <ul>
+          <li>Specializes in business intelligence tooling</li>
+          <li>Builds complex dashboards in Tableau, Power BI, Looker</li>
+          <li>Designs semantic data models (star schemas)</li>
+          <li>Bridges the gap between IT and business stakeholders</li>
+          <li>Focuses on reporting and performance monitoring</li>
+          <li>Primary output: reports, dashboards, data models</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Data Analyst</th>
+            <th>Data Scientist</th>
+            <th>Data Engineer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Primary Question</strong></td>
+            <td>What happened? Why?</td>
+            <td>What will happen? What should we do?</td>
+            <td>How do we reliably collect and serve data?</td>
+          </tr>
+          <tr>
+            <td><strong>Time Orientation</strong></td>
+            <td>Past / Present</td>
+            <td>Future</td>
+            <td>Present (infrastructure)</td>
+          </tr>
+          <tr>
+            <td><strong>Core Tools</strong></td>
+            <td>SQL, Excel, Tableau, Python</td>
+            <td>Python, R, TensorFlow, scikit-learn</td>
+            <td>Spark, Kafka, Airflow, dbt, SQL</td>
+          </tr>
+          <tr>
+            <td><strong>Statistics Depth</strong></td>
+            <td>Moderate (descriptive, inferential basics)</td>
+            <td>Deep (Bayesian, ML theory, experimental design)</td>
+            <td>Light (data quality metrics)</td>
+          </tr>
+          <tr>
+            <td><strong>Coding Depth</strong></td>
+            <td>Moderate</td>
+            <td>High</td>
+            <td>Very High</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <div class="note-label">In Practice</div>
+      <p>Role boundaries vary significantly by company size. At a startup, a single "data person" may do all three jobs. At a large tech company, these are distinct career ladders with further specialization (e.g., ML Engineer, Analytics Engineer, Research Scientist). For interviews, clarify the company's expectations during the process — especially if the job description mixes these responsibilities.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 7 — Interview Q&A -->
+  <section id="interview">
+    <h2>7. Interview Questions</h2>
+
+    <div class="qa-section">
+      <div class="qa-header">Foundational Concepts — Q&amp;A</div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the difference between descriptive, diagnostic, predictive, and prescriptive analytics? Give an example of each from the same business domain.</div>
+        <div class="qa-a">
+          Using an e-commerce business as the context:<br><br>
+          <strong>Descriptive:</strong> "Our revenue last month was ₹2.1 Cr, with 12,400 orders averaging ₹1,694 each."<br>
+          <strong>Diagnostic:</strong> "Revenue fell 18% in week 3 because a promo code that offered 40% off was shared outside its intended audience, resulting in 2,200 unintended high-discount orders."<br>
+          <strong>Predictive:</strong> "Based on current traffic and add-to-cart rates, we forecast ₹2.4 Cr revenue next month with a 90% confidence interval of [₹2.1 Cr, ₹2.7 Cr]."<br>
+          <strong>Prescriptive:</strong> "To maximize revenue next month, our pricing model recommends discounting electronics by 8% and increasing app-push frequency by 15% for the 18–25 segment."
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the difference between structured and unstructured data? Give examples of each.</div>
+        <div class="qa-a">
+          <strong>Structured data</strong> conforms to a predefined schema — it lives in tables with typed columns and rows. Every entry fits the schema. Examples: a customer table (customer_id INTEGER, name VARCHAR, email VARCHAR, created_at TIMESTAMP), a transactions ledger, a product inventory table.<br><br>
+          <strong>Unstructured data</strong> has no predefined schema. It is produced by humans or machines in free form. Examples: customer support emails, product review text, support call audio recordings, product photos. Extracting value from unstructured data requires preprocessing — NLP for text, computer vision for images — before standard analytical techniques can be applied.<br><br>
+          <strong>Semi-structured data</strong> is in between: it has flexible structure via tags or markers but does not conform to a rigid schema. A JSON document may have an "address" field in one record and no such field in another. Examples: JSON event logs, XML configuration files, email headers.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What are the four scales of measurement and why does it matter which scale a variable is on?</div>
+        <div class="qa-a">
+          The four scales are <strong>Nominal</strong> (categories with no order — blood type, country), <strong>Ordinal</strong> (categories with meaningful order but unequal intervals — satisfaction rating, medal position), <strong>Interval</strong> (equal intervals but no true zero — temperature in °C, calendar year), and <strong>Ratio</strong> (equal intervals plus a true zero — revenue, age, weight).<br><br>
+          It matters because the scale determines which statistical operations are valid:<ul>
+            <li>You can compute a mode for nominal data but not a mean — the mean of {A, B, A} is undefined.</li>
+            <li>You can rank ordinal data and compute a median, but differences are not interpretable — the difference between a 1-star and 2-star review may not equal the difference between 4-star and 5-star.</li>
+            <li>For interval data, differences are meaningful (the difference between 20°C and 30°C is the same as between 10°C and 20°C), but ratios are not (30°C is not "1.5× as hot" as 20°C because 0°C is not "no heat").</li>
+            <li>Ratio data supports all arithmetic, including meaningful ratios: ₹1,000 is genuinely twice ₹500 because ₹0 means no money.</li>
+          </ul>
+          Applying an inappropriate operation (e.g., averaging a nominal variable) produces a meaningless result that can lead to flawed conclusions.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>How is a data analyst different from a data scientist?</div>
+        <div class="qa-a">
+          The core distinction is in <strong>time orientation and method</strong>:<br><br>
+          A <strong>data analyst</strong> primarily works with historical and current data to answer "what happened?" and "why?" using SQL queries, aggregations, visualizations, and descriptive/diagnostic statistics. Their output is insight, reports, and dashboards that inform a human decision-maker.<br><br>
+          A <strong>data scientist</strong> primarily builds models that look <em>forward</em> — predicting future outcomes, classifying new instances, or optimizing decisions. They require deeper statistical foundations (probability theory, Bayesian inference, experimental design) and software engineering skills to deploy models in production systems.<br><br>
+          In practice, the boundary is blurry — many analysts do predictive work, and many scientists spend significant time on analysis. The distinction is more about emphasis and tool depth than a hard boundary.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the data lifecycle? At which stage does most data quality work happen?</div>
+        <div class="qa-a">
+          The data lifecycle describes the stages data passes through from creation to insight: <strong>Collection → Storage → Processing → Analysis → Visualization → Decision → (new data generated)</strong>. It is a cycle because decisions generate actions, which generate new data that re-enters the pipeline.<br><br>
+          The majority of data quality work occurs in the <strong>Processing</strong> stage — handling missing values, removing duplicates, resolving conflicting records, standardizing formats, and joining data from disparate sources. In production analytics environments, this stage accounts for 50–80% of an analyst's time. The implication is that a clean, well-modelled data layer upstream dramatically multiplies the productivity of analytics downstream — which is the reason the Data Engineer and Analytics Engineer roles exist.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>Is temperature (in °C) a ratio variable? Why or why not?</div>
+        <div class="qa-a">
+          <strong>No</strong>. Temperature in °C is an <strong>interval</strong> variable, not a ratio variable. The reason is that 0°C does not represent the <em>absence</em> of temperature — it is an arbitrary reference point (the freezing point of water). Because there is no true zero, ratio statements are meaningless: 40°C is not "twice as hot" as 20°C in any physically meaningful sense.<br><br>
+          By contrast, temperature in Kelvin <em>is</em> a ratio variable: 0 K (absolute zero) represents the complete absence of thermal energy, so 400 K genuinely is twice as energetic as 200 K.<br><br>
+          This is a classic interview trick question that tests whether a candidate understands that the scale of measurement is not just about the numbers — it is about the <em>meaning</em> of zero.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="page-nav">
+    <a href="#">Next: Module 2 — Statistics &amp; Probability →</a>
+  </nav>
+
+</div>
+</body>
+</html>

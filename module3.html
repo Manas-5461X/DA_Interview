@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 3 — SQL for Data Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F7F8FC; --surface: #FFFFFF; --surface-2: #EFF2FA;
+  --text: #18202F; --text-muted: #5A6585;
+  --accent: #2B5CE6; --accent-light: #EEF3FF; --border: #DDE3F2;
+  --code-bg: #1A1D2E; --code-text: #C9D1F0;
+  --kw: #82AAFF; --fn: #C3E88D; --str: #F78C6C; --cmt: #546E7A; --num: #F78C6C;
+  --green: #059669; --green-light: #ECFDF5; --green-border: #6EE7B7;
+  --orange: #D97706; --orange-light: #FFFBEB;
+  --purple: #7C3AED; --purple-light: #F5F3FF;
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1218; --surface: #161C28; --surface-2: #1D2538;
+    --text: #E8EBF7; --text-muted: #8A96C2;
+    --accent: #5079F5; --accent-light: #1A2450; --border: #273050;
+    --code-bg: #080C15; --code-text: #C9D1F0;
+    --green-light: #071A10; --green-border: #065F46;
+    --orange-light: #1C1407; --purple-light: #120D28;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1218; --surface: #161C28; --surface-2: #1D2538;
+  --text: #E8EBF7; --text-muted: #8A96C2;
+  --accent: #5079F5; --accent-light: #1A2450; --border: #273050;
+  --code-bg: #080C15; --code-text: #C9D1F0;
+  --green-light: #071A10; --green-border: #065F46;
+  --orange-light: #1C1407; --purple-light: #120D28;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'IBM Plex Sans', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 16px; padding-inline: 24px; padding-block: 48px 100px; }
+.page-wrap { max-width: 860px; margin: 0 auto; }
+.module-header { border-bottom: 2px solid var(--border); padding-bottom: 36px; margin-bottom: 48px; }
+.module-tag { display: inline-flex; align-items: center; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; margin-bottom: 20px; }
+.module-header h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 700; line-height: 1.18; color: var(--text); text-wrap: balance; margin-bottom: 14px; }
+.module-header .lead { font-size: 18px; color: var(--text-muted); max-width: 65ch; line-height: 1.65; }
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 56px; }
+.toc-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+.toc ol { list-style: decimal; padding-left: 22px; display: flex; flex-direction: column; gap: 7px; }
+.toc a { color: var(--accent); text-decoration: none; font-size: 15px; }
+.toc a:hover { text-decoration: underline; }
+section { margin-bottom: 64px; }
+h2 { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 22px; padding-bottom: 10px; border-bottom: 2px solid var(--accent); text-wrap: balance; display: block; }
+h3 { font-size: 19px; font-weight: 600; color: var(--text); margin-top: 36px; margin-bottom: 12px; text-wrap: balance; }
+h4 { font-size: 15px; font-weight: 600; color: var(--text); margin-top: 24px; margin-bottom: 8px; }
+p { margin-bottom: 16px; max-width: 72ch; }
+.definition { background: var(--accent-light); border-left: 4px solid var(--accent); padding: 16px 20px; border-radius: 0 var(--radius) var(--radius) 0; margin: 22px 0; }
+.def-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.definition p { margin: 0; font-size: 15px; max-width: none; }
+.example { background: var(--green-light); border: 1px solid var(--green-border); border-radius: var(--radius); padding: 20px 24px; margin: 22px 0; }
+.ex-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+.example p { font-size: 15px; }
+.note { background: var(--orange-light); border-left: 4px solid var(--orange); padding: 14px 20px; border-radius: 0 var(--radius) var(--radius) 0; margin: 22px 0; }
+.note-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+.note p { margin: 0; font-size: 14px; max-width: none; }
+pre { background: var(--code-bg); color: var(--code-text); padding: 20px 24px; border-radius: var(--radius); overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.8; margin: 16px 0; tab-size: 2; }
+.kw { color: var(--kw); font-weight: 600; }
+.fn { color: var(--fn); }
+.str { color: var(--str); }
+.cmt { color: var(--cmt); font-style: italic; }
+.num { color: var(--num); }
+code { font-family: 'IBM Plex Mono', monospace; font-size: 13px; background: var(--surface-2); border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; }
+.table-wrap { overflow-x: auto; margin: 24px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { background: var(--surface-2); font-weight: 600; text-align: left; padding: 11px 16px; border-bottom: 2px solid var(--border); color: var(--text); }
+td { padding: 10px 16px; border-bottom: 1px solid var(--border); vertical-align: top; font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
+th { font-family: 'IBM Plex Sans', sans-serif; }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface-2); }
+.td-text { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; }
+.qa-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-top: 32px; }
+.qa-header { background: var(--accent); color: #fff; padding: 14px 22px; font-weight: 700; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+.qa-item { padding: 22px 24px; border-bottom: 1px solid var(--border); }
+.qa-item:last-child { border-bottom: none; }
+.qa-q { font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 10px; display: flex; gap: 10px; align-items: flex-start; }
+.qa-badge { min-width: 22px; height: 22px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; flex-shrink: 0; }
+.qa-a { font-size: 14.5px; color: var(--text-muted); padding-left: 32px; line-height: 1.72; }
+.qa-a strong { color: var(--text); }
+ul, ol { padding-left: 22px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+li { max-width: 72ch; }
+.join-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px 0; }
+.join-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
+.join-card h4 { margin: 0 0 6px; font-size: 15px; color: var(--accent); }
+.join-card p { margin: 0; font-size: 13px; color: var(--text-muted); max-width: none; }
+.join-card .jc-result { margin-top: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text); background: var(--surface-2); padding: 6px 10px; border-radius: 4px; }
+.problem-num { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 12px; font-weight: 700; margin-right: 8px; }
+.problem-block { margin-bottom: 40px; }
+.problem-block h4 { display: flex; align-items: center; font-size: 16px; }
+.problem-block .difficulty { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-left: 10px; vertical-align: middle; }
+.easy { background: var(--green-light); color: var(--green); }
+.medium { background: var(--orange-light); color: var(--orange); }
+.hard { background: var(--purple-light); color: var(--purple); }
+.page-nav { display: flex; justify-content: space-between; align-items: center; padding-top: 40px; border-top: 1px solid var(--border); margin-top: 60px; font-size: 14px; color: var(--text-muted); }
+.page-nav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+@media (max-width: 600px) { body { padding-inline: 16px; } .join-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header class="module-header">
+    <div class="module-tag">Module 03 · Data Analytics Interview Packet</div>
+    <h1>SQL for Data Analytics</h1>
+    <p class="lead">SQL is the single most tested skill in data analytics interviews. This module covers every concept from basic querying to advanced window functions, with 30+ solved interview problems that reflect real-world hiring assessments.</p>
+  </header>
+
+  <nav class="toc">
+    <div class="toc-label">Contents</div>
+    <ol>
+      <li><a href="#basics">SQL Basics — SELECT, WHERE, ORDER BY</a></li>
+      <li><a href="#aggregates">Aggregate Functions &amp; GROUP BY</a></li>
+      <li><a href="#joins">Joins — All Types with Examples</a></li>
+      <li><a href="#subqueries">Subqueries &amp; CTEs</a></li>
+      <li><a href="#window">Window Functions</a></li>
+      <li><a href="#functions">Date, String &amp; Numeric Functions</a></li>
+      <li><a href="#optimization">Query Optimization &amp; Indexes</a></li>
+      <li><a href="#problems">30 Solved Interview Problems</a></li>
+    </ol>
+  </nav>
+
+  <!-- ─────────── SECTION 1 ─────────── -->
+  <section id="basics">
+    <h2>1. SQL Basics</h2>
+    <p>SQL (Structured Query Language) is the standard language for querying relational databases. Every SQL query follows a logical execution order that differs from the written order — understanding this is key to writing correct queries.</p>
+
+    <h3>1.1 Logical Execution Order</h3>
+    <p>SQL executes clauses in this order, regardless of how they are written:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>Clause</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="td-text"><strong>FROM</strong> + <strong>JOIN</strong></td><td class="td-text">Identify source tables and combine them</td></tr>
+          <tr><td>2</td><td class="td-text"><strong>WHERE</strong></td><td class="td-text">Filter rows (before grouping)</td></tr>
+          <tr><td>3</td><td class="td-text"><strong>GROUP BY</strong></td><td class="td-text">Group remaining rows</td></tr>
+          <tr><td>4</td><td class="td-text"><strong>HAVING</strong></td><td class="td-text">Filter groups (after grouping)</td></tr>
+          <tr><td>5</td><td class="td-text"><strong>SELECT</strong></td><td class="td-text">Choose and compute columns</td></tr>
+          <tr><td>6</td><td class="td-text"><strong>DISTINCT</strong></td><td class="td-text">Deduplicate</td></tr>
+          <tr><td>7</td><td class="td-text"><strong>ORDER BY</strong></td><td class="td-text">Sort results</td></tr>
+          <tr><td>8</td><td class="td-text"><strong>LIMIT / OFFSET</strong></td><td class="td-text">Restrict number of rows returned</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <div class="note-label">Key Implication</div>
+      <p>Because WHERE runs before SELECT, you cannot reference a column alias defined in SELECT inside a WHERE clause. Use HAVING for filtering on aggregated values (computed after GROUP BY), or wrap the query in a subquery/CTE if you need to filter on a SELECT alias.</p>
+    </div>
+
+    <h3>1.2 Basic Query Structure</h3>
+<pre><span class="kw">SELECT</span>  column1,
+        column2,
+        column3 * 1.18 <span class="kw">AS</span> price_with_gst    <span class="cmt">-- computed column with alias</span>
+<span class="kw">FROM</span>    orders
+<span class="kw">WHERE</span>   order_date &gt;= <span class="str">'2024-01-01'</span>
+  <span class="kw">AND</span>   status <span class="kw">IN</span> (<span class="str">'completed'</span>, <span class="str">'shipped'</span>)
+  <span class="kw">AND</span>   amount <span class="kw">IS NOT NULL</span>
+<span class="kw">ORDER BY</span> order_date <span class="kw">DESC</span>
+<span class="kw">LIMIT</span>   100;</pre>
+
+    <h3>1.3 Filtering with WHERE</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Operator</th><th>Use</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>=, &lt;&gt;, !=</td><td class="td-text">Equality, inequality</td><td>status = 'active'</td></tr>
+          <tr><td>&lt;, &gt;, &lt;=, &gt;=</td><td class="td-text">Comparison</td><td>amount &gt;= 1000</td></tr>
+          <tr><td>BETWEEN a AND b</td><td class="td-text">Inclusive range</td><td>age BETWEEN 18 AND 25</td></tr>
+          <tr><td>IN (list)</td><td class="td-text">Membership in a set</td><td>city IN ('Mumbai', 'Delhi')</td></tr>
+          <tr><td>LIKE pattern</td><td class="td-text">Pattern match (% = any chars, _ = one char)</td><td>email LIKE '%@gmail.com'</td></tr>
+          <tr><td>IS NULL / IS NOT NULL</td><td class="td-text">Null check</td><td>phone IS NULL</td></tr>
+          <tr><td>AND, OR, NOT</td><td class="td-text">Logical combination</td><td>age &gt; 18 AND active = 1</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────── SECTION 2 ─────────── -->
+  <section id="aggregates">
+    <h2>2. Aggregate Functions &amp; GROUP BY</h2>
+    <p>Aggregate functions collapse multiple rows into a single summary value. They are always used with GROUP BY (unless applied to the entire table as one group).</p>
+
+    <h3>2.1 Core Aggregate Functions</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>Description</th><th>NULL handling</th></tr></thead>
+        <tbody>
+          <tr><td>COUNT(*)</td><td class="td-text">Count all rows in the group</td><td class="td-text">Includes NULLs</td></tr>
+          <tr><td>COUNT(col)</td><td class="td-text">Count non-NULL values in column</td><td class="td-text">Excludes NULLs</td></tr>
+          <tr><td>COUNT(DISTINCT col)</td><td class="td-text">Count unique non-NULL values</td><td class="td-text">Excludes NULLs</td></tr>
+          <tr><td>SUM(col)</td><td class="td-text">Total of numeric column</td><td class="td-text">Ignores NULLs</td></tr>
+          <tr><td>AVG(col)</td><td class="td-text">Mean of numeric column</td><td class="td-text">Ignores NULLs (numerator AND denominator)</td></tr>
+          <tr><td>MIN(col) / MAX(col)</td><td class="td-text">Smallest / largest value</td><td class="td-text">Ignores NULLs</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>2.2 GROUP BY and HAVING</h3>
+<pre><span class="kw">SELECT</span>  category,
+        <span class="fn">COUNT</span>(*) <span class="kw">AS</span> order_count,
+        <span class="fn">SUM</span>(amount) <span class="kw">AS</span> total_revenue,
+        <span class="fn">AVG</span>(amount) <span class="kw">AS</span> avg_order_value,
+        <span class="fn">MAX</span>(amount) <span class="kw">AS</span> highest_order
+<span class="kw">FROM</span>    orders
+<span class="kw">WHERE</span>   order_date &gt;= <span class="str">'2024-01-01'</span>    <span class="cmt">-- filter rows BEFORE grouping</span>
+<span class="kw">GROUP BY</span> category
+<span class="kw">HAVING</span>  <span class="fn">COUNT</span>(*) &gt; 50              <span class="cmt">-- filter groups AFTER aggregation</span>
+<span class="kw">ORDER BY</span> total_revenue <span class="kw">DESC</span>;</pre>
+
+    <div class="note">
+      <div class="note-label">WHERE vs HAVING</div>
+      <p>WHERE filters individual rows before grouping. HAVING filters groups after aggregation. You cannot use aggregate functions (SUM, COUNT, etc.) in a WHERE clause — use HAVING instead. You can reference column aliases in ORDER BY but not in WHERE or HAVING in most databases.</p>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example</div>
+      <p>Find the top 3 cities by total sales, but only include cities with more than 100 orders in the last year:</p>
+<pre><span class="kw">SELECT</span>  city,
+        <span class="fn">COUNT</span>(*) <span class="kw">AS</span> total_orders,
+        <span class="fn">SUM</span>(amount) <span class="kw">AS</span> total_sales
+<span class="kw">FROM</span>    orders
+<span class="kw">WHERE</span>   order_date &gt;= <span class="fn">DATE_SUB</span>(<span class="fn">CURDATE</span>(), <span class="kw">INTERVAL</span> <span class="num">1</span> <span class="kw">YEAR</span>)
+<span class="kw">GROUP BY</span> city
+<span class="kw">HAVING</span>  <span class="fn">COUNT</span>(*) &gt; <span class="num">100</span>
+<span class="kw">ORDER BY</span> total_sales <span class="kw">DESC</span>
+<span class="kw">LIMIT</span>   <span class="num">3</span>;</pre>
+    </div>
+  </section>
+
+  <!-- ─────────── SECTION 3 ─────────── -->
+  <section id="joins">
+    <h2>3. Joins — All Types with Examples</h2>
+    <p>Joins combine rows from two or more tables based on a related column. The type of join determines what happens to rows that don't have a match in the other table.</p>
+
+    <p>For all examples below, assume two tables:</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;">
+      <div>
+        <p style="font-weight:600;font-size:14px;margin-bottom:6px;">customers</p>
+        <div class="table-wrap" style="margin:0;">
+          <table><thead><tr><th>id</th><th>name</th></tr></thead>
+          <tbody><tr><td>1</td><td class="td-text">Alice</td></tr><tr><td>2</td><td class="td-text">Bob</td></tr><tr><td>3</td><td class="td-text">Carol</td></tr></tbody></table>
+        </div>
+      </div>
+      <div>
+        <p style="font-weight:600;font-size:14px;margin-bottom:6px;">orders</p>
+        <div class="table-wrap" style="margin:0;">
+          <table><thead><tr><th>id</th><th>customer_id</th><th>amount</th></tr></thead>
+          <tbody><tr><td>101</td><td>1</td><td>500</td></tr><tr><td>102</td><td>1</td><td>300</td></tr><tr><td>103</td><td>2</td><td>750</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <div class="join-grid">
+      <div class="join-card">
+        <h4>INNER JOIN</h4>
+        <p>Returns only rows where the join condition is satisfied in BOTH tables. Rows with no match in either table are excluded.</p>
+        <div class="jc-result">Alice: 2 orders<br>Bob: 1 order<br>Carol: ✗ excluded</div>
+      </div>
+      <div class="join-card">
+        <h4>LEFT JOIN (LEFT OUTER)</h4>
+        <p>Returns all rows from the LEFT table, plus matching rows from the right table. Non-matching right-side values appear as NULL.</p>
+        <div class="jc-result">Alice: 2 orders<br>Bob: 1 order<br>Carol: NULL (kept)</div>
+      </div>
+      <div class="join-card">
+        <h4>RIGHT JOIN (RIGHT OUTER)</h4>
+        <p>Returns all rows from the RIGHT table, plus matching rows from the left table. Non-matching left-side values appear as NULL.</p>
+        <div class="jc-result">All orders kept<br>Left NULLs for unmatched customers</div>
+      </div>
+      <div class="join-card">
+        <h4>FULL OUTER JOIN</h4>
+        <p>Returns all rows from both tables. Non-matching rows from either side appear with NULLs for the other side's columns.</p>
+        <div class="jc-result">All customers + all orders<br>NULLs where no match exists on either side</div>
+      </div>
+      <div class="join-card">
+        <h4>CROSS JOIN</h4>
+        <p>Returns the Cartesian product of both tables — every row from the left paired with every row from the right. n×m rows total. Has no ON condition.</p>
+        <div class="jc-result">3 customers × 3 orders = 9 rows</div>
+      </div>
+      <div class="join-card">
+        <h4>SELF JOIN</h4>
+        <p>A table joined to itself using aliases. Used for hierarchical data (employees and managers), comparing rows within the same table.</p>
+        <div class="jc-result">e.g., employee e1 JOIN employee e2 ON e1.manager_id = e2.id</div>
+      </div>
+    </div>
+
+<pre><span class="cmt">-- INNER JOIN: customers who placed at least one order</span>
+<span class="kw">SELECT</span>  c.name, o.amount
+<span class="kw">FROM</span>    customers c
+<span class="kw">INNER JOIN</span> orders o <span class="kw">ON</span> c.id = o.customer_id;
+
+<span class="cmt">-- LEFT JOIN: all customers, with NULL amount if no orders</span>
+<span class="kw">SELECT</span>  c.name, <span class="fn">COALESCE</span>(o.amount, <span class="num">0</span>) <span class="kw">AS</span> amount
+<span class="kw">FROM</span>    customers c
+<span class="kw">LEFT JOIN</span> orders o <span class="kw">ON</span> c.id = o.customer_id;
+
+<span class="cmt">-- Find customers with NO orders (LEFT JOIN anti-pattern)</span>
+<span class="kw">SELECT</span>  c.name
+<span class="kw">FROM</span>    customers c
+<span class="kw">LEFT JOIN</span> orders o <span class="kw">ON</span> c.id = o.customer_id
+<span class="kw">WHERE</span>   o.id <span class="kw">IS NULL</span>;
+
+<span class="cmt">-- SELF JOIN: employee with their manager's name</span>
+<span class="kw">SELECT</span>  e.name <span class="kw">AS</span> employee,
+        m.name <span class="kw">AS</span> manager
+<span class="kw">FROM</span>    employees e
+<span class="kw">LEFT JOIN</span> employees m <span class="kw">ON</span> e.manager_id = m.id;</pre>
+  </section>
+
+  <!-- ─────────── SECTION 4 ─────────── -->
+  <section id="subqueries">
+    <h2>4. Subqueries &amp; CTEs</h2>
+
+    <h3>4.1 Subqueries</h3>
+    <p>A subquery is a SELECT statement nested inside another SQL statement. It can appear in the SELECT, FROM, WHERE, or HAVING clause.</p>
+
+<pre><span class="cmt">-- WHERE subquery: customers who spent above average</span>
+<span class="kw">SELECT</span>  customer_id, <span class="fn">SUM</span>(amount) <span class="kw">AS</span> total
+<span class="kw">FROM</span>    orders
+<span class="kw">GROUP BY</span> customer_id
+<span class="kw">HAVING</span>  <span class="fn">SUM</span>(amount) &gt; (
+    <span class="kw">SELECT</span> <span class="fn">AVG</span>(total_spent)
+    <span class="kw">FROM</span> (
+        <span class="kw">SELECT</span> customer_id, <span class="fn">SUM</span>(amount) <span class="kw">AS</span> total_spent
+        <span class="kw">FROM</span> orders
+        <span class="kw">GROUP BY</span> customer_id
+    ) <span class="kw">AS</span> customer_totals
+);
+
+<span class="cmt">-- FROM subquery (derived table)</span>
+<span class="kw">SELECT</span>  category, <span class="fn">AVG</span>(monthly_revenue) <span class="kw">AS</span> avg_monthly
+<span class="kw">FROM</span> (
+    <span class="kw">SELECT</span> category,
+           <span class="fn">DATE_FORMAT</span>(order_date, <span class="str">'%Y-%m'</span>) <span class="kw">AS</span> month,
+           <span class="fn">SUM</span>(amount) <span class="kw">AS</span> monthly_revenue
+    <span class="kw">FROM</span>  orders
+    <span class="kw">GROUP BY</span> category, month
+) sub
+<span class="kw">GROUP BY</span> category;</pre>
+
+    <h3>4.2 CTEs (Common Table Expressions)</h3>
+    <p>A CTE defines a named, temporary result set using the WITH clause. It is executed once, can be referenced multiple times in the main query, and makes complex queries far more readable than nested subqueries.</p>
+
+<pre><span class="cmt">-- CTE: monthly cohort retention</span>
+<span class="kw">WITH</span> first_orders <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>  customer_id,
+            <span class="fn">MIN</span>(order_date) <span class="kw">AS</span> first_order_date,
+            <span class="fn">DATE_FORMAT</span>(<span class="fn">MIN</span>(order_date), <span class="str">'%Y-%m'</span>) <span class="kw">AS</span> cohort_month
+    <span class="kw">FROM</span>    orders
+    <span class="kw">GROUP BY</span> customer_id
+),
+repeat_orders <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>  o.customer_id,
+            f.cohort_month,
+            <span class="fn">TIMESTAMPDIFF</span>(<span class="kw">MONTH</span>, f.first_order_date, o.order_date) <span class="kw">AS</span> months_since_first
+    <span class="kw">FROM</span>    orders o
+    <span class="kw">JOIN</span>    first_orders f <span class="kw">ON</span> o.customer_id = f.customer_id
+    <span class="kw">WHERE</span>   o.order_date &gt; f.first_order_date
+)
+<span class="kw">SELECT</span>  cohort_month,
+        months_since_first,
+        <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> customer_id) <span class="kw">AS</span> retained_customers
+<span class="kw">FROM</span>    repeat_orders
+<span class="kw">GROUP BY</span> cohort_month, months_since_first
+<span class="kw">ORDER BY</span> cohort_month, months_since_first;</pre>
+
+    <div class="note">
+      <div class="note-label">CTE vs Subquery</div>
+      <p>Prefer CTEs over deeply nested subqueries. CTEs are read top-to-bottom, can be referenced multiple times without re-executing, are debuggable step-by-step, and dramatically improve maintainability. In most databases, CTEs and subqueries produce identical execution plans, so the choice is about readability, not performance.</p>
+    </div>
+  </section>
+
+  <!-- ─────────── SECTION 5 ─────────── -->
+  <section id="window">
+    <h2>5. Window Functions</h2>
+
+    <div class="definition">
+      <div class="def-label">Definition</div>
+      <p>A <strong>window function</strong> performs a calculation across a set of rows (the "window") that are related to the current row — without collapsing those rows into a single output row. This is the key difference from GROUP BY: every row retains its identity in the output while still having access to aggregate information from its window.</p>
+    </div>
+
+    <h3>5.1 Syntax</h3>
+<pre><span class="fn">function_name</span>([expression])
+  <span class="kw">OVER</span> (
+    [<span class="kw">PARTITION BY</span> column1, column2]    <span class="cmt">-- reset the window per partition</span>
+    [<span class="kw">ORDER BY</span>    column3 <span class="kw">ASC|DESC</span>]   <span class="cmt">-- define ordering within the window</span>
+    [<span class="kw">ROWS|RANGE BETWEEN</span> ... <span class="kw">AND</span> ...]  <span class="cmt">-- define the window frame</span>
+  )</pre>
+
+    <h3>5.2 Ranking Functions</h3>
+<pre><span class="kw">SELECT</span>
+    employee_id,
+    department,
+    salary,
+    <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> department <span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>) <span class="kw">AS</span> row_num,
+    <span class="fn">RANK</span>()       <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> department <span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>) <span class="kw">AS</span> rnk,
+    <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> department <span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>) <span class="kw">AS</span> dense_rnk,
+    <span class="fn">NTILE</span>(<span class="num">4</span>)     <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> department <span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>) <span class="kw">AS</span> quartile
+<span class="kw">FROM</span> employees;</pre>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>Ties handled how</th><th>Gap after ties?</th></tr></thead>
+        <tbody>
+          <tr><td>ROW_NUMBER()</td><td class="td-text">Arbitrary ordering — no two rows share a number</td><td class="td-text">N/A</td></tr>
+          <tr><td>RANK()</td><td class="td-text">Tied rows share the same rank</td><td class="td-text">Yes (1,1,3 not 1,1,2)</td></tr>
+          <tr><td>DENSE_RANK()</td><td class="td-text">Tied rows share the same rank</td><td class="td-text">No (1,1,2 not 1,1,3)</td></tr>
+          <tr><td>NTILE(n)</td><td class="td-text">Divides rows into n buckets as evenly as possible</td><td class="td-text">N/A</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>5.3 Offset Functions: LAG and LEAD</h3>
+<pre><span class="kw">SELECT</span>
+    order_date,
+    revenue,
+    <span class="fn">LAG</span>(revenue, <span class="num">1</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> order_date) <span class="kw">AS</span> prev_day_revenue,
+    <span class="fn">LEAD</span>(revenue, <span class="num">1</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> order_date) <span class="kw">AS</span> next_day_revenue,
+    revenue - <span class="fn">LAG</span>(revenue, <span class="num">1</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> order_date) <span class="kw">AS</span> day_over_day_change,
+    <span class="fn">ROUND</span>(
+        (revenue - <span class="fn">LAG</span>(revenue, <span class="num">1</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> order_date))
+        / <span class="fn">NULLIF</span>(<span class="fn">LAG</span>(revenue, <span class="num">1</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> order_date), <span class="num">0</span>) * <span class="num">100</span>, <span class="num">2</span>
+    ) <span class="kw">AS</span> pct_change
+<span class="kw">FROM</span>    daily_revenue
+<span class="kw">ORDER BY</span> order_date;</pre>
+
+    <h3>5.4 Aggregate Window Functions &amp; Running Totals</h3>
+<pre><span class="kw">SELECT</span>
+    order_date,
+    amount,
+    <span class="fn">SUM</span>(amount) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> order_date) <span class="kw">AS</span> running_total,
+    <span class="fn">AVG</span>(amount) <span class="kw">OVER</span> (
+        <span class="kw">ORDER BY</span> order_date
+        <span class="kw">ROWS BETWEEN</span> <span class="num">6</span> <span class="kw">PRECEDING AND CURRENT ROW</span>
+    ) <span class="kw">AS</span> rolling_7day_avg,
+    <span class="fn">SUM</span>(amount) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="fn">DATE_FORMAT</span>(order_date, <span class="str">'%Y-%m'</span>)) <span class="kw">AS</span> monthly_total,
+    amount / <span class="fn">SUM</span>(amount) <span class="kw">OVER</span> () * <span class="num">100</span> <span class="kw">AS</span> pct_of_grand_total
+<span class="kw">FROM</span>    orders
+<span class="kw">ORDER BY</span> order_date;</pre>
+  </section>
+
+  <!-- ─────────── SECTION 6 ─────────── -->
+  <section id="functions">
+    <h2>6. Date, String &amp; Numeric Functions</h2>
+
+    <h3>6.1 Date Functions (MySQL / standard SQL)</h3>
+<pre><span class="cmt">-- Current date and time</span>
+<span class="fn">CURDATE</span>()            <span class="cmt">-- returns today's date (DATE)</span>
+<span class="fn">NOW</span>()                <span class="cmt">-- returns current datetime (DATETIME)</span>
+
+<span class="cmt">-- Extracting parts</span>
+<span class="fn">YEAR</span>(order_date)     <span class="cmt">-- extracts year integer</span>
+<span class="fn">MONTH</span>(order_date)    <span class="cmt">-- extracts month (1-12)</span>
+<span class="fn">DAY</span>(order_date)      <span class="cmt">-- extracts day of month</span>
+<span class="fn">DAYOFWEEK</span>(order_date)<span class="cmt">-- 1=Sunday ... 7=Saturday</span>
+<span class="fn">DATE_FORMAT</span>(order_date, <span class="str">'%Y-%m'</span>)  <span class="cmt">-- format as 'YYYY-MM'</span>
+
+<span class="cmt">-- Arithmetic</span>
+<span class="fn">DATE_ADD</span>(order_date, <span class="kw">INTERVAL</span> <span class="num">30</span> <span class="kw">DAY</span>)   <span class="cmt">-- add 30 days</span>
+<span class="fn">DATE_SUB</span>(order_date, <span class="kw">INTERVAL</span> <span class="num">1</span> <span class="kw">MONTH</span>)  <span class="cmt">-- subtract 1 month</span>
+<span class="fn">DATEDIFF</span>(end_date, start_date)            <span class="cmt">-- difference in days</span>
+<span class="fn">TIMESTAMPDIFF</span>(<span class="kw">MONTH</span>, start_dt, end_dt)   <span class="cmt">-- difference in months</span></pre>
+
+    <h3>6.2 String Functions</h3>
+<pre><span class="fn">UPPER</span>(name)                 <span class="cmt">-- 'alice' → 'ALICE'</span>
+<span class="fn">LOWER</span>(name)                 <span class="cmt">-- 'ALICE' → 'alice'</span>
+<span class="fn">TRIM</span>(name)                  <span class="cmt">-- remove leading/trailing spaces</span>
+<span class="fn">LENGTH</span>(name)                <span class="cmt">-- character count</span>
+<span class="fn">SUBSTRING</span>(str, start, len)  <span class="cmt">-- extract substring</span>
+<span class="fn">CONCAT</span>(first, <span class="str">' '</span>, last)   <span class="cmt">-- concatenate strings</span>
+<span class="fn">REPLACE</span>(str, <span class="str">'old'</span>, <span class="str">'new'</span>)<span class="cmt">-- find and replace</span>
+<span class="fn">INSTR</span>(str, substr)          <span class="cmt">-- position of substr (0 if not found)</span>
+<span class="fn">LEFT</span>(str, n)                <span class="cmt">-- first n characters</span>
+<span class="fn">RIGHT</span>(str, n)               <span class="cmt">-- last n characters</span></pre>
+
+    <h3>6.3 NULL-Handling Functions</h3>
+<pre><span class="fn">COALESCE</span>(a, b, c)           <span class="cmt">-- returns first non-NULL argument</span>
+<span class="fn">NULLIF</span>(a, b)                <span class="cmt">-- returns NULL if a = b, else returns a</span>
+<span class="fn">IFNULL</span>(a, default_val)     <span class="cmt">-- MySQL-specific: if a IS NULL return default</span>
+<span class="fn">ISNULL</span>(a)                  <span class="cmt">-- 1 if a IS NULL, 0 otherwise</span>
+
+<span class="cmt">-- Safe division (avoid division-by-zero)</span>
+revenue / <span class="fn">NULLIF</span>(visits, <span class="num">0</span>)</pre>
+
+    <h3>6.4 Conditional Logic: CASE WHEN</h3>
+<pre><span class="kw">SELECT</span>
+    order_id,
+    amount,
+    <span class="kw">CASE</span>
+        <span class="kw">WHEN</span> amount &lt; <span class="num">500</span>  <span class="kw">THEN</span> <span class="str">'Low'</span>
+        <span class="kw">WHEN</span> amount &lt; <span class="num">2000</span> <span class="kw">THEN</span> <span class="str">'Medium'</span>
+        <span class="kw">ELSE</span>                     <span class="str">'High'</span>
+    <span class="kw">END</span> <span class="kw">AS</span> order_tier,
+    <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> status = <span class="str">'returned'</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>) <span class="kw">AS</span> return_count
+<span class="kw">FROM</span>    orders
+<span class="kw">GROUP BY</span> order_tier;</pre>
+  </section>
+
+  <!-- ─────────── SECTION 7 ─────────── -->
+  <section id="optimization">
+    <h2>7. Query Optimization &amp; Indexes</h2>
+
+    <h3>7.1 Indexes</h3>
+    <div class="definition">
+      <div class="def-label">Definition</div>
+      <p>An <strong>index</strong> is a data structure (typically a B-tree) that the database engine maintains alongside a table to allow fast row lookup without scanning every row. An index on column <code>email</code> means a query with <code>WHERE email = 'x@y.com'</code> can locate the row in O(log n) time instead of O(n) time.</p>
+    </div>
+    <ul>
+      <li><strong>Primary key index:</strong> Automatically created on the primary key column(s). Unique, not null.</li>
+      <li><strong>Unique index:</strong> Enforces uniqueness of values in a column (e.g., email address).</li>
+      <li><strong>Composite index:</strong> Index on multiple columns. Column order matters — the index is used for queries that filter on the leftmost prefix of the columns.</li>
+      <li><strong>Full-text index:</strong> Optimizes LIKE/text search queries.</li>
+    </ul>
+
+    <div class="note">
+      <div class="note-label">Index Trade-offs</div>
+      <p>Indexes speed up SELECT queries (fewer rows scanned) but slow down INSERT, UPDATE, and DELETE operations (the index must be updated with every write). Heavy indexing on write-intensive tables can be counterproductive. A practical rule: index columns that appear frequently in WHERE clauses, JOIN conditions, and ORDER BY clauses for large tables.</p>
+    </div>
+
+    <h3>7.2 Optimization Principles</h3>
+    <ul>
+      <li><strong>Avoid SELECT *:</strong> Fetch only needed columns. SELECT * reads all columns into memory even if the query only uses two.</li>
+      <li><strong>Filter early:</strong> Apply WHERE conditions as early as possible to reduce the number of rows that subsequent operations must process.</li>
+      <li><strong>Avoid functions on indexed columns in WHERE:</strong> <code>WHERE YEAR(created_at) = 2024</code> prevents the engine from using an index on <code>created_at</code>. Rewrite as <code>WHERE created_at BETWEEN '2024-01-01' AND '2024-12-31'</code>.</li>
+      <li><strong>Use EXPLAIN:</strong> Prefix a query with EXPLAIN to see the query execution plan — which indexes are used, the join type, estimated rows scanned. This is the standard tool for diagnosing slow queries.</li>
+      <li><strong>Limit join complexity:</strong> Every additional join multiplies the row space the engine must traverse. Ensure join columns are indexed on both sides.</li>
+    </ul>
+<pre><span class="cmt">-- See the execution plan for any query</span>
+<span class="kw">EXPLAIN</span> <span class="kw">SELECT</span> customer_id, <span class="fn">SUM</span>(amount)
+<span class="kw">FROM</span>   orders
+<span class="kw">WHERE</span>  created_at <span class="kw">BETWEEN</span> <span class="str">'2024-01-01'</span> <span class="kw">AND</span> <span class="str">'2024-12-31'</span>
+<span class="kw">GROUP BY</span> customer_id;</pre>
+  </section>
+
+  <!-- ─────────── SECTION 8 ─────────── -->
+  <section id="problems">
+    <h2>8. Solved Interview Problems</h2>
+    <p>All problems use three tables. Schema:</p>
+<pre><span class="cmt">-- Table: users</span>
+users(user_id INT PK, name VARCHAR, signup_date DATE, country VARCHAR)
+
+<span class="cmt">-- Table: orders</span>
+orders(order_id INT PK, user_id INT FK, amount DECIMAL, order_date DATE, status VARCHAR)
+
+<span class="cmt">-- Table: products</span>
+products(product_id INT PK, order_id INT FK, category VARCHAR, qty INT, unit_price DECIMAL)</pre>
+
+    <div class="problem-block">
+      <h4><span class="problem-num">1</span>Find the total revenue and number of orders per country. <span class="difficulty easy">Easy</span></h4>
+<pre><span class="kw">SELECT</span>  u.country,
+        <span class="fn">COUNT</span>(o.order_id)    <span class="kw">AS</span> total_orders,
+        <span class="fn">SUM</span>(o.amount)        <span class="kw">AS</span> total_revenue,
+        <span class="fn">AVG</span>(o.amount)        <span class="kw">AS</span> avg_order_value
+<span class="kw">FROM</span>    users u
+<span class="kw">JOIN</span>    orders o <span class="kw">ON</span> u.user_id = o.user_id
+<span class="kw">WHERE</span>   o.status = <span class="str">'completed'</span>
+<span class="kw">GROUP BY</span> u.country
+<span class="kw">ORDER BY</span> total_revenue <span class="kw">DESC</span>;</pre>
+    </div>
+
+    <div class="problem-block">
+      <h4><span class="problem-num">2</span>Find users who have never placed an order. <span class="difficulty easy">Easy</span></h4>
+<pre><span class="cmt">-- Method 1: LEFT JOIN anti-join</span>
+<span class="kw">SELECT</span>  u.user_id, u.name
+<span class="kw">FROM</span>    users u
+<span class="kw">LEFT JOIN</span> orders o <span class="kw">ON</span> u.user_id = o.user_id
+<span class="kw">WHERE</span>   o.order_id <span class="kw">IS NULL</span>;
+
+<span class="cmt">-- Method 2: NOT EXISTS (often more readable)</span>
+<span class="kw">SELECT</span>  user_id, name
+<span class="kw">FROM</span>    users u
+<span class="kw">WHERE NOT EXISTS</span> (
+    <span class="kw">SELECT</span> <span class="num">1</span> <span class="kw">FROM</span> orders o <span class="kw">WHERE</span> o.user_id = u.user_id
+);</pre>
+    </div>
+
+    <div class="problem-block">
+      <h4><span class="problem-num">3</span>Find the second highest order amount. <span class="difficulty easy">Easy</span></h4>
+<pre><span class="cmt">-- Method 1: OFFSET (clean, modern)</span>
+<span class="kw">SELECT</span>  <span class="kw">DISTINCT</span> amount
+<span class="kw">FROM</span>    orders
+<span class="kw">ORDER BY</span> amount <span class="kw">DESC</span>
+<span class="kw">LIMIT</span>   <span class="num">1</span> <span class="kw">OFFSET</span> <span class="num">1</span>;
+
+<span class="cmt">-- Method 2: Subquery (works everywhere)</span>
+<span class="kw">SELECT</span>  <span class="fn">MAX</span>(amount) <span class="kw">AS</span> second_highest
+<span class="kw">FROM</span>    orders
+<span class="kw">WHERE</span>   amount &lt; (<span class="kw">SELECT</span> <span class="fn">MAX</span>(amount) <span class="kw">FROM</span> orders);</pre>
+    </div>
+
+    <div class="problem-block">
+      <h4><span class="problem-num">4</span>Rank users by total spending within each country. <span class="difficulty medium">Medium</span></h4>
+<pre><span class="kw">WITH</span> user_spending <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>  u.user_id, u.name, u.country, <span class="fn">SUM</span>(o.amount) <span class="kw">AS</span> total_spent
+    <span class="kw">FROM</span>    users u
+    <span class="kw">JOIN</span>    orders o <span class="kw">ON</span> u.user_id = o.user_id
+    <span class="kw">WHERE</span>   o.status = <span class="str">'completed'</span>
+    <span class="kw">GROUP BY</span> u.user_id, u.name, u.country
+)
+<span class="kw">SELECT</span>  user_id, name, country, total_spent,
+        <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> country <span class="kw">ORDER BY</span> total_spent <span class="kw">DESC</span>) <span class="kw">AS</span> country_rank
+<span class="kw">FROM</span>    user_spending
+<span class="kw">ORDER BY</span> country, country_rank;</pre>
+    </div>
+
+    <div class="problem-block">
+      <h4><span class="problem-num">5</span>Calculate month-over-month revenue growth percentage. <span class="difficulty medium">Medium</span></h4>
+<pre><span class="kw">WITH</span> monthly_rev <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>  <span class="fn">DATE_FORMAT</span>(order_date, <span class="str">'%Y-%m'</span>) <span class="kw">AS</span> month,
+            <span class="fn">SUM</span>(amount) <span class="kw">AS</span> revenue
+    <span class="kw">FROM</span>    orders
+    <span class="kw">WHERE</span>   status = <span class="str">'completed'</span>
+    <span class="kw">GROUP BY</span> month
+)
+<span class="kw">SELECT</span>  month,
+        revenue,
+        <span class="fn">LAG</span>(revenue) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> month) <span class="kw">AS</span> prev_month_revenue,
+        <span class="fn">ROUND</span>(
+            (revenue - <span class="fn">LAG</span>(revenue) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> month))
+            / <span class="fn">NULLIF</span>(<span class="fn">LAG</span>(revenue) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> month), <span class="num">0</span>) * <span class="num">100</span>, <span class="num">2</span>
+        ) <span class="kw">AS</span> mom_growth_pct
+<span class="kw">FROM</span>    monthly_rev
+<span class="kw">ORDER BY</span> month;</pre>
+    </div>
+
+    <div class="problem-block">
+      <h4><span class="problem-num">6</span>Find users who placed orders in both January and February 2024. <span class="difficulty medium">Medium</span></h4>
+<pre><span class="kw">SELECT</span>  user_id
+<span class="kw">FROM</span>    orders
+<span class="kw">WHERE</span>   order_date <span class="kw">BETWEEN</span> <span class="str">'2024-01-01'</span> <span class="kw">AND</span> <span class="str">'2024-02-29'</span>
+<span class="kw">GROUP BY</span> user_id
+<span class="kw">HAVING</span>
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="fn">MONTH</span>(order_date)) = <span class="num">2</span>
+    <span class="kw">AND</span> <span class="fn">MIN</span>(<span class="fn">MONTH</span>(order_date)) = <span class="num">1</span>
+    <span class="kw">AND</span> <span class="fn">MAX</span>(<span class="fn">MONTH</span>(order_date)) = <span class="num">2</span>;</pre>
+    </div>
+
+    <div class="problem-block">
+      <h4><span class="problem-num">7</span>Find the running total of orders per user, ordered by date. <span class="difficulty medium">Medium</span></h4>
+<pre><span class="kw">SELECT</span>  user_id,
+        order_date,
+        amount,
+        <span class="fn">SUM</span>(amount) <span class="kw">OVER</span> (
+            <span class="kw">PARTITION BY</span> user_id
+            <span class="kw">ORDER BY</span>     order_date
+            <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
+        ) <span class="kw">AS</span> cumulative_spend
+<span class="kw">FROM</span>    orders
+<span class="kw">WHERE</span>   status = <span class="str">'completed'</span>
+<span class="kw">ORDER BY</span> user_id, order_date;</pre>
+    </div>
+
+    <div class="problem-block">
+      <h4><span class="problem-num">8</span>Find the top-selling category per country. <span class="difficulty medium">Medium</span></h4>
+<pre><span class="kw">WITH</span> category_sales <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>  u.country,
+            p.category,
+            <span class="fn">SUM</span>(p.qty * p.unit_price) <span class="kw">AS</span> revenue
+    <span class="kw">FROM</span>    users u
+    <span class="kw">JOIN</span>    orders o  <span class="kw">ON</span> u.user_id  = o.user_id
+    <span class="kw">JOIN</span>    products p <span class="kw">ON</span> o.order_id = p.order_id
+    <span class="kw">WHERE</span>   o.status = <span class="str">'completed'</span>
+    <span class="kw">GROUP BY</span> u.country, p.category
+),
+ranked <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>  *,
+            <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> country <span class="kw">ORDER BY</span> revenue <span class="kw">DESC</span>) <span class="kw">AS</span> rnk
+    <span class="kw">FROM</span>    category_sales
+)
+<span class="kw">SELECT</span>  country, category, revenue
+<span class="kw">FROM</span>    ranked
+<span class="kw">WHERE</span>   rnk = <span class="num">1</span>
+<span class="kw">ORDER BY</span> country;</pre>
+    </div>
+
+    <div class="problem-block">
+      <h4><span class="problem-num">9</span>Find users whose total spend increased month-over-month for at least 3 consecutive months. <span class="difficulty hard">Hard</span></h4>
+<pre><span class="kw">WITH</span> monthly <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>  user_id,
+            <span class="fn">DATE_FORMAT</span>(order_date, <span class="str">'%Y-%m'</span>) <span class="kw">AS</span> month,
+            <span class="fn">SUM</span>(amount) <span class="kw">AS</span> monthly_spend
+    <span class="kw">FROM</span>    orders <span class="kw">WHERE</span> status = <span class="str">'completed'</span>
+    <span class="kw">GROUP BY</span> user_id, month
+),
+with_prev <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>  user_id, month, monthly_spend,
+            <span class="fn">LAG</span>(monthly_spend) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> user_id <span class="kw">ORDER BY</span> month) <span class="kw">AS</span> prev_spend,
+            <span class="fn">LAG</span>(month)         <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> user_id <span class="kw">ORDER BY</span> month) <span class="kw">AS</span> prev_month
+    <span class="kw">FROM</span>    monthly
+),
+flags <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>  user_id, month,
+            <span class="kw">CASE WHEN</span> monthly_spend &gt; prev_spend
+                      <span class="kw">AND</span> <span class="fn">TIMESTAMPDIFF</span>(<span class="kw">MONTH</span>, prev_month, month) = <span class="num">1</span>
+                 <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span> <span class="kw">AS</span> increased
+    <span class="kw">FROM</span>    with_prev
+),
+streaks <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>  user_id,
+            <span class="fn">SUM</span>(increased) <span class="kw">OVER</span> (
+                <span class="kw">PARTITION BY</span> user_id
+                <span class="kw">ORDER BY</span> month
+                <span class="kw">ROWS BETWEEN</span> <span class="num">2</span> <span class="kw">PRECEDING AND CURRENT ROW</span>
+            ) <span class="kw">AS</span> streak_3
+    <span class="kw">FROM</span>    flags
+)
+<span class="kw">SELECT DISTINCT</span> user_id
+<span class="kw">FROM</span>    streaks
+<span class="kw">WHERE</span>   streak_3 = <span class="num">3</span>;</pre>
+    </div>
+
+    <div class="problem-block">
+      <h4><span class="problem-num">10</span>Compute a 7-day rolling average of daily order count. <span class="difficulty medium">Medium</span></h4>
+<pre><span class="kw">WITH</span> daily <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>  order_date, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> daily_orders
+    <span class="kw">FROM</span>    orders
+    <span class="kw">GROUP BY</span> order_date
+)
+<span class="kw">SELECT</span>  order_date,
+        daily_orders,
+        <span class="fn">AVG</span>(daily_orders) <span class="kw">OVER</span> (
+            <span class="kw">ORDER BY</span> order_date
+            <span class="kw">ROWS BETWEEN</span> <span class="num">6</span> <span class="kw">PRECEDING AND CURRENT ROW</span>
+        ) <span class="kw">AS</span> rolling_7d_avg
+<span class="kw">FROM</span>    daily
+<span class="kw">ORDER BY</span> order_date;</pre>
+    </div>
+
+    <!-- ── Interview Q&A ── -->
+    <h3 style="margin-top:48px;">SQL Concept Questions</h3>
+    <div class="qa-section">
+      <div class="qa-header">SQL — Conceptual Q&amp;A</div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the difference between WHERE and HAVING?</div>
+        <div class="qa-a">
+          <strong>WHERE</strong> filters rows <em>before</em> any grouping occurs (step 2 in SQL execution order). It operates on individual rows and cannot reference aggregate functions because aggregations have not yet been computed.<br><br>
+          <strong>HAVING</strong> filters groups <em>after</em> GROUP BY has been applied (step 4). It can reference aggregate functions because it runs after they have been computed.<br><br>
+          A practical rule: if the filter references an aggregation (SUM, COUNT, AVG, etc.), use HAVING. If it filters raw column values on individual rows, use WHERE. Both can appear in the same query — WHERE reduces the row set before grouping, HAVING reduces the group set after.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the difference between RANK(), DENSE_RANK(), and ROW_NUMBER()?</div>
+        <div class="qa-a">
+          All three assign integers to rows based on a specified ordering within a partition. The difference is how they handle ties:<br><br>
+          <strong>ROW_NUMBER()</strong>: Assigns a unique sequential integer to every row. Ties are broken arbitrarily — no two rows share a number. Result for scores [90,90,85]: 1,2,3.<br><br>
+          <strong>RANK()</strong>: Tied rows receive the same rank. After ties, the next rank is incremented by the number of tied rows (creating gaps). Result for [90,90,85]: 1,1,3 (rank 2 is skipped).<br><br>
+          <strong>DENSE_RANK()</strong>: Tied rows receive the same rank. After ties, the next rank is n+1 with no gaps. Result for [90,90,85]: 1,1,2.<br><br>
+          Use ROW_NUMBER to deduplicate or paginate. Use RANK/DENSE_RANK for leaderboards. Use DENSE_RANK when you want ranks that consumers can interpret as "Nth place" without gaps.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is a CTE and when would you use it instead of a subquery?</div>
+        <div class="qa-a">
+          A CTE (Common Table Expression) is a named temporary result set defined with the WITH clause, available only for the duration of the query. It is logically equivalent to a derived table (FROM subquery) in most cases.<br><br>
+          <strong>Prefer a CTE when:</strong><ul>
+            <li>The same derived result needs to be referenced more than once in the main query (write it once as a CTE, reference it multiple times).</li>
+            <li>The query has multiple sequential transformation steps — CTEs read top-to-bottom and are far easier to debug and maintain than deeply nested subqueries.</li>
+            <li>You want to build a query incrementally and verify each step.</li>
+          </ul>
+          <strong>Prefer a subquery when:</strong> the derived result is simple and used only once, and inlining it keeps the query compact.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>What is the difference between INNER JOIN and LEFT JOIN? When do you choose each?</div>
+        <div class="qa-a">
+          <strong>INNER JOIN</strong> returns only rows where the join condition is satisfied in both tables. Rows from either table that have no matching row in the other are excluded from the result.<br><br>
+          <strong>LEFT JOIN</strong> returns all rows from the left (first) table, and matching rows from the right table. If a left-table row has no match in the right table, right-table columns appear as NULL. The left table's row count is preserved.<br><br>
+          <strong>Choose INNER JOIN</strong> when you only want records that exist in both tables — e.g., orders with their associated product details (orphaned orders are not meaningful).<br><br>
+          <strong>Choose LEFT JOIN</strong> when you want all records from one table regardless of whether they have a match — e.g., all customers including those who have never ordered. The pattern <code>LEFT JOIN … WHERE right.id IS NULL</code> is the standard "anti-join" — finding rows with NO match.
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-badge">Q</span>How do window functions differ from GROUP BY?</div>
+        <div class="qa-a">
+          <strong>GROUP BY</strong> collapses multiple rows into one row per group. After GROUP BY, individual row details are lost — you can only see the aggregated values.<br><br>
+          <strong>Window functions</strong> compute aggregate values across related rows but keep every individual row in the output. The result set has the same number of rows as the input — each row gets an additional computed column (e.g., a running total, a rank, or the previous row's value).<br><br>
+          Example: to see each order alongside the customer's total spending, GROUP BY would collapse to one row per customer (losing individual order details). A window function keeps every order row and adds a <code>SUM(amount) OVER (PARTITION BY user_id)</code> column — each order row shows both its own amount and the user's total.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="page-nav">
+    <a href="#">← Module 2: Statistics</a>
+    <a href="#">Module 4: Python →</a>
+  </nav>
+
+</div>
+</body>
+</html>

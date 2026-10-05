@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 11: Interview Question Bank</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:wght@400;600&display=swap">
+<style>
+  :root {
+    --bg: #f8f9fc;
+    --surface: #ffffff;
+    --surface2: #f0f2f8;
+    --border: #e2e6f0;
+    --text: #1a1d2e;
+    --text2: #4a4f6a;
+    --text3: #7a7f9a;
+    --accent: #2B5CE6;
+    --accent-light: #e8edfb;
+    --accent2: #7C3AED;
+    --accent2-light: #f0ebfd;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --orange: #d97706;
+    --orange-light: #fef3c7;
+    --teal: #0891b2;
+    --teal-light: #cffafe;
+    --pink: #db2777;
+    --pink-light: #fce7f3;
+    --code-bg: #1e2030;
+    --code-text: #cdd6f4;
+    --kw: #82AAFF;
+    --fn: #C3E88D;
+    --st: #F78C6C;
+    --cm: #546E7A;
+    --nm: #F07178;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1117; --surface: #1a1d2e; --surface2: #252840; --border: #2e3154;
+      --text: #e8eaf6; --text2: #9ea3c0; --text3: #6b7194;
+      --accent-light: #1a2340; --accent2-light: #1e1535;
+      --green-light: #052e1c; --red-light: #2d0a0a; --orange-light: #2d1a00;
+      --teal-light: #042030; --pink-light: #2d0a1e;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1117; --surface: #1a1d2e; --surface2: #252840; --border: #2e3154;
+    --text: #e8eaf6; --text2: #9ea3c0; --text3: #6b7194;
+    --accent-light: #1a2340; --accent2-light: #1e1535;
+    --green-light: #052e1c; --red-light: #2d0a0a; --orange-light: #2d1a00;
+    --teal-light: #042030; --pink-light: #2d0a1e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px;
+    padding-inline: 24px; padding-block: 0 60px;
+  }
+  .page-wrap { max-width: 940px; margin: 0 auto; }
+
+  .module-header {
+    background: linear-gradient(135deg, #1a1d2e 0%, #2B5CE6 40%, #7C3AED 75%, #db2777 100%);
+    color: white; padding: 56px 48px; border-radius: 0 0 24px 24px;
+    margin-inline: -24px; margin-bottom: 48px; position: relative; overflow: hidden;
+  }
+  .module-header::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,0.05);
+  }
+  .module-tag { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; margin-bottom: 12px; }
+  .module-header h1 { font-size: clamp(28px, 5vw, 42px); font-weight: 700; line-height: 1.2; margin-bottom: 16px; }
+  .module-header p { font-size: 17px; opacity: 0.85; max-width: 640px; line-height: 1.6; }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex; gap: 24px; flex-wrap: wrap; margin-top: 28px;
+  }
+  .stat-chip {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+    padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: white;
+  }
+
+  /* TOC */
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 48px; }
+  .toc h2 { font-size: 14px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 16px; }
+  .toc ol { list-style: none; counter-reset: toc; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 32px; }
+  @media (max-width: 600px) { .toc ol { grid-template-columns: 1fr; } }
+  .toc ol li { counter-increment: toc; display: flex; align-items: baseline; gap: 8px; }
+  .toc ol li::before { content: counter(toc, decimal-leading-zero); font-size: 11px; font-weight: 600; color: var(--accent); font-family: 'IBM Plex Mono', monospace; flex-shrink: 0; }
+  .toc a { color: var(--text2); text-decoration: none; font-size: 14px; }
+  .toc a:hover { color: var(--accent); }
+
+  .section { margin-bottom: 60px; }
+  .section-title {
+    font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 22px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--border);
+    display: flex; align-items: center; gap: 12px; text-wrap: balance;
+  }
+  .section-title .sec-num {
+    font-size: 13px; font-weight: 600; font-family: 'IBM Plex Mono', monospace;
+    padding: 3px 8px; border-radius: 4px; flex-shrink: 0;
+  }
+  .sec-blue { color: var(--accent); background: var(--accent-light); }
+  .sec-green { color: var(--green); background: var(--green-light); }
+  .sec-purple { color: var(--accent2); background: var(--accent2-light); }
+  .sec-orange { color: var(--orange); background: var(--orange-light); }
+  .sec-teal { color: var(--teal); background: var(--teal-light); }
+  .sec-pink { color: var(--pink); background: var(--pink-light); }
+  .sec-red { color: var(--red); background: var(--red-light); }
+
+  h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 28px 0 12px; }
+  p { color: var(--text2); margin-bottom: 12px; }
+
+  /* Category header chips */
+  .category-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  }
+  .cat-badge {
+    display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; padding: 4px 12px; border-radius: 20px;
+  }
+  .cat-count {
+    font-size: 12px; color: var(--text3); font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* Q&A Items */
+  .qa-bank { display: flex; flex-direction: column; gap: 14px; }
+  .qa-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden;
+  }
+  .qa-q {
+    padding: 16px 20px; font-weight: 600; font-size: 14.5px; color: var(--text);
+    display: flex; gap: 12px; align-items: flex-start; cursor: pointer; line-height: 1.5;
+  }
+  .qa-qnum {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700;
+    padding: 2px 7px; border-radius: 4px; flex-shrink: 0; margin-top: 2px;
+  }
+  .qa-a {
+    padding: 16px 20px 18px; font-size: 14px; color: var(--text2); line-height: 1.8;
+    border-top: 1px solid var(--border);
+  }
+  .qa-a p { margin-bottom: 8px; color: var(--text2); }
+  .qa-a p:last-child { margin-bottom: 0; }
+  .qa-a ul, .qa-a ol { margin: 8px 0 8px 20px; }
+  .qa-a li { margin-bottom: 4px; color: var(--text2); }
+  .qa-a strong { color: var(--text); }
+  .qa-a code { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; background: var(--surface2); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
+
+  /* Difficulty badges */
+  .diff-easy   { background: var(--green-light);  color: var(--green); }
+  .diff-medium { background: var(--orange-light); color: var(--orange); }
+  .diff-hard   { background: var(--red-light);    color: var(--red); }
+
+  /* Cheat sheets */
+  .cheat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin: 20px 0; }
+  .cheat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .cheat-card h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text3); margin-bottom: 12px; }
+  .cheat-row { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .cheat-row:last-child { border-bottom: none; }
+  .cheat-term { color: var(--text); font-weight: 500; }
+  .cheat-def { color: var(--text2); text-align: right; font-size: 12px; font-family: 'IBM Plex Mono', monospace; }
+
+  /* Behavioral framework */
+  .star-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+  @media (max-width: 600px) { .star-grid { grid-template-columns: 1fr 1fr; } }
+  .star-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+  .star-letter { font-size: 32px; font-weight: 800; color: var(--accent); font-family: 'IBM Plex Serif', serif; line-height: 1; margin-bottom: 6px; }
+  .star-card h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .star-card p { font-size: 12px; color: var(--text2); margin: 0; }
+
+  /* Case study cards */
+  .case-study {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px; margin-bottom: 16px;
+  }
+  .case-study h4 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .case-study .case-meta { font-size: 12px; color: var(--text3); margin-bottom: 14px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .case-study p { font-size: 14px; color: var(--text2); margin-bottom: 8px; }
+  .case-study .approach-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); margin-bottom: 6px; }
+  .case-study ol { margin: 0 0 0 18px; }
+  .case-study ol li { font-size: 13px; color: var(--text2); margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<header class="module-header">
+  <div class="module-tag">Data Analytics Interview Packet · Module 11</div>
+  <h1>Interview Question Bank</h1>
+  <p>200+ curated Q&amp;As spanning statistics, SQL, Python, ML, A/B testing, business analytics, and behavioural questions — organized by topic and difficulty with model answers, case study walkthroughs, and quick-reference cheat sheets.</p>
+  <div class="stats-bar">
+    <span class="stat-chip">200+ Questions</span>
+    <span class="stat-chip">8 Topic Areas</span>
+    <span class="stat-chip">3 Case Studies</span>
+    <span class="stat-chip">6 Cheat Sheets</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#stats-q">Statistics &amp; Probability</a></li>
+    <li><a href="#sql-q">SQL</a></li>
+    <li><a href="#python-q">Python &amp; Pandas</a></li>
+    <li><a href="#ml-q">Machine Learning</a></li>
+    <li><a href="#ab-q">A/B Testing &amp; Experimentation</a></li>
+    <li><a href="#biz-q">Business Analytics</a></li>
+    <li><a href="#behavioral">Behavioural Questions</a></li>
+    <li><a href="#cases">Case Study Walkthroughs</a></li>
+    <li><a href="#cheatsheets">Quick-Reference Cheat Sheets</a></li>
+  </ol>
+</nav>
+
+<!-- ===== STATISTICS ===== -->
+<section class="section" id="stats-q">
+  <h2 class="section-title"><span class="sec-num sec-blue">01</span>Statistics &amp; Probability</h2>
+
+  <div class="qa-bank">
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-easy">S01</span>What is the difference between mean, median, and mode? When would you use each?</div>
+      <div class="qa-a">
+        <p><strong>Mean</strong> is the arithmetic average (sum ÷ count). <strong>Median</strong> is the middle value when sorted; for even n, the average of the two middle values. <strong>Mode</strong> is the most frequently occurring value.</p>
+        <p><strong>When to use:</strong> Use the mean when data is roughly symmetric and free of extreme outliers — it uses all data points and is mathematically convenient for further calculations. Use the median when data is skewed or has outliers, because it is resistant to extremes. Income distributions, house prices, and web session durations are classic median cases (a few billionaires or viral pages skew the mean far above the "typical" value). Use the mode for categorical data (most common product category, most popular page) where averaging is meaningless.</p>
+        <p><strong>Rule of thumb:</strong> When mean >> median in a positive-skew dataset, the median tells a more representative story. Always report both when in doubt, and let the audience know which you're using and why.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-easy">S02</span>What is standard deviation? How is it different from variance?</div>
+      <div class="qa-a">
+        <p><strong>Variance</strong> is the average squared deviation from the mean: σ² = (1/n) Σ(xᵢ − μ)². Squaring removes negative deviations and penalizes large deviations heavily. <strong>Standard deviation</strong> is the square root of variance: σ = √variance.</p>
+        <p>Standard deviation is preferred in practice because it is in the same units as the original data. If you measure height in cm, the variance is in cm² (meaningless to interpret), but the standard deviation is in cm. A SD of 5cm around a mean of 170cm is immediately interpretable.</p>
+        <p><strong>Population vs. sample:</strong> When computing SD for a sample (not the entire population), divide by (n−1) instead of n — this is the <em>Bessel correction</em> that corrects for underestimating population variance from a sample. Python's <code>np.std(ddof=1)</code> or <code>pd.Series.std()</code> uses n−1 by default (sample SD). <code>np.std()</code> defaults to ddof=0 (population SD).</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">S03</span>Explain the Central Limit Theorem and why it matters for analytics.</div>
+      <div class="qa-a">
+        <p>The <strong>Central Limit Theorem (CLT)</strong> states: if you take sufficiently large random samples from any population (regardless of that population's distribution), the distribution of the sample means will approximate a normal distribution. The mean of this sampling distribution equals the population mean (μ), and its standard deviation (the standard error) equals σ/√n.</p>
+        <p><strong>Why it matters for analytics:</strong></p>
+        <ul>
+          <li><em>Justifies hypothesis testing:</em> Most statistical tests (t-test, z-test) assume normality. The CLT means these tests are valid for means even when raw data is not normal, as long as n is large enough (typically n ≥ 30 as a rough guide, more for heavily skewed data).</li>
+          <li><em>Enables confidence intervals:</em> We can construct CIs around sample means using normal distribution quantiles, even for non-normal populations.</li>
+          <li><em>Validates A/B testing:</em> Conversion rates and revenue-per-user are often skewed. The CLT lets us treat the distribution of mean differences as approximately normal, enabling Z-tests and t-tests.</li>
+        </ul>
+        <p>Example: Website order values are right-skewed (most orders are small, a few are very large). The CLT tells us that the distribution of the mean order value across 1,000 samples of size n=500 will be approximately normal, so we can use t-tests to compare means across groups.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">S04</span>What is a confidence interval? How do you interpret "95% confidence interval"?</div>
+      <div class="qa-a">
+        <p>A <strong>confidence interval (CI)</strong> is a range of values computed from sample data that is likely to contain the true population parameter. A 95% CI is computed as: x̄ ± z*(σ/√n), where z* = 1.96 for 95% confidence.</p>
+        <p><strong>Correct interpretation:</strong> "If we repeated this study 100 times and computed the CI each time, approximately 95 of those intervals would contain the true population mean." This is subtle — a 95% CI does NOT mean "there is a 95% probability that the true parameter lies in this specific interval." Once computed, the true value either is or isn't in the interval; the 95% refers to the long-run procedure.</p>
+        <p><strong>Practical meaning:</strong> A wider CI indicates more uncertainty (smaller sample or higher variance). A narrower CI indicates more precision. For A/B testing, a CI that excludes zero for a metric difference tells you the direction is statistically reliable at that confidence level.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">S05</span>What is the difference between Type I and Type II errors? Give a practical example.</div>
+      <div class="qa-a">
+        <p><strong>Type I Error (False Positive):</strong> Rejecting the null hypothesis when it is actually true. Probability = α (significance level). You detect an effect that doesn't exist.</p>
+        <p><strong>Type II Error (False Negative):</strong> Failing to reject the null hypothesis when it is actually false. Probability = β. You miss a real effect.</p>
+        <p><strong>Medical example:</strong> Testing whether a drug works. Type I: concluding the drug works when it actually has no effect → you might approve an ineffective drug. Type II: concluding the drug doesn't work when it actually does → you reject a beneficial treatment.</p>
+        <p><strong>Business example (A/B test):</strong> Testing whether a new checkout flow improves conversion. Type I: declaring the new flow a winner when the difference was random noise → you ship a change that doesn't actually help (or may hurt). Type II: declaring no difference when the new flow genuinely improves conversion → you miss out on real gains.</p>
+        <p><strong>Trade-off:</strong> Lowering α reduces Type I errors but increases Type II errors (you need more evidence to reject H0, so you miss more real effects). Increasing sample size is the only way to simultaneously reduce both error types.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">S06</span>What is correlation? Does correlation imply causation?</div>
+      <div class="qa-a">
+        <p><strong>Correlation</strong> measures the linear relationship between two variables. The Pearson correlation coefficient r ranges from −1 (perfect negative linear relationship) to +1 (perfect positive linear relationship); 0 means no linear relationship. Formula: r = Σ[(xᵢ − x̄)(yᵢ − ȳ)] / (n−1)·sₓ·sᵧ.</p>
+        <p><strong>Correlation does not imply causation.</strong> Three alternative explanations for a correlation:</p>
+        <ul>
+          <li><em>Reverse causation:</em> Y causes X, not X causes Y. Ice cream sales and drowning deaths are positively correlated — not because ice cream causes drowning, but because both are caused by hot weather (a confound).</li>
+          <li><em>Confounding variable:</em> A third variable Z causes both X and Y, creating a spurious correlation between them.</li>
+          <li><em>Coincidence / spurious correlation:</em> With enough variables, some will correlate by chance. "Per capita cheese consumption" correlates with "deaths by bedsheet tangling" over time — meaningless.</li>
+        </ul>
+        <p>To establish causation, you need either a randomized controlled experiment (A/B test), or quasi-experimental methods (instrumental variables, difference-in-differences, regression discontinuity) when randomization isn't possible.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-hard">S07</span>What is the difference between Bayes' Theorem and frequentist probability?</div>
+      <div class="qa-a">
+        <p><strong>Frequentist probability</strong> defines probability as the long-run frequency of an event over repeated trials. A 95% confidence interval is a statement about the procedure: in repeated sampling, 95% of such intervals would contain the true parameter. Parameters are fixed, unknown constants; only data is random.</p>
+        <p><strong>Bayesian probability</strong> treats probability as a degree of belief. You start with a prior distribution P(θ) encoding your beliefs about the parameter before seeing data, observe data, and update to the posterior distribution P(θ|data) using Bayes' theorem:</p>
+        <p style="font-family:'IBM Plex Mono',monospace; font-size:14px; text-align:center; padding:8px 0; color:var(--text);">P(θ|data) ∝ P(data|θ) × P(θ)</p>
+        <p>The posterior combines the likelihood of the data given the parameter with your prior belief. Bayesian credible intervals are directly interpretable: "there is a 95% probability the true conversion rate lies between 4.8% and 5.2%."</p>
+        <p><strong>Practical implication:</strong> Frequentist tests (z-test, t-test) are simpler and the industry standard for A/B testing. Bayesian methods are preferred when you want to incorporate prior knowledge, need to make probability statements about parameters directly, or want to monitor a test continuously without the peeking problem.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">S08</span>When would you use a non-parametric test instead of a t-test?</div>
+      <div class="qa-a">
+        <p>T-tests make two key assumptions: (1) data is approximately normally distributed (or n is large enough for the CLT to apply), and (2) data is continuous. When these are violated, non-parametric tests are appropriate.</p>
+        <p><strong>Use non-parametric tests when:</strong></p>
+        <ul>
+          <li><em>Small sample size + non-normal distribution:</em> n &lt; 30 and the data is clearly skewed or heavy-tailed (e.g., revenue data with many zeros and a few massive outliers)</li>
+          <li><em>Ordinal data:</em> Survey ratings (1–5 scale), ranked preferences — you can't meaningfully compute a mean from ranks</li>
+          <li><em>Presence of extreme outliers</em> that can't be removed but distort the mean</li>
+          <li><em>Bounded data:</em> Proportions or percentages close to 0 or 100% where normality breaks down</li>
+        </ul>
+        <p><strong>Common non-parametric alternatives:</strong></p>
+        <ul>
+          <li>Mann-Whitney U test: alternative to independent-samples t-test; compares rank distributions</li>
+          <li>Wilcoxon Signed-Rank: alternative to paired t-test</li>
+          <li>Kruskal-Wallis: alternative to one-way ANOVA</li>
+          <li>Spearman correlation: alternative to Pearson for rank or non-linear relationships</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== SQL ===== -->
+<section class="section" id="sql-q">
+  <h2 class="section-title"><span class="sec-num sec-green">02</span>SQL</h2>
+
+  <div class="qa-bank">
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-easy">Q01</span>What is the difference between WHERE and HAVING?</div>
+      <div class="qa-a">
+        <p><strong>WHERE</strong> filters rows before any grouping or aggregation occurs. It operates on individual rows of the raw table and cannot reference aggregate functions.</p>
+        <p><strong>HAVING</strong> filters groups after GROUP BY aggregation. It can reference aggregate functions like SUM(), COUNT(), AVG().</p>
+        <p><strong>Example:</strong> Find regions where total sales exceed ₹1,00,000: <code>SELECT region, SUM(sale_amount) FROM sales GROUP BY region HAVING SUM(sale_amount) &gt; 100000</code>. If you wrote <code>WHERE SUM(sale_amount) &gt; 100000</code>, it would throw an error because aggregation hasn't happened yet at the WHERE stage.</p>
+        <p><strong>Query execution order:</strong> FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT. WHERE runs before GROUP BY; HAVING runs after.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-easy">Q02</span>Explain the different types of JOINs.</div>
+      <div class="qa-a">
+        <p><strong>INNER JOIN:</strong> Returns only rows that have matches in both tables. Non-matching rows from either side are excluded.</p>
+        <p><strong>LEFT JOIN (LEFT OUTER JOIN):</strong> Returns all rows from the left table, plus matching rows from the right. Non-matching left rows get NULL values for right table columns. Use this when you want to preserve all records from the primary table.</p>
+        <p><strong>RIGHT JOIN:</strong> Mirror of LEFT JOIN. Returns all rows from the right table. Rarely used — conventionally rewrite as LEFT JOIN with tables swapped.</p>
+        <p><strong>FULL OUTER JOIN:</strong> Returns all rows from both tables. Non-matching rows from either side get NULLs. Use when you need to find records in A not in B AND records in B not in A simultaneously.</p>
+        <p><strong>CROSS JOIN:</strong> Cartesian product — every row of table A paired with every row of table B. If A has 100 rows and B has 100 rows, result has 10,000 rows. Useful for generating all combinations (e.g., all products × all dates).</p>
+        <p><strong>Self Join:</strong> A table joined to itself using aliases. Classic use: finding employees and their managers where both are in the same employee table: <code>SELECT e.name, m.name AS manager FROM employees e JOIN employees m ON e.manager_id = m.id</code>.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">Q03</span>What are window functions? Give three examples.</div>
+      <div class="qa-a">
+        <p><strong>Window functions</strong> perform calculations across a set of rows related to the current row, without collapsing rows into groups (unlike GROUP BY). They use the OVER() clause to define the "window" (partition + order).</p>
+        <p><strong>Example 1 — Ranking:</strong></p>
+        <p><code>SELECT customer_id, revenue, RANK() OVER (ORDER BY revenue DESC) AS revenue_rank FROM customers</code> — assigns rank 1 to the highest-revenue customer. RANK() leaves gaps for ties; DENSE_RANK() doesn't; ROW_NUMBER() is unique even for ties.</p>
+        <p><strong>Example 2 — Running total:</strong></p>
+        <p><code>SELECT date, daily_revenue, SUM(daily_revenue) OVER (ORDER BY date) AS cumulative_revenue FROM daily_sales</code> — computes a running cumulative sum ordered by date.</p>
+        <p><strong>Example 3 — Lag/Lead for period comparison:</strong></p>
+        <p><code>SELECT month, revenue, LAG(revenue, 1) OVER (ORDER BY month) AS prev_month_revenue, revenue - LAG(revenue, 1) OVER (ORDER BY month) AS mom_change FROM monthly_revenue</code> — computes month-over-month change without a self-join.</p>
+        <p><strong>PARTITION BY</strong> resets the window per group: <code>RANK() OVER (PARTITION BY region ORDER BY revenue DESC)</code> ranks within each region independently.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">Q04</span>Find the second-highest salary in a table without using LIMIT or TOP.</div>
+      <div class="qa-a">
+        <p>This is a classic SQL interview question testing knowledge of subqueries and correlated queries.</p>
+        <p><strong>Method 1 — Subquery:</strong></p>
+        <p><code>SELECT MAX(salary) FROM employees WHERE salary &lt; (SELECT MAX(salary) FROM employees)</code> — finds the maximum salary excluding the overall maximum. Clean and readable.</p>
+        <p><strong>Method 2 — DENSE_RANK window function (preferred):</strong></p>
+        <p><code>SELECT salary FROM (SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk FROM employees) ranked WHERE rnk = 2</code> — generalizes easily to Nth highest by changing rnk = 2 to rnk = N.</p>
+        <p><strong>Edge case to mention:</strong> What if multiple employees tie for second place? Method 1 (MAX with subquery) returns one value which represents all tied second-place salaries. DENSE_RANK handles ties correctly (both get the same rank). Always clarify tie-breaking behavior with the interviewer.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">Q05</span>Write a query to find users who made a purchase in January 2024 but NOT in February 2024.</div>
+      <div class="qa-a">
+        <p>Three equivalent approaches — mention all three to show breadth:</p>
+        <p><strong>Method 1 — LEFT JOIN with NULL check:</strong></p>
+        <p><code>SELECT DISTINCT jan.user_id FROM orders jan LEFT JOIN orders feb ON jan.user_id = feb.user_id AND feb.order_date BETWEEN '2024-02-01' AND '2024-02-29' WHERE jan.order_date BETWEEN '2024-01-01' AND '2024-01-31' AND feb.user_id IS NULL</code></p>
+        <p><strong>Method 2 — NOT EXISTS:</strong></p>
+        <p><code>SELECT DISTINCT user_id FROM orders o1 WHERE order_date BETWEEN '2024-01-01' AND '2024-01-31' AND NOT EXISTS (SELECT 1 FROM orders o2 WHERE o2.user_id = o1.user_id AND o2.order_date BETWEEN '2024-02-01' AND '2024-02-29')</code></p>
+        <p><strong>Method 3 — EXCEPT (set operation):</strong></p>
+        <p><code>SELECT DISTINCT user_id FROM orders WHERE order_date BETWEEN '2024-01-01' AND '2024-01-31' EXCEPT SELECT DISTINCT user_id FROM orders WHERE order_date BETWEEN '2024-02-01' AND '2024-02-29'</code></p>
+        <p>EXCEPT is the cleanest and most readable. NOT EXISTS can be more performant on large tables depending on indexing. LEFT JOIN + NULL is the most universally compatible across SQL dialects.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-hard">Q06</span>What is a CTE and when would you use it instead of a subquery?</div>
+      <div class="qa-a">
+        <p>A <strong>Common Table Expression (CTE)</strong> is a named temporary result set defined using the WITH clause. It exists only for the duration of the query that follows it.</p>
+        <p><strong>Syntax:</strong> <code>WITH cte_name AS (SELECT ...) SELECT ... FROM cte_name WHERE ...</code></p>
+        <p><strong>Advantages over subqueries:</strong></p>
+        <ul>
+          <li><em>Readability:</em> CTEs are defined at the top, named, and referenced by name. Nested subqueries become hard to read when more than 2 levels deep.</li>
+          <li><em>Reusability:</em> A CTE can be referenced multiple times in the same query; a subquery must be copy-pasted each time.</li>
+          <li><em>Recursive queries:</em> CTEs can reference themselves (RECURSIVE CTEs), enabling traversal of hierarchical data (org charts, bill of materials). Subqueries cannot be recursive.</li>
+          <li><em>Debugging:</em> You can add SELECT * FROM cte_name to inspect intermediate results while building complex queries.</li>
+        </ul>
+        <p><strong>When subqueries may be preferred:</strong> Very simple one-off filtering in a WHERE clause where a CTE would add unnecessary ceremony. Also, some query optimizers handle correlated subqueries more efficiently in certain contexts.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-hard">Q07</span>Write a SQL query to calculate 7-day rolling average of daily active users.</div>
+      <div class="qa-a">
+        <p><strong>Using a window function with a ROWS BETWEEN frame:</strong></p>
+        <p><code>SELECT event_date, dau, AVG(dau) OVER (ORDER BY event_date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS dau_7day_avg FROM (SELECT event_date, COUNT(DISTINCT user_id) AS dau FROM events GROUP BY event_date) daily_dau ORDER BY event_date</code></p>
+        <p><strong>Key clause: <code>ROWS BETWEEN 6 PRECEDING AND CURRENT ROW</code></strong> — this defines the window frame: the current row plus the 6 rows before it = 7 rows total. <code>RANGE BETWEEN</code> would include all rows with the same date value as "current," which behaves differently for non-unique dates.</p>
+        <p><strong>Important caveat:</strong> For the first 6 days, there aren't 7 full days of history, so the average is computed over fewer days. This is usually acceptable, but you can add a filter (<code>WHERE row_num &gt;= 7</code> using ROW_NUMBER()) to show only full 7-day windows.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== PYTHON ===== -->
+<section class="section" id="python-q">
+  <h2 class="section-title"><span class="sec-num sec-purple">03</span>Python &amp; Pandas</h2>
+
+  <div class="qa-bank">
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-easy">P01</span>What is the difference between .loc and .iloc in Pandas?</div>
+      <div class="qa-a">
+        <p><strong>.loc</strong> is label-based indexing — you refer to rows and columns by their index labels and column names. If the index is ['a','b','c'], <code>df.loc['a':'b', 'col1']</code> returns rows 'a' through 'b' including both endpoints.</p>
+        <p><strong>.iloc</strong> is integer position-based indexing — you use zero-based integer positions regardless of index labels. <code>df.iloc[0:2, 1]</code> returns rows at positions 0 and 1 (the endpoint 2 is exclusive), column at position 1.</p>
+        <p><strong>Critical difference — slicing endpoint:</strong> .loc slicing is inclusive at both ends; .iloc slicing is exclusive at the right end (Python convention).</p>
+        <p><strong>When to use which:</strong> Use .loc when you have a meaningful index (dates, IDs) and want to reference it semantically. Use .iloc for positional access when you know you want "the first 10 rows" or "every other column" regardless of what they're labeled.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">P02</span>How would you handle missing values in a Pandas DataFrame?</div>
+      <div class="qa-a">
+        <p><strong>Step 1 — Diagnose:</strong> <code>df.isnull().sum()</code> gives count of nulls per column. <code>df.isnull().mean()</code> gives the proportion. Decide strategy based on: percentage missing, why it's missing (MCAR/MAR/MNAR), and downstream use.</p>
+        <p><strong>Step 2 — Choose strategy:</strong></p>
+        <ul>
+          <li><em>Drop rows:</em> <code>df.dropna(subset=['col1', 'col2'])</code> — appropriate when missing is MCAR and &lt;5% of data</li>
+          <li><em>Drop columns:</em> <code>df.drop(columns=['col'])</code> — when &gt;60–70% of a column is missing</li>
+          <li><em>Mean/median imputation:</em> <code>df['col'].fillna(df['col'].median())</code> — for numerical columns; use median for skewed data</li>
+          <li><em>Mode imputation:</em> <code>df['cat_col'].fillna(df['cat_col'].mode()[0])</code> — for categorical columns</li>
+          <li><em>Forward fill:</em> <code>df.ffill()</code> — for time series where previous value is a reasonable estimate</li>
+          <li><em>KNN / MICE imputation:</em> <code>from sklearn.impute import KNNImputer</code> — for multivariate, MAR data where missingness is correlated with other columns</li>
+        </ul>
+        <p><strong>Critical rule:</strong> Always fit imputation parameters on the training set only, then apply to train and test. Computing the mean on train+test leaks test information into training, biasing model evaluation.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">P03</span>What is the difference between apply(), map(), and applymap()/map() in Pandas?</div>
+      <div class="qa-a">
+        <p><strong>.map()</strong> (on a Series): applies a function element-by-element to a single Series. Also accepts a dict or another Series to map values. Primarily for element-wise transformations. <code>df['gender'].map({'M':'Male','F':'Female'})</code></p>
+        <p><strong>.apply()</strong> (on a Series or DataFrame): applies a function along an axis. On a Series: element-wise (same as map, but more general). On a DataFrame: row-wise (axis=1) or column-wise (axis=0). More flexible — the function can return a scalar, Series, or DataFrame. <code>df.apply(lambda row: row['price'] * row['qty'], axis=1)</code> computes revenue row-by-row.</p>
+        <p><strong>.applymap() / .map()</strong> (on a DataFrame, deprecated in newer Pandas): applies a function element-by-element to every cell of a DataFrame. In Pandas 2.1+, <code>df.map(func)</code> replaces <code>df.applymap(func)</code>.</p>
+        <p><strong>Performance note:</strong> apply() with a Python lambda is slow for large DataFrames because it runs a Python function in a loop. Prefer vectorized operations (numpy operations, Pandas built-ins) whenever possible. <code>df['revenue'] = df['price'] * df['qty']</code> is 10–100× faster than the apply() equivalent.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">P04</span>How do you merge DataFrames in Pandas? Explain the different join types.</div>
+      <div class="qa-a">
+        <p>Pandas merge is the primary join method: <code>pd.merge(left, right, on='key', how='inner')</code></p>
+        <p>The <strong>how</strong> parameter mirrors SQL JOINs:</p>
+        <ul>
+          <li><code>how='inner'</code>: Keep only rows with matching keys in both DataFrames (default)</li>
+          <li><code>how='left'</code>: Keep all rows from left; NaN for unmatched right columns</li>
+          <li><code>how='right'</code>: Keep all rows from right; NaN for unmatched left columns</li>
+          <li><code>how='outer'</code>: Keep all rows from both; NaN where no match</li>
+          <li><code>how='cross'</code>: Cartesian product (no on= needed)</li>
+        </ul>
+        <p><strong>Key parameters:</strong> <code>on='col'</code> when column name is the same in both DataFrames; <code>left_on='col_a', right_on='col_b'</code> when names differ; <code>suffixes=('_x','_y')</code> to disambiguate same-named non-key columns; <code>validate='one_to_one'</code> raises an error if the expected cardinality is violated (useful for catching duplicate key bugs).</p>
+        <p>For index-based joins, use <code>df1.join(df2, how='left')</code>. For concatenating DataFrames vertically (stacking rows), use <code>pd.concat([df1, df2], ignore_index=True)</code>.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-hard">P05</span>What is vectorization in NumPy/Pandas and why does it matter for performance?</div>
+      <div class="qa-a">
+        <p><strong>Vectorization</strong> means applying an operation to an entire array (or Series/DataFrame) at once using compiled C/Fortran code under the hood, rather than looping over elements one at a time in Python. NumPy array operations and Pandas built-in methods are vectorized.</p>
+        <p><strong>Why it matters:</strong> Python loops are slow because of interpreter overhead per iteration. A NumPy vectorized operation avoids this by calling a pre-compiled C function that processes all elements in a tight C loop. The performance difference can be 10–1000× depending on array size.</p>
+        <p><strong>Example — computing exponential for 1 million values:</strong></p>
+        <p>Python loop: ~1000ms. NumPy: <code>np.exp(arr)</code> ~5ms. The NumPy version is 200× faster because it's one C function call, not 1 million Python function calls.</p>
+        <p><strong>Practical rules:</strong></p>
+        <ul>
+          <li>Prefer <code>df['a'] + df['b']</code> over <code>df.apply(lambda row: row['a'] + row['b'], axis=1)</code></li>
+          <li>Prefer <code>df['col'].str.lower()</code> (vectorized string method) over <code>df['col'].apply(str.lower)</code></li>
+          <li>Use boolean indexing (<code>df[df['age'] &gt; 25]</code>) instead of looping to filter</li>
+          <li>When you must loop, <code>df.itertuples()</code> is faster than <code>df.iterrows()</code></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== ML ===== -->
+<section class="section" id="ml-q">
+  <h2 class="section-title"><span class="sec-num sec-orange">04</span>Machine Learning</h2>
+
+  <div class="qa-bank">
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-easy">M01</span>What is the bias-variance tradeoff?</div>
+      <div class="qa-a">
+        <p>Prediction error decomposes into three components: Bias² + Variance + Irreducible Noise.</p>
+        <p><strong>Bias</strong> is the error from wrong model assumptions — a linear model fit to nonlinear data has high bias. High bias → underfitting → model performs poorly on both training and test data.</p>
+        <p><strong>Variance</strong> is the error from model sensitivity to fluctuations in training data — a very deep decision tree memorizes training noise. High variance → overfitting → model performs well on training but poorly on test data.</p>
+        <p>The tradeoff: more complex models decrease bias but increase variance; simpler models have more bias but less variance. Goal: find the complexity that minimizes total error on unseen data. Cross-validation helps estimate where this optimum lies.</p>
+        <p><strong>Diagnoses:</strong> High bias → training error and validation error are both high and close together. High variance → training error is low but validation error is much higher. A learning curve (performance vs. training size) makes this visible.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">M02</span>Explain precision and recall. When would you prioritize one over the other?</div>
+      <div class="qa-a">
+        <p><strong>Precision</strong> = TP / (TP + FP): of all cases the model predicted positive, what fraction are actually positive? High precision means low false alarm rate.</p>
+        <p><strong>Recall</strong> = TP / (TP + FN): of all actual positives, what fraction did the model correctly identify? High recall means low miss rate.</p>
+        <p>There is a tradeoff: lowering the classification threshold increases recall (catch more true positives) but decreases precision (more false alarms). The F1-score (harmonic mean of precision and recall) balances both.</p>
+        <p><strong>Prioritize recall when:</strong> Missing a positive is very costly. Medical diagnosis (missing cancer is worse than a false alarm — you investigate and clear a false positive, but you can't undo a missed diagnosis). Fraud detection (better to flag some legitimate transactions than to let fraud through).</p>
+        <p><strong>Prioritize precision when:</strong> False positives are costly. Email spam filtering (marking a legitimate email as spam loses an important message — better to miss some spam than to delete real emails). Legal document review (flagging an innocent document for review wastes expensive lawyer time).</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">M03</span>What is regularization? Explain L1 vs. L2 regularization.</div>
+      <div class="qa-a">
+        <p><strong>Regularization</strong> adds a penalty term to the loss function to discourage large coefficient values, reducing model complexity and variance. It's the primary technique for preventing overfitting in linear models.</p>
+        <p><strong>L2 Regularization (Ridge):</strong> Penalty = λ·Σwᵢ². Adds the sum of squared weights to the loss. L2 shrinks all coefficients toward zero but rarely to exactly zero. Good for multicollinearity — it distributes weight across correlated features. <code>from sklearn.linear_model import Ridge</code></p>
+        <p><strong>L1 Regularization (Lasso):</strong> Penalty = λ·Σ|wᵢ|. Adds the sum of absolute weights. L1 produces sparse models — it drives some coefficients to exactly zero, performing automatic feature selection. Useful when you suspect many features are irrelevant. <code>from sklearn.linear_model import Lasso</code></p>
+        <p><strong>ElasticNet:</strong> Combines L1 and L2: λ₁·Σ|wᵢ| + λ₂·Σwᵢ². Gets the feature selection of L1 with the coefficient stability of L2. The hyperparameter l1_ratio controls the mix.</p>
+        <p><strong>λ (alpha in sklearn):</strong> Higher λ → more regularization → simpler model. Select via cross-validation. If λ → 0, model converges to OLS regression. If λ → ∞, all coefficients → 0.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">M04</span>How does Random Forest work? How is it different from a single Decision Tree?</div>
+      <div class="qa-a">
+        <p><strong>Random Forest</strong> is an ensemble method that trains many decision trees and aggregates their predictions. For classification, it takes a majority vote across trees; for regression, it averages their outputs.</p>
+        <p>Two sources of randomness that differentiate it from a single tree:</p>
+        <ul>
+          <li><em>Bootstrap sampling (bagging):</em> Each tree is trained on a bootstrap sample (n rows sampled with replacement). About 63.2% of rows appear in each sample; the rest are "out-of-bag" (OOB) and can be used for validation without a separate test set.</li>
+          <li><em>Feature randomness:</em> At each node split, only a random subset of √p features (classification) or p/3 features (regression) are considered. This decorrelates the trees — if one strong feature dominates, it won't appear in every tree's every split, preventing all trees from being identical.</li>
+        </ul>
+        <p><strong>Advantages over a single tree:</strong> Much lower variance (averaging reduces variance by 1/n if trees were independent); comparable or lower bias; more robust to outliers. The tradeoff is interpretability — a Random Forest with 500 trees can't be visualized as a single flowchart.</p>
+        <p><strong>Key hyperparameters:</strong> n_estimators (more trees = more stable but slower); max_depth (controls tree size and variance); min_samples_split; max_features.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-hard">M05</span>What is data leakage? How do you prevent it?</div>
+      <div class="qa-a">
+        <p><strong>Data leakage</strong> occurs when information from outside the training dataset (specifically from the test set or from future data) is used to train the model, causing artificially inflated performance metrics that don't generalize to new data. In production, the model underperforms its reported metrics — often dramatically.</p>
+        <p><strong>Two main forms:</strong></p>
+        <ul>
+          <li><em>Target leakage:</em> A feature that is itself derived from or causally downstream of the target. Example: predicting loan default, and including "days_past_due" (which is zero until the person actually defaults) as a feature. The model "knows" the answer.</li>
+          <li><em>Train-test contamination:</em> Fitting preprocessing steps on the full dataset before splitting. Example: computing mean for imputation on train+test combined → the test mean influences training imputation, leaking test information into training.</li>
+        </ul>
+        <p><strong>Prevention:</strong></p>
+        <ul>
+          <li>Always split data BEFORE any feature engineering, scaling, or imputation</li>
+          <li>Use sklearn Pipelines to ensure preprocessing fits on training data only and transforms both train and test with training parameters</li>
+          <li>For time series: use temporal train/test splits (no future data in training); use TimeSeriesSplit for cross-validation</li>
+          <li>Scrutinize features with surprisingly high importance — real-world predictors rarely achieve >90% correlation with the target without leakage</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-hard">M06</span>How would you handle a highly imbalanced dataset in a classification task?</div>
+      <div class="qa-a">
+        <p>Class imbalance (e.g., 99% non-fraud, 1% fraud) causes a naive classifier to predict the majority class for every observation and achieve 99% accuracy while being completely useless.</p>
+        <p><strong>Step 1 — Use the right metric.</strong> Accuracy is meaningless. Use: Precision-Recall AUC (better than ROC-AUC for severe imbalance), F1-score (or F-beta with higher beta to weight recall), or Matthews Correlation Coefficient.</p>
+        <p><strong>Step 2 — Threshold adjustment.</strong> Lower the classification threshold from 0.5 to, say, 0.2 to increase recall at the cost of precision. Choose threshold using the precision-recall curve.</p>
+        <p><strong>Step 3 — Resampling techniques:</strong></p>
+        <ul>
+          <li><em>Oversampling minority class:</em> SMOTE (Synthetic Minority Over-sampling Technique) creates synthetic examples by interpolating between existing minority class examples. <code>from imblearn.over_sampling import SMOTE</code></li>
+          <li><em>Undersampling majority class:</em> Randomly remove majority class examples. Risk: losing potentially useful majority class information.</li>
+          <li><em>Combination:</em> SMOTE + Tomek Links (remove ambiguous majority class borderline examples).</li>
+        </ul>
+        <p><strong>Step 4 — Algorithm-level methods:</strong> Use <code>class_weight='balanced'</code> in sklearn (automatically weights the loss function to penalize minority class errors more). XGBoost's <code>scale_pos_weight = negative/positive</code> parameter does the same.</p>
+        <p><strong>Critical rule:</strong> Apply resampling ONLY to training data after the train/test split. Never oversample before splitting — synthetic minority examples from training would appear in test, leaking information and inflating performance metrics.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== A/B TESTING ===== -->
+<section class="section" id="ab-q">
+  <h2 class="section-title"><span class="sec-num sec-teal">05</span>A/B Testing &amp; Experimentation</h2>
+
+  <div class="qa-bank">
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-easy">E01</span>What is statistical significance? What does p-value = 0.03 mean?</div>
+      <div class="qa-a">
+        <p><strong>Statistical significance</strong> means the observed result is unlikely to have occurred by chance alone, given the null hypothesis is true. Formally: the p-value is below the pre-specified significance level α (typically 0.05).</p>
+        <p><strong>p-value = 0.03 means:</strong> If the null hypothesis (no effect) were true, there is a 3% probability of observing a result as extreme as, or more extreme than, the one observed, purely by chance. Since 0.03 &lt; 0.05, we reject the null hypothesis at the 5% significance level.</p>
+        <p><strong>What it does NOT mean:</strong></p>
+        <ul>
+          <li>It does NOT mean there is a 97% probability that the alternative hypothesis is true</li>
+          <li>It does NOT mean the effect is large or practically important</li>
+          <li>It does NOT mean the result will replicate</li>
+        </ul>
+        <p><strong>Practical significance vs. statistical significance:</strong> A p=0.001 result with 0.1% lift on conversion rate with n=10 million is statistically very significant but practically meaningless — the effect is tiny. Always pair p-value with effect size and confidence interval.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">E02</span>Why shouldn't you stop an A/B test early when you see a significant result?</div>
+      <div class="qa-a">
+        <p>This is the <strong>peeking problem</strong>, also called "optional stopping." If you run a test, check significance every day, and stop as soon as p &lt; 0.05, you massively inflate the Type I error rate beyond the nominal 5%.</p>
+        <p><strong>Why this happens:</strong> p-values fluctuate over time due to random sampling. Even when there is no true effect, the p-value will dip below 0.05 at some point during the experiment by chance. If you're watching and stop at that moment, you've capitalized on a random fluctuation. With 20 peeks, the true Type I error rate can exceed 20–30% instead of 5%.</p>
+        <p><strong>Correct approach:</strong></p>
+        <ul>
+          <li>Calculate required sample size BEFORE starting the test</li>
+          <li>Run the test until the predetermined sample size is reached, regardless of interim results</li>
+          <li>Stop the test early only for pre-specified ethical/safety reasons, using Sequential Testing methods</li>
+        </ul>
+        <p><strong>Alternatives that allow peeking:</strong></p>
+        <ul>
+          <li><em>Sequential testing (always valid p-values):</em> mSPRT, sequential probability ratio test — maintain validity for continuous monitoring</li>
+          <li><em>Bayesian A/B testing:</em> Posterior probabilities are valid at any sample size; stopping when probability of being best exceeds a threshold is statistically coherent</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">E03</span>How do you calculate the required sample size for an A/B test?</div>
+      <div class="qa-a">
+        <p>Sample size depends on four quantities: significance level (α), statistical power (1−β), baseline conversion rate (p₁), and minimum detectable effect (MDE, the smallest lift worth detecting).</p>
+        <p>For a two-proportion test, the formula is: n = (z_α/2 + z_β)² × [p₁(1−p₁) + p₂(1−p₂)] / (p₁ − p₂)²</p>
+        <p>where p₂ = p₁ + MDE, z_α/2 = 1.96 (for α=0.05, two-tailed), z_β = 0.84 (for 80% power).</p>
+        <p><strong>Worked example:</strong> Baseline CR = 5.0%, target CR = 5.5% (MDE = 0.5pp), α = 0.05, power = 80%:</p>
+        <p>Using Python's statsmodels: <code>from statsmodels.stats.power import NormalIndPower; effect_size = proportion_effectsize(0.055, 0.05); n = NormalIndPower().solve_power(effect_size, power=0.8, alpha=0.05)</code> → n ≈ 15,200 per group (30,400 total).</p>
+        <p><strong>Key insight:</strong> Sample size grows with the square of (1/MDE) — halving the MDE quadruples the required sample. If the expected effect is small, you need a very large sample or must compromise on power.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-hard">E04</span>Explain Simpson's Paradox with a business example.</div>
+      <div class="qa-a">
+        <p><strong>Simpson's Paradox</strong> occurs when a trend appears in different groups of data but disappears or reverses when the groups are combined. It is caused by a lurking confounding variable that correlates with both the treatment and the outcome.</p>
+        <p><strong>Classic business example:</strong> An e-commerce company runs an A/B test of a new checkout flow. Aggregate results show Control (old flow): 12% conversion; Treatment (new flow): 10% conversion. They conclude Treatment is worse.</p>
+        <p>But segmenting by device:</p>
+        <table style="font-size:13px; width:100%; margin:8px 0; border-collapse:collapse;">
+          <tr style="background:var(--surface2); font-weight:600;"><td style="padding:6px 10px; border:1px solid var(--border);">Device</td><td style="padding:6px 10px; border:1px solid var(--border);">Control CR</td><td style="padding:6px 10px; border:1px solid var(--border);">Treatment CR</td><td style="padding:6px 10px; border:1px solid var(--border);">Treatment better?</td></tr>
+          <tr><td style="padding:6px 10px; border:1px solid var(--border); color:var(--text2);">Mobile</td><td style="padding:6px 10px; border:1px solid var(--border); color:var(--text2);">8%</td><td style="padding:6px 10px; border:1px solid var(--border); color:var(--text2);">9%</td><td style="padding:6px 10px; border:1px solid var(--border); color:var(--green);">✓ Yes</td></tr>
+          <tr><td style="padding:6px 10px; border:1px solid var(--border); color:var(--text2);">Desktop</td><td style="padding:6px 10px; border:1px solid var(--border); color:var(--text2);">18%</td><td style="padding:6px 10px; border:1px solid var(--border); color:var(--text2);">20%</td><td style="padding:6px 10px; border:1px solid var(--border); color:var(--green);">✓ Yes</td></tr>
+        </table>
+        <p>Treatment wins on both device segments, but the aggregate shows Treatment loses. The confound is that Treatment got disproportionately more mobile traffic (mobile users have lower baseline CR), while Control got more desktop traffic (higher baseline CR). The device mix imbalance drives the aggregate reversal.</p>
+        <p><strong>Resolution:</strong> Analyze results within segments, not just in aggregate. Investigate SRM (Sample Ratio Mismatch) — unequal device distribution between groups may indicate an assignment mechanism problem.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== BUSINESS ANALYTICS ===== -->
+<section class="section" id="biz-q">
+  <h2 class="section-title"><span class="sec-num sec-pink">06</span>Business Analytics</h2>
+
+  <div class="qa-bank">
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">B01</span>What is the difference between a KPI and a metric?</div>
+      <div class="qa-a">
+        <p>A <strong>metric</strong> is any quantifiable measurement — page views, click events, API response time, number of support tickets. Metrics describe what is happening.</p>
+        <p>A <strong>KPI (Key Performance Indicator)</strong> is a subset of metrics — specifically, a metric that directly measures progress toward a strategic business objective. KPIs are tied to goals, have targets, and are monitored to inform decisions. Every KPI is a metric, but not every metric is a KPI.</p>
+        <p><strong>Example:</strong> "Number of API calls" is a metric (operational, describes system activity). "Monthly Recurring Revenue growth rate" is a KPI (tied to the strategic goal of revenue growth, tracked against a quarterly target). Page load time is a metric; page load time P95 for the checkout page is a KPI (tied to the objective of maximizing checkout conversion).</p>
+        <p><strong>Why the distinction matters:</strong> Analysts often measure too many things. A well-chosen KPI framework (typically 3–5 KPIs per team) focuses effort on what actually drives business outcomes and prevents "metric theatre" — looking busy tracking things that don't matter.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">B02</span>Walk me through how you would perform a cohort retention analysis.</div>
+      <div class="qa-a">
+        <p>Cohort retention analysis groups users by their acquisition date and tracks the percentage of each cohort that remains active over time. The result is a retention matrix (heatmap) with cohorts as rows and time periods since acquisition as columns.</p>
+        <p><strong>Step-by-step:</strong></p>
+        <ul>
+          <li><em>Step 1 — Define "active":</em> What does active mean? Opened app? Made a purchase? Logged in? The definition must match the product's core value exchange.</li>
+          <li><em>Step 2 — Assign cohort:</em> Label each user with their acquisition date (week or month, depending on data volume).</li>
+          <li><em>Step 3 — Compute periods:</em> For each user-activity record, compute periods_since_acquisition = activity_period − acquisition_period.</li>
+          <li><em>Step 4 — Aggregate:</em> Count distinct active users per (cohort × period) and divide by cohort size (period 0 users) to get retention %.</li>
+          <li><em>Step 5 — Visualize:</em> Heatmap with blue intensity encoding retention %. Darker = higher retention.</li>
+        </ul>
+        <p><strong>Insights to extract:</strong> (1) Are newer cohorts retaining better than older ones? (improving product quality). (2) Where does the retention curve flatten? (loyal core user %). (3) Is there a sharp drop at a specific period suggesting a churn trigger?</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-hard">B03</span>Our app's revenue dropped 20% last month. How would you investigate?</div>
+      <div class="qa-a">
+        <p>I'd follow a structured diagnostic workflow:</p>
+        <p><strong>1. Validate the data first.</strong> Before alerting anyone, confirm the drop is real. Check for tracking failures, pipeline issues, or definition changes in the revenue query. If possible, cross-check against the payment gateway directly.</p>
+        <p><strong>2. Decompose revenue.</strong> Revenue = New customer revenue + Existing customer revenue (expansions) − Churn. Which component drove the decline? If churn spiked, that's a retention problem. If new revenue declined, that's acquisition or activation.</p>
+        <p><strong>3. Check timing.</strong> Did it drop suddenly on a specific day (points to a specific event/release) or gradually over the month (structural)?</p>
+        <p><strong>4. Segment the drop.</strong> Break by: platform (iOS/Android/web), geography, subscription tier, acquisition channel. Isolate where the drop is concentrated.</p>
+        <p><strong>5. Correlate with changes.</strong> What changed last month? New pricing? A product release? Marketing campaign ended? A competitor launched? Review the changelog and marketing calendar.</p>
+        <p><strong>6. Funnel analysis.</strong> If it's a new revenue problem: where in the acquisition funnel is traffic dropping off? If it's a churn problem: what cohorts are churning? When in their lifecycle?</p>
+        <p><strong>7. Formulate and test hypotheses</strong> explicitly, quantify the contribution of each, and recommend specific fixes with expected recovery.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== BEHAVIORAL ===== -->
+<section class="section" id="behavioral">
+  <h2 class="section-title"><span class="sec-num sec-red">07</span>Behavioural Questions</h2>
+
+  <h3>The STAR Framework</h3>
+  <div class="star-grid">
+    <div class="star-card">
+      <div class="star-letter">S</div>
+      <h4>Situation</h4>
+      <p>Set the scene briefly. Context only — don't over-explain.</p>
+    </div>
+    <div class="star-card">
+      <div class="star-letter">T</div>
+      <h4>Task</h4>
+      <p>Your specific responsibility in the situation.</p>
+    </div>
+    <div class="star-card">
+      <div class="star-letter">A</div>
+      <h4>Action</h4>
+      <p>What YOU did. Use "I", not "we". Be specific about methods.</p>
+    </div>
+    <div class="star-card">
+      <div class="star-letter">R</div>
+      <h4>Result</h4>
+      <p>Quantify the outcome wherever possible. Mention what you learned.</p>
+    </div>
+  </div>
+
+  <div class="qa-bank">
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-easy">BH01</span>Tell me about a time you turned data into a decision that had real business impact.</div>
+      <div class="qa-a">
+        <p><strong>What the interviewer is assessing:</strong> Can you close the loop from analysis to action? Can you quantify business impact? Do you understand that data analysis is not the end goal — decisions and outcomes are?</p>
+        <p><strong>Structure your answer with STAR. Key elements to include:</strong></p>
+        <ul>
+          <li>What was the business question or problem? (Situation)</li>
+          <li>What data did you access, and what analysis did you run? (Task + Action)</li>
+          <li>What was your recommendation, and how did you communicate it? (Action)</li>
+          <li>What decision was made? What was the measurable outcome? (Result)</li>
+        </ul>
+        <p><strong>Red flags to avoid:</strong> Describing analysis that nobody acted on; focusing entirely on technical methodology without linking to the business outcome; vague results ("it improved performance") without numbers.</p>
+        <p><strong>Strong closing line:</strong> "...and the analysis became the basis for a product decision that [measurable outcome]. I also set up a dashboard so the team could monitor the impact ongoing."</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">BH02</span>Describe a time you had to explain a complex finding to a non-technical audience.</div>
+      <div class="qa-a">
+        <p><strong>What the interviewer is assessing:</strong> Communication skills are as important as technical skills in analytics. Can you translate numbers into business language? Can you handle pushback from non-technical stakeholders?</p>
+        <p><strong>Key elements:</strong></p>
+        <ul>
+          <li>What was the complex finding? (Briefly — don't over-explain the stats)</li>
+          <li>Who was the audience and what did they care about?</li>
+          <li>How did you adapt your communication? (Analogies, visualizations, leading with the headline conclusion rather than the method)</li>
+          <li>Was there pushback? How did you handle disagreement?</li>
+          <li>What was the outcome?</li>
+        </ul>
+        <p><strong>Tip:</strong> Mention that you lead with the "so what" before the "how" — executives and business stakeholders want the conclusion and its business implication first; they ask about methodology if interested.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">BH03</span>Tell me about a time your analysis was wrong. How did you handle it?</div>
+      <div class="qa-a">
+        <p><strong>What the interviewer is assessing:</strong> Intellectual honesty and resilience. This is a test of character. Every analyst makes mistakes; the question is how they respond. They want to see ownership (no blame-shifting), systematic correction (you debugged the error, not just the output), and learning (what changed after).</p>
+        <p><strong>Common mistakes analysts can discuss:</strong></p>
+        <ul>
+          <li>A metric definition mismatch (counted "sessions" differently from the stakeholder's understanding)</li>
+          <li>A filtering error that excluded a key segment</li>
+          <li>A false conclusion from data that later turned out to have a quality issue</li>
+          <li>Overclaiming causation from correlational data</li>
+        </ul>
+        <p><strong>Structure:</strong> State what happened briefly and specifically. Describe how you discovered the error (ideally before anyone else did — or honestly if someone else caught it). Explain what you did to correct it and communicate the correction. Describe the systemic fix you implemented to prevent it (peer review, automated sanity checks, etc.).</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-qnum diff-medium">BH04</span>How do you prioritize when you have multiple analytics requests from different stakeholders?</div>
+      <div class="qa-a">
+        <p><strong>A mature answer addresses three things:</strong> your prioritization framework, stakeholder management, and expectation-setting.</p>
+        <p><strong>Prioritization framework:</strong> Assess requests along two dimensions: impact (how much will this analysis move the needle on a business goal?) and urgency (time sensitivity — a decision deadline vs. a nice-to-know). High impact + urgent = do first. Low impact + low urgency = decline or defer. Use the impact-urgency matrix explicitly.</p>
+        <p><strong>Stakeholder management:</strong> Requests compete for the same limited resource (you). Align with your manager on priority order rather than deciding alone — this avoids conflict and ensures strategic priorities take precedence over whoever asks most persistently.</p>
+        <p><strong>Expectation-setting:</strong> For lower-priority requests, give a realistic ETA and hold to it. Under-promise and over-deliver. If a request gets deprioritized for two weeks, tell the requester immediately rather than going silent. Credibility is built through reliability.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== CASE STUDIES ===== -->
+<section class="section" id="cases">
+  <h2 class="section-title"><span class="sec-num sec-blue">08</span>Case Study Walkthroughs</h2>
+
+  <div class="case-study">
+    <h4>Case 1 — Diagnosing a DAU Drop at a Social App</h4>
+    <div class="case-meta">
+      <span>⏱ ~20 min interview case</span>
+      <span>🎯 Skills: RCA, segmentation, data intuition</span>
+    </div>
+    <p><strong>Prompt:</strong> "Daily active users for our mobile social app dropped 18% week-over-week. How do you investigate?"</p>
+    <div class="approach-label">Model Approach</div>
+    <ol>
+      <li><strong>Clarify and confirm:</strong> Is this a real signal or a data artifact? Check pipeline completeness, logging code changes, timezone handling. Is it week-over-week or vs. baseline? Both metrics should be checked.</li>
+      <li><strong>Characterize:</strong> When exactly did it start? (Daily granularity) Is it improving, worsening, or stable at the new level? Is there seasonality (weekend vs. weekday)?</li>
+      <li><strong>Segment by platform:</strong> iOS vs. Android vs. web. If only Android dropped, it points to a recent Android release. If all platforms dropped, it's either a backend issue or external.</li>
+      <li><strong>Segment by user type:</strong> New users vs. returning. If new user DAU is flat but returning user DAU dropped, it's a retention/engagement problem, not acquisition.</li>
+      <li><strong>Segment by geography and version:</strong> A specific country? A specific app version? Forced upgrades that failed?</li>
+      <li><strong>Correlate with changes:</strong> What was deployed last week? Push notification system change? Feed algorithm change? Infrastructure migration?</li>
+      <li><strong>Hypotheses to test:</strong> (H1) Android v4.2 release broke a core feature; (H2) Push notification delivery dropped, reducing re-engagement; (H3) Feed algorithm change reduced session quality, leading to faster churn.</li>
+      <li><strong>Recommend:</strong> If H1 confirmed → rollback or hotfix. If H2 → restore push delivery system. Add monitoring alert: DAU deviation > 10% triggers automatic Slack alert. Long-term: add pre-release canary testing for core engagement loops.</li>
+    </ol>
+  </div>
+
+  <div class="case-study">
+    <h4>Case 2 — Measuring the Success of a New Feature</h4>
+    <div class="case-meta">
+      <span>⏱ ~20 min interview case</span>
+      <span>🎯 Skills: Metric design, A/B testing, product thinking</span>
+    </div>
+    <p><strong>Prompt:</strong> "We're launching a 'Save for Later' feature in our e-commerce app. How would you measure its success?"</p>
+    <div class="approach-label">Model Approach</div>
+    <ol>
+      <li><strong>Clarify the goal:</strong> Why are we building this? Hypothesis: users who save items come back and convert, increasing total purchase rate. The business goal is GMV and repeat purchase rate.</li>
+      <li><strong>Primary metric:</strong> 30-day purchase rate (% of users who make at least one purchase in 30 days after feature exposure).</li>
+      <li><strong>Secondary metrics:</strong> Feature adoption rate (% of eligible users who save at least one item), save-to-purchase conversion rate (% of saved items that are later purchased), session depth and return visit rate.</li>
+      <li><strong>Guardrail metrics:</strong> Cart abandonment rate (ensure "Save for Later" doesn't cannibalize "Add to Cart"); AOV (ensure saved items don't just replace lower-value immediate purchases).</li>
+      <li><strong>Measurement method:</strong> A/B test — randomly assign users to see "Save for Later" (treatment) vs. not (control). Run for 4 weeks (capture a full purchase cycle). Use 2-proportion Z-test for the primary metric; check SRM first.</li>
+      <li><strong>Expected analysis:</strong> If primary metric lifts significantly with no negative movement in guardrails → ship. If primary metric lifts but cart abandonment also rises → investigate interaction; may need UX change to ensure it's an addition, not a substitution.</li>
+    </ol>
+  </div>
+
+  <div class="case-study">
+    <h4>Case 3 — Pricing Optimization</h4>
+    <div class="case-meta">
+      <span>⏱ ~25 min interview case</span>
+      <span>🎯 Skills: Revenue analysis, trade-off thinking, strategy</span>
+    </div>
+    <p><strong>Prompt:</strong> "We're considering raising the price of our pro plan from ₹499/month to ₹599/month. How would you analyze this decision?"</p>
+    <div class="approach-label">Model Approach</div>
+    <ol>
+      <li><strong>Frame the trade-off:</strong> Higher price → more revenue per user; but may increase churn and reduce new subscriber conversion. Net impact on revenue depends on price elasticity of demand.</li>
+      <li><strong>Break-even analysis:</strong> Revenue per user increases by ₹100 (20%). If churn increases by up to 20% (elasticity = 1.0), total revenue stays flat. If elasticity &lt; 1.0, price increase is revenue-positive. If &gt; 1.0, it's negative.</li>
+      <li><strong>Historical data:</strong> What was the impact when price was changed previously? Are there competitor prices as external benchmarks? What does the NPS distribution look like — do price-sensitive users cluster in a specific segment?</li>
+      <li><strong>A/B test design:</strong> Randomly show ₹599 price to new potential subscribers; track trial-to-paid conversion rate. For existing subscribers, raise price and measure churn in the following 3 months. Note: raising price on existing subscribers requires careful communication and ethical consideration.</li>
+      <li><strong>Segment analysis:</strong> Calculate LTV at both price points by acquisition channel. High-intent organic users may tolerate the increase; price-sensitive paid-acquisition users may churn. Different segments may need different pricing.</li>
+      <li><strong>Recommendation framework:</strong> If elasticity analysis suggests &lt; 15% churn increase → proceed. If churn risk is high for a key segment → consider grandfathering existing users and testing only on new subscribers. Quantify expected revenue impact at different elasticity assumptions (sensitivity analysis).</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===== CHEAT SHEETS ===== -->
+<section class="section" id="cheatsheets">
+  <h2 class="section-title"><span class="sec-num sec-green">09</span>Quick-Reference Cheat Sheets</h2>
+
+  <h3>Statistical Tests Selection</h3>
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4>Compare Two Groups (Continuous)</h4>
+      <div class="cheat-row"><span class="cheat-term">Normal, n≥30</span><span class="cheat-def">Welch's t-test</span></div>
+      <div class="cheat-row"><span class="cheat-term">Non-normal / small n</span><span class="cheat-def">Mann-Whitney U</span></div>
+      <div class="cheat-row"><span class="cheat-term">Paired samples</span><span class="cheat-def">Paired t-test / Wilcoxon</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4>Compare Proportions</h4>
+      <div class="cheat-row"><span class="cheat-term">Two proportions, large n</span><span class="cheat-def">Z-test (2-prop)</span></div>
+      <div class="cheat-row"><span class="cheat-term">Small counts (&lt;5)</span><span class="cheat-def">Fisher's Exact</span></div>
+      <div class="cheat-row"><span class="cheat-term">Categorical association</span><span class="cheat-def">Chi-square test</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4>Compare 3+ Groups</h4>
+      <div class="cheat-row"><span class="cheat-term">Normal, equal variance</span><span class="cheat-def">One-way ANOVA</span></div>
+      <div class="cheat-row"><span class="cheat-term">Non-normal / ordinal</span><span class="cheat-def">Kruskal-Wallis</span></div>
+      <div class="cheat-row"><span class="cheat-term">Post-hoc (which pairs?)</span><span class="cheat-def">Tukey HSD / Bonferroni</span></div>
+    </div>
+  </div>
+
+  <h3>ML Metrics Reference</h3>
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4>Regression Metrics</h4>
+      <div class="cheat-row"><span class="cheat-term">MAE</span><span class="cheat-def">Mean |error|</span></div>
+      <div class="cheat-row"><span class="cheat-term">RMSE</span><span class="cheat-def">√Mean(error²)</span></div>
+      <div class="cheat-row"><span class="cheat-term">R²</span><span class="cheat-def">1 − SS_res/SS_tot</span></div>
+      <div class="cheat-row"><span class="cheat-term">MAPE</span><span class="cheat-def">Mean |error/actual|</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4>Classification Metrics</h4>
+      <div class="cheat-row"><span class="cheat-term">Precision</span><span class="cheat-def">TP/(TP+FP)</span></div>
+      <div class="cheat-row"><span class="cheat-term">Recall</span><span class="cheat-def">TP/(TP+FN)</span></div>
+      <div class="cheat-row"><span class="cheat-term">F1</span><span class="cheat-def">2·P·R/(P+R)</span></div>
+      <div class="cheat-row"><span class="cheat-term">ROC-AUC</span><span class="cheat-def">Area under ROC curve</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4>When to Use Which</h4>
+      <div class="cheat-row"><span class="cheat-term">Outlier-robust</span><span class="cheat-def">MAE (not RMSE)</span></div>
+      <div class="cheat-row"><span class="cheat-term">Imbalanced classes</span><span class="cheat-def">PR-AUC, F1</span></div>
+      <div class="cheat-term" style="color:var(--text2); font-size:12px; display:block; padding-top:6px;">RMSE penalizes large errors more than MAE (squared vs. absolute). Use RMSE when large errors are particularly undesirable.</div>
+    </div>
+  </div>
+
+  <h3>Business Formulas Quick Reference</h3>
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4>Revenue Metrics</h4>
+      <div class="cheat-row"><span class="cheat-term">MRR</span><span class="cheat-def">Avg price × subscribers</span></div>
+      <div class="cheat-row"><span class="cheat-term">ARR</span><span class="cheat-def">MRR × 12</span></div>
+      <div class="cheat-row"><span class="cheat-term">ARPU</span><span class="cheat-def">Revenue / Active users</span></div>
+      <div class="cheat-row"><span class="cheat-term">NRR</span><span class="cheat-def">(Start+Exp−Churn)/Start</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4>Unit Economics</h4>
+      <div class="cheat-row"><span class="cheat-term">CAC</span><span class="cheat-def">Spend / New customers</span></div>
+      <div class="cheat-row"><span class="cheat-term">LTV</span><span class="cheat-def">ARPU × GM% / Churn</span></div>
+      <div class="cheat-row"><span class="cheat-term">LTV:CAC</span><span class="cheat-def">Should be ≥ 3</span></div>
+      <div class="cheat-row"><span class="cheat-term">Payback period</span><span class="cheat-def">CAC / (ARPU × GM%)</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4>Engagement Metrics</h4>
+      <div class="cheat-row"><span class="cheat-term">DAU/MAU</span><span class="cheat-def">Stickiness (≥0.5 = good)</span></div>
+      <div class="cheat-row"><span class="cheat-term">Churn rate</span><span class="cheat-def">Lost / Start-of-period</span></div>
+      <div class="cheat-row"><span class="cheat-term">Retention (Day N)</span><span class="cheat-def">Active on Day N / Acquired</span></div>
+      <div class="cheat-row"><span class="cheat-term">Conversion rate</span><span class="cheat-def">Conversions / Visitors</span></div>
+    </div>
+  </div>
+
+  <h3>SQL Window Functions Quick Reference</h3>
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4>Ranking Functions</h4>
+      <div class="cheat-row"><span class="cheat-term">ROW_NUMBER()</span><span class="cheat-def">Unique row number</span></div>
+      <div class="cheat-row"><span class="cheat-term">RANK()</span><span class="cheat-def">Gaps on ties</span></div>
+      <div class="cheat-row"><span class="cheat-term">DENSE_RANK()</span><span class="cheat-def">No gaps on ties</span></div>
+      <div class="cheat-row"><span class="cheat-term">NTILE(n)</span><span class="cheat-def">Divide into n buckets</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4>Aggregate Windows</h4>
+      <div class="cheat-row"><span class="cheat-term">SUM() OVER(...)</span><span class="cheat-def">Running / partitioned sum</span></div>
+      <div class="cheat-row"><span class="cheat-term">AVG() OVER(...)</span><span class="cheat-def">Moving average</span></div>
+      <div class="cheat-row"><span class="cheat-term">COUNT() OVER(...)</span><span class="cheat-def">Running count</span></div>
+      <div class="cheat-row"><span class="cheat-term">ROWS BETWEEN N PRECEDING AND CURRENT ROW</span><span class="cheat-def">N+1 row window</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4>Navigation Functions</h4>
+      <div class="cheat-row"><span class="cheat-term">LAG(col, n)</span><span class="cheat-def">Value n rows before</span></div>
+      <div class="cheat-row"><span class="cheat-term">LEAD(col, n)</span><span class="cheat-def">Value n rows ahead</span></div>
+      <div class="cheat-row"><span class="cheat-term">FIRST_VALUE(col)</span><span class="cheat-def">First in window</span></div>
+      <div class="cheat-row"><span class="cheat-term">LAST_VALUE(col)</span><span class="cheat-def">Last in window</span></div>
+    </div>
+  </div>
+
+  <h3>Python Pandas Quick Reference</h3>
+  <div class="cheat-grid">
+    <div class="cheat-card">
+      <h4>Inspection</h4>
+      <div class="cheat-row"><span class="cheat-term">df.head(n)</span><span class="cheat-def">First n rows</span></div>
+      <div class="cheat-row"><span class="cheat-term">df.info()</span><span class="cheat-def">Types &amp; nulls</span></div>
+      <div class="cheat-row"><span class="cheat-term">df.describe()</span><span class="cheat-def">Summary stats</span></div>
+      <div class="cheat-row"><span class="cheat-term">df.value_counts()</span><span class="cheat-def">Frequency table</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4>Filtering &amp; Selection</h4>
+      <div class="cheat-row"><span class="cheat-term">df[mask]</span><span class="cheat-def">Boolean filter</span></div>
+      <div class="cheat-row"><span class="cheat-term">df.loc[row, col]</span><span class="cheat-def">Label-based</span></div>
+      <div class="cheat-row"><span class="cheat-term">df.iloc[i, j]</span><span class="cheat-def">Position-based</span></div>
+      <div class="cheat-row"><span class="cheat-term">df.query("col &gt; 5")</span><span class="cheat-def">SQL-like filter</span></div>
+    </div>
+    <div class="cheat-card">
+      <h4>GroupBy Patterns</h4>
+      <div class="cheat-row"><span class="cheat-term">.groupby(col).agg()</span><span class="cheat-def">Multi-function agg</span></div>
+      <div class="cheat-row"><span class="cheat-term">.transform()</span><span class="cheat-def">Group-level scalar to rows</span></div>
+      <div class="cheat-row"><span class="cheat-term">.pivot_table()</span><span class="cheat-def">Flexible pivot</span></div>
+      <div class="cheat-row"><span class="cheat-term">.crosstab()</span><span class="cheat-def">Frequency cross-tab</span></div>
+    </div>
+  </div>
+
+</section>
+
+</div>
+</body>
+</html>

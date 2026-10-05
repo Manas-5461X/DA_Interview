@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 6: Data Visualization — Data Analytics Interview Packet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F7F8FC;
+  --surface: #FFFFFF;
+  --surface-2: #EFF2FA;
+  --text: #18202F;
+  --text-muted: #5A6585;
+  --accent: #2B5CE6;
+  --accent-light: #EEF3FF;
+  --border: #DDE3F2;
+  --code-bg: #1A1D2E;
+  --code-text: #C9D1F0;
+  --green: #059669;
+  --green-light: #ECFDF5;
+  --green-border: #6EE7B7;
+  --orange: #D97706;
+  --orange-light: #FFFBEB;
+  --orange-border: #FCD34D;
+  --red: #DC2626;
+  --red-light: #FEF2F2;
+  --purple: #7C3AED;
+  --purple-light: #F5F3FF;
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1117;
+    --surface: #1A1D2E;
+    --surface-2: #222639;
+    --text: #E8EAF6;
+    --text-muted: #8892B0;
+    --accent: #5B8AF0;
+    --accent-light: #1A2140;
+    --border: #2E3356;
+    --code-bg: #0D0F1A;
+    --code-text: #C9D1F0;
+    --green: #34D399;
+    --green-light: #064E3B;
+    --green-border: #065F46;
+    --orange: #FBBF24;
+    --orange-light: #451A03;
+    --orange-border: #92400E;
+    --red: #F87171;
+    --red-light: #450A0A;
+    --purple: #A78BFA;
+    --purple-light: #2E1065;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1117;
+  --surface: #1A1D2E;
+  --surface-2: #222639;
+  --text: #E8EAF6;
+  --text-muted: #8892B0;
+  --accent: #5B8AF0;
+  --accent-light: #1A2140;
+  --border: #2E3356;
+  --code-bg: #0D0F1A;
+  --code-text: #C9D1F0;
+  --green: #34D399;
+  --green-light: #064E3B;
+  --green-border: #065F46;
+  --orange: #FBBF24;
+  --orange-light: #451A03;
+  --red: #F87171;
+  --red-light: #450A0A;
+  --purple: #A78BFA;
+  --purple-light: #2E1065;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 16px;
+  padding-inline: 16px;
+  padding-block: 40px;
+}
+.container { max-width: 860px; margin-inline: auto; }
+
+.module-header {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 12px;
+  padding: 40px 48px;
+  margin-bottom: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.module-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%);
+}
+.module-tag { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; margin-bottom: 12px; }
+.module-header h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.2; margin-bottom: 12px; text-wrap: balance; }
+.module-header p { font-size: 1rem; opacity: 0.85; max-width: 580px; line-height: 1.6; }
+
+.theme-toggle {
+  position: fixed; top: 20px; right: 20px;
+  background: var(--surface); border: 1px solid var(--border); color: var(--text);
+  border-radius: 50%; width: 40px; height: 40px; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 48px; }
+.toc h2 { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+.toc ol { padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.toc a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+.toc a:hover { text-decoration: underline; }
+
+section { margin-bottom: 56px; }
+h2 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); text-wrap: balance; }
+h3 { font-size: 1.15rem; font-weight: 600; color: var(--text); margin-top: 28px; margin-bottom: 12px; }
+h4 { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-top: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+p { margin-bottom: 14px; }
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { margin-bottom: 6px; line-height: 1.6; }
+
+.definition { background: var(--accent-light); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.definition .def-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.definition p { margin: 0; font-size: 0.97rem; }
+
+.example { background: var(--green-light); border-left: 4px solid var(--green); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.example .ex-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 6px; }
+.example p, .example li { font-size: 0.95rem; }
+
+.note { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.note .note-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+.note p { margin: 0; font-size: 0.95rem; }
+
+.warning { background: var(--red-light); border-left: 4px solid var(--red); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.warning .warn-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+.warning p { margin: 0; font-size: 0.95rem; }
+
+.tip { background: var(--purple-light); border-left: 4px solid var(--purple); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.tip .tip-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--purple); margin-bottom: 6px; }
+.tip p { margin: 0; font-size: 0.95rem; }
+
+pre { background: var(--code-bg); border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 16px 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; line-height: 1.65; color: var(--code-text); }
+code { font-family: 'IBM Plex Mono', monospace; font-size: 0.875em; background: var(--surface-2); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
+pre code { background: none; padding: 0; font-size: inherit; color: inherit; border-radius: 0; }
+.kw { color: #82AAFF; }
+.fn { color: #C3E88D; }
+.st { color: #F78C6C; }
+.cm { color: #546E7A; font-style: italic; }
+.cl { color: #FFCB6B; }
+.nm { color: #F07178; }
+
+.table-wrap { overflow-x: auto; margin: 20px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th { background: var(--surface-2); color: var(--text); font-weight: 600; text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+tr:nth-child(even) td { background: var(--surface-2); }
+
+/* CHART SELECTOR GUIDE */
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.chart-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent);
+}
+.chart-card.comparison::before { background: #059669; }
+.chart-card.distribution::before { background: #7C3AED; }
+.chart-card.relationship::before { background: #D97706; }
+.chart-card.composition::before { background: #DC2626; }
+.chart-card .chart-type {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.chart-card h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.chart-card p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 8px; }
+.chart-card .use-when {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* PRINCIPLE CARDS */
+.principle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.principle-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.principle-card .principle-num {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0.25;
+  line-height: 1;
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.principle-card h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.principle-card p { font-size: 0.87rem; color: var(--text-muted); margin: 0; }
+
+/* SVG CHART DEMOS */
+.chart-demo {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin: 20px 0;
+}
+.chart-demo .chart-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+svg text { font-family: 'IBM Plex Sans', sans-serif; }
+
+/* QA */
+.qa-section { margin-top: 40px; }
+.qa-section h2 { color: var(--accent); }
+.qa-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 20px; overflow: hidden; }
+.qa-q { background: var(--accent-light); padding: 14px 20px; font-weight: 600; font-size: 0.97rem; color: var(--accent); display: flex; gap: 10px; align-items: flex-start; }
+.qa-q::before { content: 'Q'; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; flex-shrink: 0; margin-top: 1px; }
+.qa-a { padding: 16px 20px; font-size: 0.95rem; line-height: 1.7; }
+.qa-a p:last-child { margin-bottom: 0; }
+.qa-a pre { font-size: 0.82rem; }
+
+/* STORY FRAMEWORK */
+.story-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+.story-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+}
+.story-step .step-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.story-step h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.story-step p { font-size: 0.88rem; color: var(--text-muted); margin: 0; }
+</style>
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+<div class="container">
+
+<div class="module-header">
+  <div class="module-tag">Module 06 · Data Analytics Interview Packet</div>
+  <h1>Data Visualization</h1>
+  <p>Principles of effective visualization, chart selection frameworks, Matplotlib & Seaborn mastery, and storytelling with data — from exploratory analysis to presentation-ready graphics.</p>
+</div>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#principles">Principles of Effective Visualization</a></li>
+    <li><a href="#chart-selection">Chart Selection Framework</a></li>
+    <li><a href="#matplotlib">Matplotlib: Anatomy & Core API</a></li>
+    <li><a href="#seaborn">Seaborn: Statistical Visualizations</a></li>
+    <li><a href="#eda-visuals">Exploratory Data Analysis Visuals</a></li>
+    <li><a href="#storytelling">Storytelling with Data</a></li>
+    <li><a href="#common-mistakes">Common Visualization Mistakes</a></li>
+    <li><a href="#qa">Interview Q&A</a></li>
+  </ol>
+</nav>
+
+<!-- SECTION 1 -->
+<section id="principles">
+  <h2>1. Principles of Effective Visualization</h2>
+  <p>A visualization is only as good as the decision or insight it enables. These core principles separate good data visualization from noise.</p>
+
+  <div class="principle-grid">
+    <div class="principle-card">
+      <div class="principle-num">01</div>
+      <h4>Choose the Right Chart for the Data</h4>
+      <p>Every chart type has a specific purpose: comparisons, distributions, relationships, or compositions. Using the wrong chart type actively misleads the reader.</p>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">02</div>
+      <h4>Maximize Data-Ink Ratio</h4>
+      <p>Edward Tufte: every drop of ink should encode data. Remove gridlines, borders, 3D effects, and decorative elements that add visual weight but convey no information.</p>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">03</div>
+      <h4>Start Y-Axis at Zero for Bar Charts</h4>
+      <p>Truncating the y-axis on a bar chart exaggerates differences. A bar chart encodes value with the length of the bar — if the bar doesn't start at 0, the length is meaningless.</p>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">04</div>
+      <h4>Use Color with Purpose</h4>
+      <p>Color should encode data, not decorate. Use sequential palettes for ordered data, diverging for deviations from a midpoint, and qualitative palettes for categorical groups. Never use more than 6–7 colors in a single chart.</p>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">05</div>
+      <h4>Label Directly, Not Just in Legends</h4>
+      <p>Direct labeling on lines or bars eliminates the cognitive load of cross-referencing a legend. The reader should not have to look back and forth between chart and legend to understand it.</p>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">06</div>
+      <h4>Give Every Chart a Clear Title</h4>
+      <p>The title should state the conclusion or insight, not just describe the chart. "Sales by Region" tells what is shown; "Northeast Sales 40% Above Target" tells what it means.</p>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">07</div>
+      <h4>Pre-attentive Attributes</h4>
+      <p>Color, size, position, and shape are processed before conscious attention. Use one pre-attentive attribute to highlight the critical element — e.g., make one bar red in a bar chart to draw the eye to it instantly.</p>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">08</div>
+      <h4>Consider Your Audience</h4>
+      <p>An exploratory visualization for yourself can be complex; a presentation-ready visualization for executives must be simple enough to understand in 5 seconds. Tailor the complexity accordingly.</p>
+    </div>
+  </div>
+
+  <h3>Tufte's Data-Ink Ratio</h3>
+  <div class="definition">
+    <div class="def-label">Definition (Edward Tufte, The Visual Display of Quantitative Information)</div>
+    <p><strong>Data-Ink Ratio</strong> = Data Ink / Total Ink used in graphic. A high data-ink ratio means most of the ink in the chart encodes actual data. Non-data ink (decorative borders, background fills, 3D shadows, redundant gridlines) should be minimized or eliminated.</p>
+  </div>
+
+  <div class="example">
+    <div class="ex-label">Chartjunk to Eliminate</div>
+    <ul>
+      <li><strong>3D effects</strong> on bar/pie charts — distort perception of relative sizes through perspective</li>
+      <li><strong>Gratuitous gridlines</strong> — use light, minimal gridlines only to guide the eye for precise reading</li>
+      <li><strong>Moiré patterns</strong> — cross-hatching patterns in bars cause visual vibration</li>
+      <li><strong>Pie chart explosion</strong> — exploding slices distort area perception</li>
+      <li><strong>Redundant data labels</strong> — if you have axis ticks, you usually don't also need labels on every bar</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SECTION 2 -->
+<section id="chart-selection">
+  <h2>2. Chart Selection Framework</h2>
+  <p>Choosing the right chart type starts with understanding what relationship in the data you want the viewer to perceive. Four primary visual relationships:</p>
+
+  <h3>Comparison Charts</h3>
+  <div class="chart-grid">
+    <div class="chart-card comparison">
+      <div class="chart-type">Comparison</div>
+      <h4>Bar Chart</h4>
+      <p>Compare discrete values across categories. Horizontal bars work better for long category names.</p>
+      <div class="use-when">Best when: ≤15 categories, one or few series</div>
+    </div>
+    <div class="chart-card comparison">
+      <div class="chart-type">Comparison over time</div>
+      <h4>Line Chart</h4>
+      <p>Show trends over time. Multiple lines work well for ≤5 series. Emphasizes change and continuity.</p>
+      <div class="use-when">Best when: time-series, continuous data, trends</div>
+    </div>
+    <div class="chart-card comparison">
+      <div class="chart-type">Grouped Comparison</div>
+      <h4>Grouped/Stacked Bar</h4>
+      <p>Grouped: compare sub-groups side by side. Stacked: show both total and part-to-whole within each category.</p>
+      <div class="use-when">Best when: 2–4 sub-groups per category</div>
+    </div>
+    <div class="chart-card comparison">
+      <div class="chart-type">Ranking</div>
+      <h4>Dot Plot / Lollipop</h4>
+      <p>Cleaner alternative to bar charts for sparse comparisons. Less ink, works well for many categories.</p>
+      <div class="use-when">Best when: ranking items, many categories</div>
+    </div>
+  </div>
+
+  <h3>Distribution Charts</h3>
+  <div class="chart-grid">
+    <div class="chart-card distribution">
+      <div class="chart-type">Distribution</div>
+      <h4>Histogram</h4>
+      <p>Shows the frequency distribution of a continuous variable. Bin width is critical — too wide or too narrow hides shape.</p>
+      <div class="use-when">Best when: one continuous variable, see shape/spread</div>
+    </div>
+    <div class="chart-card distribution">
+      <div class="chart-type">Distribution + Outliers</div>
+      <h4>Box Plot</h4>
+      <p>Shows five-number summary (Q1, Q3, median, min, max) and outliers. Excellent for comparing distributions across groups.</p>
+      <div class="use-when">Best when: comparing multiple group distributions</div>
+    </div>
+    <div class="chart-card distribution">
+      <div class="chart-type">Distribution (Smoothed)</div>
+      <h4>KDE / Violin Plot</h4>
+      <p>KDE: smoothed continuous distribution. Violin: box plot + KDE mirrored. Shows bimodality that histograms may miss.</p>
+      <div class="use-when">Best when: smooth shape more important than exact counts</div>
+    </div>
+  </div>
+
+  <h3>Relationship Charts</h3>
+  <div class="chart-grid">
+    <div class="chart-card relationship">
+      <div class="chart-type">Relationship</div>
+      <h4>Scatter Plot</h4>
+      <p>Show correlation between two continuous variables. Add a third dimension with color or bubble size.</p>
+      <div class="use-when">Best when: two continuous variables, checking correlation</div>
+    </div>
+    <div class="chart-card relationship">
+      <div class="chart-type">Multi-variable</div>
+      <h4>Heatmap</h4>
+      <p>Correlation matrix, confusion matrix, or any 2D grid of values. Color encodes magnitude.</p>
+      <div class="use-when">Best when: many pairwise comparisons, matrix data</div>
+    </div>
+    <div class="chart-card relationship">
+      <div class="chart-type">Relationship over time</div>
+      <h4>Bubble Chart</h4>
+      <p>Scatter plot with bubble size as third dimension. Time can be animated (Gapminder-style).</p>
+      <div class="use-when">Best when: 3 numeric dimensions simultaneously</div>
+    </div>
+  </div>
+
+  <h3>Composition Charts</h3>
+  <div class="chart-grid">
+    <div class="chart-card composition">
+      <div class="chart-type">Composition</div>
+      <h4>Pie / Donut Chart</h4>
+      <p>Part-to-whole with few categories (≤5). Humans are poor at reading angles — use only when the point is "one category dominates."</p>
+      <div class="use-when">Best when: 2–4 parts, one is clearly dominant</div>
+    </div>
+    <div class="chart-card composition">
+      <div class="chart-type">Composition + Trend</div>
+      <h4>Stacked Area Chart</h4>
+      <p>Part-to-whole changing over time. 100% stacked version shows proportions. Regular stacked shows totals + composition.</p>
+      <div class="use-when">Best when: few categories, long time series</div>
+    </div>
+    <div class="chart-card composition">
+      <div class="chart-type">Hierarchy</div>
+      <h4>Treemap</h4>
+      <p>Nested rectangles where area encodes a numeric value. Excellent for showing hierarchy and proportion simultaneously.</p>
+      <div class="use-when">Best when: hierarchical data, many leaves</div>
+    </div>
+  </div>
+
+  <h3>Quick-Reference Decision Table</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>You want to show…</th><th>Data Type</th><th>Use This Chart</th><th>Avoid</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Category comparisons</td><td>Categorical + Numeric</td><td>Bar chart (horizontal for long labels)</td><td>Pie chart, 3D bar</td></tr>
+        <tr><td>Trend over time</td><td>Date + Numeric</td><td>Line chart</td><td>Bar chart for dense time series</td></tr>
+        <tr><td>Correlation</td><td>2 numeric</td><td>Scatter plot</td><td>Line chart (implies sequence)</td></tr>
+        <tr><td>Distribution shape</td><td>1 numeric</td><td>Histogram or KDE</td><td>Bar chart (different encoding)</td></tr>
+        <tr><td>Outliers per group</td><td>Categorical + Numeric</td><td>Box plot or violin plot</td><td>Bar chart (hides distribution)</td></tr>
+        <tr><td>Part-to-whole (static)</td><td>Categorical</td><td>Stacked bar (100%), pie (≤4 parts)</td><td>3D pie, exploded pie</td></tr>
+        <tr><td>Many-variable relationships</td><td>Multiple numeric</td><td>Heatmap (correlation matrix), pair plot</td><td>Multiple overlapping scatter plots</td></tr>
+        <tr><td>Geographic data</td><td>Location + Numeric</td><td>Choropleth map, bubble map</td><td>Standard bar chart</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 3 -->
+<section id="matplotlib">
+  <h2>3. Matplotlib: Anatomy & Core API</h2>
+
+  <h3>The Figure-Axes Architecture</h3>
+  <p>Matplotlib has two levels of API: the <strong>pyplot</strong> state-machine interface (quick, MATLAB-style) and the <strong>object-oriented (OO)</strong> interface. The OO interface is the correct approach for non-trivial charts.</p>
+
+  <div class="definition">
+    <div class="def-label">Key Objects</div>
+    <p><strong>Figure</strong>: the top-level container (the entire window/canvas). <strong>Axes</strong> (not to be confused with "axis"): the area where data is plotted — one Figure can contain multiple Axes (subplots). <strong>Axis</strong>: the x-axis or y-axis object, with ticks, labels, and limits.</p>
+  </div>
+
+  <pre><span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># === OBJECT-ORIENTED APPROACH (preferred) ===</span>
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">10</span>, <span class="nm">6</span>))  <span class="cm"># returns Figure and Axes</span>
+
+x = np.<span class="fn">linspace</span>(<span class="nm">0</span>, <span class="nm">10</span>, <span class="nm">100</span>)
+y1 = np.<span class="fn">sin</span>(x)
+y2 = np.<span class="fn">cos</span>(x)
+
+<span class="cm"># Plot on the axes object</span>
+ax.<span class="fn">plot</span>(x, y1, label=<span class="st">'sin(x)'</span>, color=<span class="st">'#2B5CE6'</span>, linewidth=<span class="nm">2</span>)
+ax.<span class="fn">plot</span>(x, y2, label=<span class="st">'cos(x)'</span>, color=<span class="st">'#DC2626'</span>, linewidth=<span class="nm">2</span>, linestyle=<span class="st">'--'</span>)
+
+<span class="cm"># Axis labels and title</span>
+ax.<span class="fn">set_xlabel</span>(<span class="st">'x'</span>, fontsize=<span class="nm">12</span>)
+ax.<span class="fn">set_ylabel</span>(<span class="st">'Amplitude'</span>, fontsize=<span class="nm">12</span>)
+ax.<span class="fn">set_title</span>(<span class="st">'Sine and Cosine Functions'</span>, fontsize=<span class="nm">14</span>, fontweight=<span class="st">'bold'</span>, pad=<span class="nm">15</span>)
+
+<span class="cm"># Legend and styling</span>
+ax.<span class="fn">legend</span>(framealpha=<span class="nm">0.9</span>)
+ax.<span class="fn">grid</span>(<span class="kw">True</span>, alpha=<span class="nm">0.3</span>, linestyle=<span class="st">'--'</span>)
+ax.<span class="fn">spines</span>[<span class="st">'top'</span>].<span class="fn">set_visible</span>(<span class="kw">False</span>)    <span class="cm"># remove top border (Tufte style)</span>
+ax.<span class="fn">spines</span>[<span class="st">'right'</span>].<span class="fn">set_visible</span>(<span class="kw">False</span>)   <span class="cm"># remove right border</span>
+
+plt.<span class="fn">tight_layout</span>()
+plt.<span class="fn">savefig</span>(<span class="st">'sine_cosine.png'</span>, dpi=<span class="nm">150</span>, bbox_inches=<span class="st">'tight'</span>)
+plt.<span class="fn">show</span>()</pre>
+
+  <h3>Multiple Subplots</h3>
+  <pre><span class="cm"># Create a 2x3 grid of subplots</span>
+fig, axes = plt.<span class="fn">subplots</span>(<span class="nm">2</span>, <span class="nm">3</span>, figsize=(<span class="nm">15</span>, <span class="nm">8</span>))
+fig.<span class="fn">suptitle</span>(<span class="st">'Distribution of Features'</span>, fontsize=<span class="nm">16</span>, fontweight=<span class="st">'bold'</span>, y=<span class="nm">1.02</span>)
+
+features = [<span class="st">'age'</span>, <span class="st">'income'</span>, <span class="st">'tenure'</span>, <span class="st">'score'</span>, <span class="st">'visits'</span>, <span class="st">'balance'</span>]
+<span class="kw">for</span> ax, feat <span class="kw">in</span> <span class="fn">zip</span>(axes.<span class="fn">flat</span>, features):
+    ax.<span class="fn">hist</span>(df[feat].<span class="fn">dropna</span>(), bins=<span class="nm">30</span>, color=<span class="st">'#2B5CE6'</span>, alpha=<span class="nm">0.7</span>, edgecolor=<span class="st">'white'</span>)
+    ax.<span class="fn">set_title</span>(feat.<span class="fn">replace</span>(<span class="st">'_'</span>, <span class="st">' '</span>).<span class="fn">title</span>())
+    ax.<span class="fn">spines</span>[<span class="st">'top'</span>].<span class="fn">set_visible</span>(<span class="kw">False</span>)
+    ax.<span class="fn">spines</span>[<span class="st">'right'</span>].<span class="fn">set_visible</span>(<span class="kw">False</span>)
+
+plt.<span class="fn">tight_layout</span>()
+plt.<span class="fn">show</span>()</pre>
+
+  <h3>Common Chart Types in Matplotlib</h3>
+  <pre><span class="cm"># Bar chart (vertical)</span>
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">10</span>, <span class="nm">5</span>))
+categories = [<span class="st">'North'</span>, <span class="st">'South'</span>, <span class="st">'East'</span>, <span class="st">'West'</span>]
+values = [<span class="nm">320</span>, <span class="nm">280</span>, <span class="nm">410</span>, <span class="nm">195</span>]
+bars = ax.<span class="fn">bar</span>(categories, values, color=<span class="st">'#2B5CE6'</span>, width=<span class="nm">0.6</span>)
+<span class="cm"># Add value labels on top of bars</span>
+<span class="kw">for</span> bar, val <span class="kw">in</span> <span class="fn">zip</span>(bars, values):
+    ax.<span class="fn">text</span>(bar.<span class="fn">get_x</span>() + bar.<span class="fn">get_width</span>() / <span class="nm">2</span>, bar.<span class="fn">get_height</span>() + <span class="nm">5</span>,
+           <span class="fn">f</span><span class="st">'{val:,}'</span>, ha=<span class="st">'center'</span>, va=<span class="st">'bottom'</span>, fontweight=<span class="st">'bold'</span>)
+
+<span class="cm"># Horizontal bar (better for long category names)</span>
+ax.<span class="fn">barh</span>(categories, values, color=<span class="st">'#2B5CE6'</span>)
+
+<span class="cm"># Scatter plot with color gradient</span>
+scatter = ax.<span class="fn">scatter</span>(df[<span class="st">'income'</span>], df[<span class="st">'spending'</span>],
+                      c=df[<span class="st">'age'</span>], cmap=<span class="st">'viridis'</span>,
+                      s=<span class="nm">40</span>, alpha=<span class="nm">0.6</span>)
+fig.<span class="fn">colorbar</span>(scatter, ax=ax, label=<span class="st">'Age'</span>)
+
+<span class="cm"># Histogram with KDE overlay</span>
+ax.<span class="fn">hist</span>(df[<span class="st">'salary'</span>], bins=<span class="nm">40</span>, density=<span class="kw">True</span>, alpha=<span class="nm">0.6</span>, color=<span class="st">'steelblue'</span>)
+<span class="kw">from</span> scipy.stats <span class="kw">import</span> gaussian_kde
+kde = <span class="fn">gaussian_kde</span>(df[<span class="st">'salary'</span>].<span class="fn">dropna</span>())
+x = np.<span class="fn">linspace</span>(df[<span class="st">'salary'</span>].<span class="fn">min</span>(), df[<span class="st">'salary'</span>].<span class="fn">max</span>(), <span class="nm">200</span>)
+ax.<span class="fn">plot</span>(x, <span class="fn">kde</span>(x), color=<span class="st">'#DC2626'</span>, linewidth=<span class="nm">2</span>, label=<span class="st">'KDE'</span>)</pre>
+</section>
+
+<!-- SECTION 4 -->
+<section id="seaborn">
+  <h2>4. Seaborn: Statistical Visualizations</h2>
+  <p>Seaborn is built on Matplotlib and provides a higher-level interface for statistical graphics. It integrates natively with Pandas DataFrames and automatically adds appropriate statistical context (confidence intervals, regression lines, etc.).</p>
+
+  <pre><span class="kw">import</span> seaborn <span class="kw">as</span> sns
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+<span class="cm"># Set the global theme</span>
+sns.<span class="fn">set_theme</span>(style=<span class="st">'whitegrid'</span>, palette=<span class="st">'husl'</span>, font_scale=<span class="nm">1.1</span>)
+
+<span class="cm"># ── DISTRIBUTION PLOTS ──────────────────────────────</span>
+
+<span class="cm"># Histogram + KDE in one call</span>
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">8</span>, <span class="nm">5</span>))
+sns.<span class="fn">histplot</span>(data=df, x=<span class="st">'salary'</span>, hue=<span class="st">'department'</span>,
+             bins=<span class="nm">30</span>, kde=<span class="kw">True</span>, ax=ax)
+
+<span class="cm"># Violin plot (distribution + quartiles)</span>
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">10</span>, <span class="nm">6</span>))
+sns.<span class="fn">violinplot</span>(data=df, x=<span class="st">'department'</span>, y=<span class="st">'salary'</span>,
+               palette=<span class="st">'Set2'</span>, inner=<span class="st">'quartile'</span>, ax=ax)
+
+<span class="cm"># Box plot</span>
+sns.<span class="fn">boxplot</span>(data=df, x=<span class="st">'department'</span>, y=<span class="st">'salary'</span>, palette=<span class="st">'Set2'</span>)
+
+<span class="cm"># KDE plot for comparing distributions</span>
+sns.<span class="fn">kdeplot</span>(data=df, x=<span class="st">'salary'</span>, hue=<span class="st">'gender'</span>, fill=<span class="kw">True</span>, alpha=<span class="nm">0.3</span>)
+
+<span class="cm"># ── RELATIONSHIP PLOTS ──────────────────────────────</span>
+
+<span class="cm"># Scatter plot with regression line</span>
+sns.<span class="fn">regplot</span>(data=df, x=<span class="st">'experience'</span>, y=<span class="st">'salary'</span>,
+            scatter_kws={<span class="st">'alpha'</span>: <span class="nm">0.5</span>}, line_kws={<span class="st">'color'</span>: <span class="st">'red'</span>})
+
+<span class="cm"># LM plot: scatter + regression grouped by hue</span>
+sns.<span class="fn">lmplot</span>(data=df, x=<span class="st">'experience'</span>, y=<span class="st">'salary'</span>,
+           hue=<span class="st">'department'</span>, height=<span class="nm">6</span>, aspect=<span class="nm">1.5</span>)
+
+<span class="cm"># ── CATEGORICAL PLOTS ──────────────────────────────</span>
+
+<span class="cm"># Bar plot (shows mean + 95% CI error bars by default)</span>
+sns.<span class="fn">barplot</span>(data=df, x=<span class="st">'department'</span>, y=<span class="st">'salary'</span>,
+            palette=<span class="st">'Blues_d'</span>, capsize=<span class="nm">0.1</span>)
+
+<span class="cm"># Count plot (like bar chart for frequencies)</span>
+sns.<span class="fn">countplot</span>(data=df, x=<span class="st">'department'</span>, order=df[<span class="st">'department'</span>].<span class="fn">value_counts</span>().index)
+
+<span class="cm"># Strip plot + box plot overlay (all data points visible)</span>
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">10</span>, <span class="nm">6</span>))
+sns.<span class="fn">boxplot</span>(data=df, x=<span class="st">'department'</span>, y=<span class="st">'salary'</span>, color=<span class="st">'lightgrey'</span>, ax=ax)
+sns.<span class="fn">stripplot</span>(data=df, x=<span class="st">'department'</span>, y=<span class="st">'salary'</span>,
+              color=<span class="st">'#2B5CE6'</span>, alpha=<span class="nm">0.4</span>, jitter=<span class="kw">True</span>, size=<span class="nm">4</span>, ax=ax)
+
+<span class="cm"># ── MATRIX / HEATMAP PLOTS ──────────────────────────</span>
+
+<span class="cm"># Correlation heatmap</span>
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">10</span>, <span class="nm">8</span>))
+corr_matrix = df.<span class="fn">select_dtypes</span>(include=[<span class="st">'number'</span>]).<span class="fn">corr</span>()
+mask = np.<span class="fn">triu</span>(np.<span class="fn">ones_like</span>(corr_matrix), k=<span class="nm">1</span>)  <span class="cm"># hide upper triangle</span>
+sns.<span class="fn">heatmap</span>(corr_matrix, mask=mask, annot=<span class="kw">True</span>, fmt=<span class="st">'.2f'</span>,
+            cmap=<span class="st">'coolwarm'</span>, center=<span class="nm">0</span>, vmin=<span class="nm">-1</span>, vmax=<span class="nm">1</span>,
+            square=<span class="kw">True</span>, linewidths=<span class="nm">0.5</span>, ax=ax)
+ax.<span class="fn">set_title</span>(<span class="st">'Correlation Matrix'</span>, fontsize=<span class="nm">14</span>, pad=<span class="nm">15</span>)
+
+<span class="cm"># ── MULTI-PLOT FIGURES ──────────────────────────────</span>
+
+<span class="cm"># Pair plot: all pairwise scatter plots + diagonal distribution</span>
+sns.<span class="fn">pairplot</span>(df[[<span class="st">'age'</span>, <span class="st">'income'</span>, <span class="st">'salary'</span>, <span class="st">'department'</span>]],
+             hue=<span class="st">'department'</span>, diag_kind=<span class="st">'kde'</span>, plot_kws={<span class="st">'alpha'</span>: <span class="nm">0.5</span>})
+
+<span class="cm"># FacetGrid: repeat a plot for each level of a categorical variable</span>
+g = sns.<span class="cl">FacetGrid</span>(df, col=<span class="st">'department'</span>, col_wrap=<span class="nm">3</span>, height=<span class="nm">4</span>)
+g.<span class="fn">map</span>(sns.histplot, <span class="st">'salary'</span>, bins=<span class="nm">20</span>, kde=<span class="kw">True</span>)
+g.<span class="fn">add_legend</span>()</pre>
+
+  <div class="note">
+    <div class="note-label">Seaborn vs Matplotlib</div>
+    <p>Seaborn works at a higher level of abstraction — you pass a DataFrame and column names, and it handles the grouping, aggregation, and styling. Seaborn returns Matplotlib Figure/Axes objects, so you can always drop down to <code>ax.set_xlabel()</code>, <code>ax.spines[]</code>, etc. to fine-tune. Think of Seaborn as Matplotlib + statistics + prettier defaults.</p>
+  </div>
+</section>
+
+<!-- SECTION 5 -->
+<section id="eda-visuals">
+  <h2>5. Exploratory Data Analysis Visuals</h2>
+  <p>Before building models or writing reports, always perform a systematic visual EDA to understand the data's shape, relationships, and anomalies.</p>
+
+  <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> seaborn <span class="kw">as</span> sns
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># ── STEP 1: UNIVARIATE — understand each variable individually ──</span>
+
+<span class="cm"># For all numeric columns: histogram grid</span>
+numeric_cols = df.<span class="fn">select_dtypes</span>(include=[<span class="st">'number'</span>]).columns
+n = len(numeric_cols)
+fig, axes = plt.<span class="fn">subplots</span>(nrows=(n + <span class="nm">2</span>) // <span class="nm">3</span>, ncols=<span class="nm">3</span>, figsize=(<span class="nm">14</span>, <span class="nm">4</span> * ((n + <span class="nm">2</span>) // <span class="nm">3</span>)))
+<span class="kw">for</span> ax, col <span class="kw">in</span> <span class="fn">zip</span>(axes.<span class="fn">flat</span>, numeric_cols):
+    ax.<span class="fn">hist</span>(df[col].<span class="fn">dropna</span>(), bins=<span class="nm">30</span>, color=<span class="st">'#2B5CE6'</span>, alpha=<span class="nm">0.8</span>, edgecolor=<span class="st">'white'</span>)
+    ax.<span class="fn">set_title</span>(col)
+    ax.<span class="fn">set_xlabel</span>(<span class="st">''</span>)
+plt.<span class="fn">tight_layout</span>()
+
+<span class="cm"># For categorical columns: count plots</span>
+cat_cols = df.<span class="fn">select_dtypes</span>(include=[<span class="st">'object'</span>, <span class="st">'category'</span>]).columns
+<span class="kw">for</span> col <span class="kw">in</span> cat_cols:
+    fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">8</span>, <span class="nm">4</span>))
+    vc = df[col].<span class="fn">value_counts</span>()
+    ax.<span class="fn">barh</span>(vc.index[::<span class="nm">-1</span>], vc.values[::<span class="nm">-1</span>], color=<span class="st">'#2B5CE6'</span>)
+    ax.<span class="fn">set_title</span>(<span class="fn">f</span><span class="st">'Value Counts: {col}'</span>)
+    plt.<span class="fn">tight_layout</span>()
+
+<span class="cm"># ── STEP 2: BIVARIATE — relationships between pairs ──</span>
+
+<span class="cm"># Numeric vs Numeric: scatter with regression line</span>
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">8</span>, <span class="nm">6</span>))
+sns.<span class="fn">regplot</span>(data=df, x=<span class="st">'experience'</span>, y=<span class="st">'salary'</span>,
+            scatter_kws={<span class="st">'alpha'</span>: <span class="nm">0.4</span>, <span class="st">'s'</span>: <span class="nm">30</span>},
+            line_kws={<span class="st">'color'</span>: <span class="st">'#DC2626'</span>}, ax=ax)
+
+<span class="cm"># Numeric vs Categorical: box plot</span>
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">10</span>, <span class="nm">5</span>))
+order = df.<span class="fn">groupby</span>(<span class="st">'department'</span>)[<span class="st">'salary'</span>].<span class="fn">median</span>().<span class="fn">sort_values</span>().index
+sns.<span class="fn">boxplot</span>(data=df, x=<span class="st">'salary'</span>, y=<span class="st">'department'</span>, order=order,
+            palette=<span class="st">'Blues_d'</span>, ax=ax)
+
+<span class="cm"># Categorical vs Categorical: cross-tabulation heatmap</span>
+ct = pd.<span class="fn">crosstab</span>(df[<span class="st">'department'</span>], df[<span class="st">'gender'</span>], normalize=<span class="st">'index'</span>)
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">8</span>, <span class="nm">5</span>))
+sns.<span class="fn">heatmap</span>(ct, annot=<span class="kw">True</span>, fmt=<span class="st">'.1%'</span>, cmap=<span class="st">'Blues'</span>, ax=ax)
+ax.<span class="fn">set_title</span>(<span class="st">'Gender Proportion by Department'</span>)
+
+<span class="cm"># ── STEP 3: MULTIVARIATE ──</span>
+
+<span class="cm"># Full correlation heatmap</span>
+corr = df.<span class="fn">select_dtypes</span>(include=<span class="st">'number'</span>).<span class="fn">corr</span>()
+mask = np.<span class="fn">triu</span>(np.<span class="fn">ones_like</span>(corr, dtype=<span class="nm">bool</span>))
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">10</span>, <span class="nm">8</span>))
+sns.<span class="fn">heatmap</span>(corr, mask=mask, annot=<span class="kw">True</span>, fmt=<span class="st">'.2f'</span>,
+            cmap=<span class="st">'coolwarm'</span>, center=<span class="nm">0</span>, ax=ax)
+
+<span class="cm"># Pair plot for top correlated features</span>
+top_features = [<span class="st">'salary'</span>, <span class="st">'age'</span>, <span class="st">'experience'</span>, <span class="st">'department'</span>]
+sns.<span class="fn">pairplot</span>(df[top_features], hue=<span class="st">'department'</span>, diag_kind=<span class="st">'kde'</span>)</pre>
+</section>
+
+<!-- SECTION 6 -->
+<section id="storytelling">
+  <h2>6. Storytelling with Data</h2>
+  <p>Exploratory visualizations are for you; storytelling visualizations are for your audience. The same data requires a fundamentally different treatment depending on whether you are exploring it or presenting a conclusion.</p>
+
+  <h3>The SCR Framework for Data Stories</h3>
+  <div class="story-flow">
+    <div class="story-step">
+      <div class="step-icon">📋</div>
+      <div>
+        <h4>Situation — Set the Context</h4>
+        <p>What is the state of the world the audience already knows? Establish the baseline. "Our monthly active users grew 40% over the past 12 months, reaching 2.3M."</p>
+      </div>
+    </div>
+    <div class="story-step">
+      <div class="step-icon">⚡</div>
+      <div>
+        <h4>Complication — Introduce the Tension</h4>
+        <p>What has changed or what problem has emerged? "However, despite growth in users, revenue per user has declined 18% over the same period."</p>
+      </div>
+    </div>
+    <div class="story-step">
+      <div class="step-icon">🔍</div>
+      <div>
+        <h4>Resolution — Drive to Insight & Action</h4>
+        <p>What does the data tell us to do? "Analysis shows new users acquired through paid campaigns have 3× lower 30-day retention than organic users. We recommend pausing paid acquisition and improving onboarding."</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>The Attention-Directing Hierarchy</h3>
+  <p>Not all elements in a visualization deserve equal visual attention. Use visual hierarchy to direct the viewer's eye to the most important finding first.</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Priority</th><th>Visual Treatment</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Critical insight</strong></td><td>Bold color, annotation, larger size</td><td>One red bar in a gray bar chart for the outlier region</td></tr>
+        <tr><td><strong>Supporting context</strong></td><td>Muted color, standard size</td><td>All other bars in light gray</td></tr>
+        <tr><td><strong>Reference</strong></td><td>Thin lines, small font, low opacity</td><td>Average line at 50% opacity with dotted style</td></tr>
+        <tr><td><strong>Decoration / structure</strong></td><td>Minimal ink, light gray</td><td>Axis lines, gridlines</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Annotation Best Practices</h3>
+  <pre><span class="cm"># Add a text annotation to highlight a key insight</span>
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">12</span>, <span class="nm">6</span>))
+
+<span class="cm"># Plot all bars in muted gray</span>
+bars = ax.<span class="fn">bar</span>(regions, revenue, color=<span class="st">'#C5CAE9'</span>)
+
+<span class="cm"># Highlight the critical bar</span>
+bars[<span class="nm">3</span>].set_color(<span class="st">'#DC2626'</span>)  <span class="cm"># red for the underperforming region</span>
+
+<span class="cm"># Add annotation with an arrow</span>
+ax.<span class="fn">annotate</span>(
+    <span class="st">'Southwest missed\ntarget by 31%'</span>,
+    xy=(bars[<span class="nm">3</span>].<span class="fn">get_x</span>() + bars[<span class="nm">3</span>].<span class="fn">get_width</span>()/<span class="nm">2</span>, bars[<span class="nm">3</span>].<span class="fn">get_height</span>()),
+    xytext=(<span class="nm">4.5</span>, <span class="nm">420000</span>),  <span class="cm"># position of the text box</span>
+    arrowprops=<span class="fn">dict</span>(arrowstyle=<span class="st">'->'</span>, color=<span class="st">'#DC2626'</span>, lw=<span class="nm">1.5</span>),
+    fontsize=<span class="nm">11</span>, fontweight=<span class="st">'bold'</span>, color=<span class="st">'#DC2626'</span>
+)
+
+<span class="cm"># Insight-driven title (not just descriptive)</span>
+ax.<span class="fn">set_title</span>(<span class="st">'Southwest Is the Only Region Below Revenue Target'</span>,
+             fontsize=<span class="nm">13</span>, fontweight=<span class="st">'bold'</span>, loc=<span class="st">'left'</span>)
+
+<span class="cm"># Add average line for reference</span>
+avg = <span class="fn">sum</span>(revenue) / <span class="fn">len</span>(revenue)
+ax.<span class="fn">axhline</span>(avg, color=<span class="st">'#546E7A'</span>, linewidth=<span class="nm">1</span>, linestyle=<span class="st">'--'</span>, alpha=<span class="nm">0.7</span>)
+ax.<span class="fn">text</span>(<span class="fn">len</span>(regions) - <span class="nm">0.5</span>, avg + <span class="nm">5000</span>, <span class="st">'Average'</span>, fontsize=<span class="nm">9</span>, color=<span class="st">'#546E7A'</span>)</pre>
+
+  <h3>Color Palette Selection</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Palette Type</th><th>When to Use</th><th>Examples</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Qualitative</strong></td><td>Categorical variables with no order</td><td>Set1, Set2, tab10, Paired (Seaborn/Matplotlib)</td></tr>
+        <tr><td><strong>Sequential</strong></td><td>Ordered data from low to high</td><td>Blues, Greens, viridis, YlOrRd</td></tr>
+        <tr><td><strong>Diverging</strong></td><td>Data with a meaningful midpoint (e.g., 0, average, neutral)</td><td>RdBu, coolwarm, PiYG, seismic</td></tr>
+        <tr><td><strong>Perceptually uniform</strong></td><td>Scientific data, continuous maps</td><td>viridis, plasma, inferno, cividis</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="warning">
+    <div class="warn-label">Accessibility</div>
+    <p>8% of men and 0.5% of women have red-green color blindness (deuteranopia). Never rely solely on red vs. green to communicate a distinction. Always add a secondary cue (pattern, shape, label, or position). Use <code>colorbrewer</code> palettes, which are designed to be colorblind-safe. Test with the <code>palettable</code> library or Coblis simulator.</p>
+  </div>
+</section>
+
+<!-- SECTION 7 -->
+<section id="common-mistakes">
+  <h2>7. Common Visualization Mistakes</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Mistake</th><th>Why It's Wrong</th><th>Fix</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Y-axis not starting at 0 on bar chart</strong></td>
+          <td>Bar length encodes magnitude; truncated bars exaggerate differences by 5–10×</td>
+          <td>Always start at 0, or switch to a dot/line chart if the zero baseline is not meaningful</td>
+        </tr>
+        <tr>
+          <td><strong>Using pie charts for >5 categories</strong></td>
+          <td>Humans cannot accurately compare non-adjacent slice angles</td>
+          <td>Use a horizontal bar chart ordered by value</td>
+        </tr>
+        <tr>
+          <td><strong>3D charts</strong></td>
+          <td>Perspective distorts relative sizes; adds visual complexity with no data benefit</td>
+          <td>Use flat 2D equivalents; never use 3D for categorical comparisons</td>
+        </tr>
+        <tr>
+          <td><strong>Dual y-axes</strong></td>
+          <td>The visual comparison between two scales is arbitrary — scaling either axis changes the apparent correlation</td>
+          <td>Use two separate charts stacked vertically with aligned x-axis</td>
+        </tr>
+        <tr>
+          <td><strong>Rainbow / Jet colormap for continuous data</strong></td>
+          <td>Not perceptually uniform; introduces false boundaries; not colorblind-safe</td>
+          <td>Use viridis, plasma, or cividis instead</td>
+        </tr>
+        <tr>
+          <td><strong>Overplotting in scatter plots</strong></td>
+          <td>Points overlap and hide density; 10,000 points may look like 100</td>
+          <td>Reduce alpha, use hexbin/2D histogram, or sample data</td>
+        </tr>
+        <tr>
+          <td><strong>Ignoring aspect ratio</strong></td>
+          <td>A wide, flat plot makes slopes look flat; a tall, narrow plot makes small changes look dramatic (Banking to 45°)</td>
+          <td>Choose aspect ratio so the average slope is ~45°; use equal aspect for geographical data</td>
+        </tr>
+        <tr>
+          <td><strong>Missing units and labels</strong></td>
+          <td>Axes without units leave the viewer guessing what "100" means</td>
+          <td>Always label axes with variable name and unit: "Revenue ($M)" not just "Revenue"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Overplotting Solutions</h3>
+  <pre><span class="cm"># Problem: 100,000 points overplotted in scatter</span>
+
+<span class="cm"># Solution 1: Reduce opacity (alpha)</span>
+ax.<span class="fn">scatter</span>(x, y, alpha=<span class="nm">0.05</span>, s=<span class="nm">5</span>)
+
+<span class="cm"># Solution 2: Hexbin plot (2D histogram with hex grid)</span>
+hb = ax.<span class="fn">hexbin</span>(x, y, gridsize=<span class="nm">50</span>, cmap=<span class="st">'Blues'</span>)
+fig.<span class="fn">colorbar</span>(hb, ax=ax, label=<span class="st">'Count'</span>)
+
+<span class="cm"># Solution 3: 2D KDE density contour</span>
+sns.<span class="fn">kdeplot</span>(data=df, x=<span class="st">'x'</span>, y=<span class="st">'y'</span>, fill=<span class="kw">True</span>, cmap=<span class="st">'Blues'</span>, thresh=<span class="nm">0.05</span>)
+
+<span class="cm"># Solution 4: Sample the data for display</span>
+df_sample = df.<span class="fn">sample</span>(<span class="nm">5000</span>, random_state=<span class="nm">42</span>)
+ax.<span class="fn">scatter</span>(df_sample[<span class="st">'x'</span>], df_sample[<span class="st">'y'</span>], alpha=<span class="nm">0.3</span>, s=<span class="nm">10</span>)</pre>
+</section>
+
+<!-- SECTION 8: QA -->
+<section id="qa" class="qa-section">
+  <h2>Interview Q&A</h2>
+
+  <div class="qa-item">
+    <div class="qa-q">How do you decide which chart type to use for a given analysis task?</div>
+    <div class="qa-a">
+      <p>I start by identifying what relationship or message the chart needs to communicate. Four primary purposes guide chart selection:</p>
+      <ul>
+        <li><strong>Comparison</strong> (which category is bigger?) → Bar chart for categories, line chart for time-series</li>
+        <li><strong>Distribution</strong> (what is the spread and shape?) → Histogram for single variable, box/violin for group comparison</li>
+        <li><strong>Relationship</strong> (how do two variables move together?) → Scatter plot for two numerics, heatmap for many-variable correlation</li>
+        <li><strong>Composition</strong> (what is the part-to-whole breakdown?) → Stacked bar (100%) or pie chart for ≤4 categories</li>
+      </ul>
+      <p>Then I consider the data types: categorical vs. numeric, single vs. multiple groups, time-ordered vs. unordered. I also consider the audience — an executive audience gets a simpler chart with direct annotation; an analytical audience can handle a pair plot or faceted grid.</p>
+      <p>Finally, I check for common pitfalls: avoid pie charts for >4 slices, never use 3D, always start bar chart y-axis at 0.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What is the difference between Matplotlib's object-oriented API and the pyplot interface? Which should you use and when?</div>
+    <div class="qa-a">
+      <p>The <strong>pyplot interface</strong> (<code>plt.plot()</code>, <code>plt.bar()</code>, etc.) maintains a global state machine — it keeps track of the current Figure and current Axes and routes calls to them. This is convenient for quick, single-chart scripts but becomes problematic with multiple subplots because you have to track which plot is "current."</p>
+      <p>The <strong>object-oriented (OO) API</strong> (<code>fig, ax = plt.subplots()</code>, then <code>ax.plot()</code>, <code>ax.set_xlabel()</code>, etc.) makes all state explicit. You hold references to the Figure and each Axes object and call methods on them directly.</p>
+      <p><strong>Use pyplot for:</strong> one-off exploratory plots, quick visualizations in notebooks, single-figure charts.</p>
+      <p><strong>Use OO for:</strong> any chart with multiple subplots, when building visualization functions (the <code>ax</code> parameter can be passed in), production code, and any situation where you need to reference the same axes multiple times.</p>
+      <p>Best practice in professional code: always use <code>fig, ax = plt.subplots()</code> even for a single chart. It costs one extra character and avoids all state-related surprises.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What is a correlation heatmap and what are its limitations?</div>
+    <div class="qa-a">
+      <p>A <strong>correlation heatmap</strong> is a color-coded matrix where each cell (i, j) shows the Pearson correlation coefficient between feature i and feature j. Values range from -1 (perfect negative linear correlation) to +1 (perfect positive linear correlation), with 0 indicating no linear relationship. The diagonal is always 1 (a variable is perfectly correlated with itself). The matrix is symmetric, so it's common to mask the upper triangle.</p>
+      <p><strong>Use it for:</strong> quickly identifying multicollinear features (problematic for linear models), finding features strongly correlated with the target variable, and detecting redundant features for dimensionality reduction.</p>
+      <p><strong>Key limitations:</strong></p>
+      <ul>
+        <li><strong>Only captures linear relationships:</strong> Two variables can have a strong non-linear relationship (e.g., quadratic, sinusoidal) and show near-zero Pearson correlation. Always complement with scatter plots.</li>
+        <li><strong>Sensitive to outliers:</strong> A single outlier can dominate the Pearson correlation. Use Spearman rank correlation for robustness.</li>
+        <li><strong>No causation:</strong> High correlation between A and B does not imply A causes B. A third variable C could cause both (confounding).</li>
+        <li><strong>Doesn't show partial effects:</strong> The bivariate correlation between X and Y may be high because both are correlated with Z, not because they are directly related.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">How would you visualize the distribution of a numeric variable? What does each option reveal?</div>
+    <div class="qa-a">
+      <p>There are several options, each with different strengths:</p>
+      <ul>
+        <li><strong>Histogram:</strong> Splits the range into bins and counts observations per bin. Reveals overall shape (symmetric, right-skewed, left-skewed, bimodal), central tendency, and spread. Weakness: bin width choice significantly affects appearance — too wide hides detail, too narrow creates noise.</li>
+        <li><strong>KDE (Kernel Density Estimate):</strong> A smooth, continuous estimate of the probability density function. Better for shape visualization than histograms; smoothing bandwidth can be tuned. Does not show exact counts.</li>
+        <li><strong>Box plot:</strong> Shows Q1, Q3, median (IQR box), whiskers at Q1−1.5×IQR and Q3+1.5×IQR, and individual outlier points. Compact and excellent for comparing distributions across groups. Weakness: hides bimodality, doesn't show sample size.</li>
+        <li><strong>Violin plot:</strong> Combines a box plot with a KDE on each side. Shows full distribution shape and summary statistics simultaneously. More informative than a box plot but takes more space.</li>
+        <li><strong>Strip/Swarm plot:</strong> Shows every individual data point as a dot. For small-to-medium datasets, this is the most honest visualization — you see the actual data, not a summary.</li>
+      </ul>
+      <p>Best practice: for initial EDA, start with a histogram + KDE overlay. For a final presentation comparing groups, use violin or box plots. For small N (&lt;200), show individual points with a strip plot.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">How do you present a data-driven recommendation to a non-technical executive audience?</div>
+    <div class="qa-a">
+      <p>The key is to lead with the business conclusion, not the methodology. Executives make decisions; they don't need to understand the statistical test that got you there.</p>
+      <p><strong>Structure (SCR framework):</strong></p>
+      <ul>
+        <li><strong>Situation:</strong> Briefly state the context they already know. One or two sentences.</li>
+        <li><strong>Complication:</strong> What changed or what problem emerged? The tension that makes action necessary.</li>
+        <li><strong>Resolution:</strong> Your recommendation, backed by the key chart. One insight, one chart, one action.</li>
+      </ul>
+      <p><strong>Visualization choices for executive audiences:</strong></p>
+      <ul>
+        <li>One key insight per chart — no multi-panel exploratory grids</li>
+        <li>Annotate the critical element directly on the chart (arrow + text box)</li>
+        <li>Use an insight-driven title ("Churn Rate Up 12% in Q3" not "Monthly Churn by Quarter")</li>
+        <li>Remove all chartjunk — no gridlines, minimal axes, no legends if you can label directly</li>
+        <li>Use a single accent color to highlight the critical element; gray out everything else</li>
+        <li>Provide a "so what" caption below the chart: "This 12% increase represents ~$2M in lost ARR"</li>
+      </ul>
+      <p>Never put a table with 50 rows in a presentation. Never show a chart with 10 lines. Every element should earn its place by helping the executive make the decision.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function toggleTheme() {
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+}
+</script>
+</body>
+</html>

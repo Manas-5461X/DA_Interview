@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 7: Machine Learning for Analysts — Data Analytics Interview Packet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F7F8FC; --surface: #FFFFFF; --surface-2: #EFF2FA;
+  --text: #18202F; --text-muted: #5A6585;
+  --accent: #2B5CE6; --accent-light: #EEF3FF; --border: #DDE3F2;
+  --code-bg: #1A1D2E; --code-text: #C9D1F0;
+  --green: #059669; --green-light: #ECFDF5; --green-border: #6EE7B7;
+  --orange: #D97706; --orange-light: #FFFBEB;
+  --red: #DC2626; --red-light: #FEF2F2;
+  --purple: #7C3AED; --purple-light: #F5F3FF;
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1117; --surface: #1A1D2E; --surface-2: #222639;
+    --text: #E8EAF6; --text-muted: #8892B0;
+    --accent: #5B8AF0; --accent-light: #1A2140; --border: #2E3356;
+    --code-bg: #0D0F1A; --code-text: #C9D1F0;
+    --green: #34D399; --green-light: #064E3B;
+    --orange: #FBBF24; --orange-light: #451A03;
+    --red: #F87171; --red-light: #450A0A;
+    --purple: #A78BFA; --purple-light: #2E1065;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1117; --surface: #1A1D2E; --surface-2: #222639;
+  --text: #E8EAF6; --text-muted: #8892B0;
+  --accent: #5B8AF0; --accent-light: #1A2140; --border: #2E3356;
+  --code-bg: #0D0F1A; --code-text: #C9D1F0;
+  --green: #34D399; --green-light: #064E3B;
+  --orange: #FBBF24; --orange-light: #451A03;
+  --red: #F87171; --red-light: #450A0A;
+  --purple: #A78BFA; --purple-light: #2E1065;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'IBM Plex Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px; padding-inline: 16px; padding-block: 40px; }
+.container { max-width: 860px; margin-inline: auto; }
+.module-header { background: var(--accent); color: #fff; border-radius: 12px; padding: 40px 48px; margin-bottom: 48px; position: relative; overflow: hidden; }
+.module-header::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%); }
+.module-tag { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; margin-bottom: 12px; }
+.module-header h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.2; margin-bottom: 12px; text-wrap: balance; }
+.module-header p { font-size: 1rem; opacity: 0.85; max-width: 580px; line-height: 1.6; }
+.theme-toggle { position: fixed; top: 20px; right: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 50%; width: 40px; height: 40px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.toc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 48px; }
+.toc h2 { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+.toc ol { padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.toc a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+.toc a:hover { text-decoration: underline; }
+section { margin-bottom: 56px; }
+h2 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); text-wrap: balance; }
+h3 { font-size: 1.15rem; font-weight: 600; color: var(--text); margin-top: 28px; margin-bottom: 12px; }
+h4 { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-top: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+p { margin-bottom: 14px; }
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { margin-bottom: 6px; line-height: 1.6; }
+.definition { background: var(--accent-light); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.definition .def-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.definition p { margin: 0; font-size: 0.97rem; }
+.example { background: var(--green-light); border-left: 4px solid var(--green); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.example .ex-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 6px; }
+.example p, .example li { font-size: 0.95rem; }
+.note { background: var(--orange-light); border-left: 4px solid var(--orange); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.note .note-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+.note p { margin: 0; font-size: 0.95rem; }
+.tip { background: var(--purple-light); border-left: 4px solid var(--purple); border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 20px 0; }
+.tip .tip-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--purple); margin-bottom: 6px; }
+.tip p { margin: 0; font-size: 0.95rem; }
+pre { background: var(--code-bg); border-radius: var(--radius); padding: 20px 24px; overflow-x: auto; margin: 16px 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; line-height: 1.65; color: var(--code-text); }
+code { font-family: 'IBM Plex Mono', monospace; font-size: 0.875em; background: var(--surface-2); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
+pre code { background: none; padding: 0; font-size: inherit; color: inherit; border-radius: 0; }
+.kw { color: #82AAFF; } .fn { color: #C3E88D; } .st { color: #F78C6C; } .cm { color: #546E7A; font-style: italic; } .cl { color: #FFCB6B; } .nm { color: #F07178; }
+.table-wrap { overflow-x: auto; margin: 20px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th { background: var(--surface-2); color: var(--text); font-weight: 600; text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+tr:nth-child(even) td { background: var(--surface-2); }
+.formula-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin: 20px 0; }
+.formula-box .formula-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+.formula-box .formula { color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 1rem; font-weight: 500; line-height: 1.8; }
+.algo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 20px 0; }
+.algo-card { background: var(--surface); border: 1px solid var(--border); border-top: 4px solid var(--accent); border-radius: var(--radius); padding: 20px; }
+.algo-card.unsup { border-top-color: var(--purple); }
+.algo-card h4 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 8px; text-transform: none; letter-spacing: 0; }
+.algo-card p { font-size: 0.87rem; color: var(--text-muted); margin: 0 0 8px; }
+.algo-card .key-params { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--accent); }
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; }
+.metric-tile { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+.metric-tile .metric-name { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+.metric-tile .metric-formula { font-family: 'IBM Plex Mono', monospace; font-size: 0.88rem; color: var(--accent); margin-bottom: 4px; }
+.metric-tile p { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+.qa-section { margin-top: 40px; }
+.qa-section h2 { color: var(--accent); }
+.qa-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 20px; overflow: hidden; }
+.qa-q { background: var(--accent-light); padding: 14px 20px; font-weight: 600; font-size: 0.97rem; color: var(--accent); display: flex; gap: 10px; align-items: flex-start; }
+.qa-q::before { content: 'Q'; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; flex-shrink: 0; margin-top: 1px; }
+.qa-a { padding: 16px 20px; font-size: 0.95rem; line-height: 1.7; }
+.qa-a p:last-child { margin-bottom: 0; }
+.confusion-matrix { display: grid; grid-template-columns: auto auto auto; gap: 0; margin: 20px auto; max-width: 360px; font-size: 0.88rem; }
+.cm-cell { padding: 12px 16px; border: 1px solid var(--border); text-align: center; }
+.cm-header { background: var(--surface-2); font-weight: 600; }
+.cm-tp { background: var(--green-light); color: var(--green); font-weight: 700; }
+.cm-tn { background: var(--green-light); color: var(--green); font-weight: 700; }
+.cm-fp { background: var(--red-light); color: var(--red); font-weight: 700; }
+.cm-fn { background: var(--orange-light); color: var(--orange); font-weight: 700; }
+</style>
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+<div class="container">
+
+<div class="module-header">
+  <div class="module-tag">Module 07 · Data Analytics Interview Packet</div>
+  <h1>Machine Learning for Analysts</h1>
+  <p>Supervised and unsupervised learning, linear and logistic regression, decision trees, random forests, K-means clustering, model evaluation metrics, bias-variance tradeoff, and cross-validation.</p>
+</div>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#taxonomy">ML Taxonomy: Supervised vs Unsupervised</a></li>
+    <li><a href="#linear-regression">Linear Regression</a></li>
+    <li><a href="#logistic-regression">Logistic Regression</a></li>
+    <li><a href="#decision-trees">Decision Trees</a></li>
+    <li><a href="#ensemble">Ensemble Methods: Random Forest & Gradient Boosting</a></li>
+    <li><a href="#clustering">K-Means Clustering</a></li>
+    <li><a href="#evaluation">Model Evaluation Metrics</a></li>
+    <li><a href="#bias-variance">Bias-Variance Tradeoff</a></li>
+    <li><a href="#cross-validation">Cross-Validation</a></li>
+    <li><a href="#qa">Interview Q&A</a></li>
+  </ol>
+</nav>
+
+<!-- SECTION 1 -->
+<section id="taxonomy">
+  <h2>1. ML Taxonomy: Supervised vs Unsupervised</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Category</th><th>Definition</th><th>Labeled Data?</th><th>Key Algorithms</th><th>Example Task</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Supervised — Regression</strong></td>
+          <td>Predict a continuous numeric output</td>
+          <td>Yes (labeled y)</td>
+          <td>Linear Regression, Decision Tree Regressor, Random Forest, XGBoost</td>
+          <td>Predict house price, forecast revenue</td>
+        </tr>
+        <tr>
+          <td><strong>Supervised — Classification</strong></td>
+          <td>Predict a discrete class label</td>
+          <td>Yes (labeled y)</td>
+          <td>Logistic Regression, Decision Tree, Random Forest, SVM, Neural Networks</td>
+          <td>Churn prediction, spam detection, fraud classification</td>
+        </tr>
+        <tr>
+          <td><strong>Unsupervised — Clustering</strong></td>
+          <td>Find natural groups in data</td>
+          <td>No</td>
+          <td>K-Means, DBSCAN, Hierarchical Clustering, Gaussian Mixture Models</td>
+          <td>Customer segmentation, document grouping</td>
+        </tr>
+        <tr>
+          <td><strong>Unsupervised — Dimensionality Reduction</strong></td>
+          <td>Reduce features while preserving structure</td>
+          <td>No</td>
+          <td>PCA, t-SNE, UMAP, Autoencoders</td>
+          <td>Visualization of high-dimensional data, compression</td>
+        </tr>
+        <tr>
+          <td><strong>Semi-Supervised</strong></td>
+          <td>Small labeled + large unlabeled dataset</td>
+          <td>Partially</td>
+          <td>Self-training, label propagation</td>
+          <td>Medical imaging with few expert labels</td>
+        </tr>
+        <tr>
+          <td><strong>Reinforcement Learning</strong></td>
+          <td>Agent learns by trial and error in an environment</td>
+          <td>No (reward signal)</td>
+          <td>Q-Learning, PPO, A3C</td>
+          <td>Game playing, robot control, recommendation</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 2 -->
+<section id="linear-regression">
+  <h2>2. Linear Regression</h2>
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p><strong>Linear Regression</strong> models the relationship between a dependent variable y and one or more independent variables X by fitting a linear equation to the observed data. It assumes a linear relationship and minimizes the sum of squared residuals (Ordinary Least Squares).</p>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">Linear Regression Model</div>
+    <div class="formula">
+      ŷ = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ + ε<br><br>
+      Minimize: RSS = Σᵢ (yᵢ − ŷᵢ)² = Σᵢ (yᵢ − β₀ − β₁xᵢ)²<br><br>
+      OLS Solution (closed form): β = (XᵀX)⁻¹ Xᵀy
+    </div>
+  </div>
+
+  <h3>Key Assumptions (LINE)</h3>
+  <ul>
+    <li><strong>L — Linearity:</strong> The relationship between X and y is linear. Check with scatter plots and residual plots.</li>
+    <li><strong>I — Independence:</strong> Observations are independent of each other. Violated in time series (autocorrelated residuals).</li>
+    <li><strong>N — Normality:</strong> Residuals are normally distributed (required for inference/p-values, not for point predictions). Check with Q-Q plot of residuals.</li>
+    <li><strong>E — Equal Variance (Homoscedasticity):</strong> The variance of residuals is constant across fitted values. Violated if residual spread fans out (heteroscedasticity). Check residuals vs. fitted plot.</li>
+    <li><strong>No Multicollinearity:</strong> Predictors are not highly correlated with each other. Check with VIF (Variance Inflation Factor); VIF &gt; 10 indicates severe multicollinearity.</li>
+  </ul>
+
+  <h3>Evaluation Metrics for Regression</h3>
+  <div class="metric-grid">
+    <div class="metric-tile">
+      <div class="metric-name">MAE</div>
+      <div class="metric-formula">MAE = (1/n) Σ|yᵢ − ŷᵢ|</div>
+      <p>Mean Absolute Error. Robust to outliers. Units = target units. Interpretable.</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">MSE</div>
+      <div class="metric-formula">MSE = (1/n) Σ(yᵢ − ŷᵢ)²</div>
+      <p>Mean Squared Error. Penalizes large errors heavily. Units = target² (not directly interpretable).</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">RMSE</div>
+      <div class="metric-formula">RMSE = √MSE</div>
+      <p>Root Mean Squared Error. Same units as target. Penalizes large errors. Most common in practice.</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">R² (R-Squared)</div>
+      <div class="metric-formula">R² = 1 − SS_res/SS_tot</div>
+      <p>Proportion of variance explained by the model. R²=1 is perfect; R²=0 means model no better than predicting the mean.</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">Adjusted R²</div>
+      <div class="metric-formula">Adj R² = 1 − (1−R²)(n−1)/(n−k−1)</div>
+      <p>Penalizes for adding features that don't improve fit. Prefer over R² when comparing models with different feature counts.</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">MAPE</div>
+      <div class="metric-formula">MAPE = (100/n) Σ|yᵢ−ŷᵢ|/|yᵢ|</div>
+      <p>Mean Absolute Percentage Error. Scale-independent; undefined when yᵢ=0. Good for comparing across different scales.</p>
+    </div>
+  </div>
+
+  <pre><span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> <span class="cl">LinearRegression</span>, <span class="cl">Ridge</span>, <span class="cl">Lasso</span>
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> mean_squared_error, mean_absolute_error, r2_score
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+X_train, X_test, y_train, y_test = <span class="fn">train_test_split</span>(X, y, test_size=<span class="nm">0.2</span>, random_state=<span class="nm">42</span>)
+
+<span class="cm"># Ordinary Least Squares</span>
+lr = <span class="cl">LinearRegression</span>()
+lr.<span class="fn">fit</span>(X_train, y_train)
+y_pred = lr.<span class="fn">predict</span>(X_test)
+
+<span class="cm"># Evaluation</span>
+rmse = np.<span class="fn">sqrt</span>(<span class="fn">mean_squared_error</span>(y_test, y_pred))
+mae  = <span class="fn">mean_absolute_error</span>(y_test, y_pred)
+r2   = <span class="fn">r2_score</span>(y_test, y_pred)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"RMSE: {rmse:.2f} | MAE: {mae:.2f} | R²: {r2:.4f}"</span>)
+
+<span class="cm"># Coefficients</span>
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Intercept: {lr.intercept_:.4f}"</span>)
+<span class="kw">for</span> feat, coef <span class="kw">in</span> <span class="fn">zip</span>(X.columns, lr.coef_):
+    <span class="fn">print</span>(<span class="fn">f</span><span class="st">"  {feat}: {coef:.4f}"</span>)
+
+<span class="cm"># Regularized variants</span>
+ridge = <span class="cl">Ridge</span>(alpha=<span class="nm">1.0</span>)    <span class="cm"># L2 penalty: shrinks coefficients, handles multicollinearity</span>
+lasso = <span class="cl">Lasso</span>(alpha=<span class="nm">0.1</span>)   <span class="cm"># L1 penalty: can drive coefficients to zero (feature selection)</span>
+
+<span class="cm"># Check residual assumptions</span>
+residuals = y_test - y_pred
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+fig, (ax1, ax2) = plt.<span class="fn">subplots</span>(<span class="nm">1</span>, <span class="nm">2</span>, figsize=(<span class="nm">12</span>, <span class="nm">4</span>))
+ax1.<span class="fn">scatter</span>(y_pred, residuals, alpha=<span class="nm">0.4</span>); ax1.<span class="fn">axhline</span>(<span class="nm">0</span>, color=<span class="st">'red'</span>, linewidth=<span class="nm">1</span>)
+ax1.<span class="fn">set_xlabel</span>(<span class="st">'Fitted Values'</span>); ax1.<span class="fn">set_ylabel</span>(<span class="st">'Residuals'</span>)
+ax2.<span class="fn">hist</span>(residuals, bins=<span class="nm">30</span>); ax2.<span class="fn">set_xlabel</span>(<span class="st">'Residuals'</span>)</pre>
+
+  <h3>Ridge vs Lasso vs ElasticNet</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Method</th><th>Penalty</th><th>Effect</th><th>Use When</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Ridge (L2)</strong></td><td>λ Σβⱼ²</td><td>Shrinks all coefficients toward 0, never exactly 0</td><td>Multicollinearity; all features relevant</td></tr>
+        <tr><td><strong>Lasso (L1)</strong></td><td>λ Σ|βⱼ|</td><td>Sets some coefficients exactly to 0 (sparse solution)</td><td>Feature selection; many irrelevant features</td></tr>
+        <tr><td><strong>ElasticNet</strong></td><td>α·L1 + (1−α)·L2</td><td>Groups correlated features (Ridge part), selects among groups (Lasso part)</td><td>Many features, some correlated groups</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 3 -->
+<section id="logistic-regression">
+  <h2>3. Logistic Regression</h2>
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p><strong>Logistic Regression</strong> is a supervised classification algorithm that models the probability of a binary outcome using the logistic (sigmoid) function. Despite its name, it is a classification model, not a regression model.</p>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">Logistic Regression Formulas</div>
+    <div class="formula">
+      Linear combination: z = β₀ + β₁x₁ + ... + βₙxₙ<br><br>
+      Sigmoid function: P(y=1|X) = σ(z) = 1 / (1 + e⁻ᶻ)    → outputs probability ∈ (0,1)<br><br>
+      Decision rule: ŷ = 1 if P(y=1|X) ≥ 0.5, else ŷ = 0<br><br>
+      Log-Odds (Logit): log[P/(1−P)] = β₀ + β₁x₁ + ... + βₙxₙ<br><br>
+      Loss function (Binary Cross-Entropy):<br>
+      L = −(1/n) Σ [yᵢ log(p̂ᵢ) + (1−yᵢ) log(1−p̂ᵢ)]
+    </div>
+  </div>
+
+  <h3>Interpretation of Coefficients</h3>
+  <p>In logistic regression, coefficients are on the log-odds scale. The exponential of a coefficient gives the <strong>odds ratio</strong>: for a one-unit increase in x, the odds of y=1 are multiplied by e^β.</p>
+  <div class="example">
+    <div class="ex-label">Interpretation Example</div>
+    <p>Suppose β_age = 0.04 in a churn model. Then e^0.04 ≈ 1.041. This means for each additional year of age, the odds of churning increase by 4.1%, holding all other variables constant.</p>
+    <p>If β_premium = −0.8: e^(−0.8) ≈ 0.449. Premium customers have 55.1% lower odds of churning compared to non-premium customers.</p>
+  </div>
+
+  <pre><span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> <span class="cl">LogisticRegression</span>
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> (classification_report, confusion_matrix,
+                                roc_auc_score, roc_curve)
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+lr = <span class="cl">LogisticRegression</span>(C=<span class="nm">1.0</span>, max_iter=<span class="nm">1000</span>, random_state=<span class="nm">42</span>)
+lr.<span class="fn">fit</span>(X_train, y_train)
+
+<span class="cm"># Predictions</span>
+y_pred       = lr.<span class="fn">predict</span>(X_test)          <span class="cm"># class labels (0 or 1)</span>
+y_pred_proba = lr.<span class="fn">predict_proba</span>(X_test)[:, <span class="nm">1</span>]  <span class="cm"># probability of class 1</span>
+
+<span class="cm"># Classification report: precision, recall, F1 per class</span>
+<span class="fn">print</span>(<span class="fn">classification_report</span>(y_test, y_pred))
+
+<span class="cm"># ROC-AUC</span>
+auc = <span class="fn">roc_auc_score</span>(y_test, y_pred_proba)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"ROC-AUC: {auc:.4f}"</span>)
+
+<span class="cm"># ROC curve plot</span>
+fpr, tpr, thresholds = <span class="fn">roc_curve</span>(y_test, y_pred_proba)
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">6</span>, <span class="nm">6</span>))
+ax.<span class="fn">plot</span>(fpr, tpr, color=<span class="st">'#2B5CE6'</span>, label=<span class="fn">f</span><span class="st">'AUC = {auc:.3f}'</span>)
+ax.<span class="fn">plot</span>([<span class="nm">0</span>, <span class="nm">1</span>], [<span class="nm">0</span>, <span class="nm">1</span>], <span class="st">'--'</span>, color=<span class="st">'gray'</span>)
+ax.<span class="fn">set_xlabel</span>(<span class="st">'FPR (1 − Specificity)'</span>); ax.<span class="fn">set_ylabel</span>(<span class="st">'TPR (Sensitivity)'</span>)
+ax.<span class="fn">set_title</span>(<span class="st">'ROC Curve'</span>); ax.<span class="fn">legend</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># Adjust decision threshold (default 0.5)</span>
+threshold = <span class="nm">0.3</span>  <span class="cm"># lower threshold → more positives (higher recall, lower precision)</span>
+y_pred_custom = (y_pred_proba >= threshold).<span class="fn">astype</span>(<span class="nm">int</span>)</pre>
+</section>
+
+<!-- SECTION 4 -->
+<section id="decision-trees">
+  <h2>4. Decision Trees</h2>
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p>A <strong>Decision Tree</strong> is a non-parametric supervised learning algorithm that partitions the feature space into axis-aligned rectangular regions by recursively splitting the training data. Each internal node tests a feature, each branch represents a decision, and each leaf node gives a prediction (class label for classification, mean target value for regression).</p>
+  </div>
+
+  <h3>Splitting Criteria</h3>
+  <div class="formula-box">
+    <div class="formula-title">Gini Impurity (Classification — CART)</div>
+    <div class="formula">
+      Gini(t) = 1 − Σₖ p(k|t)²<br>
+      Gini = 0 when node is pure (all one class)<br>
+      Gini = 0.5 at maximum impurity (binary, 50/50 split)
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">Information Gain / Entropy (ID3, C4.5)</div>
+    <div class="formula">
+      Entropy(t) = −Σₖ p(k|t) log₂ p(k|t)<br>
+      Entropy = 0 (pure) → Entropy = 1 (maximum, binary 50/50)<br><br>
+      Information Gain = Entropy(parent) − Σ (|child|/|parent|) × Entropy(child)
+    </div>
+  </div>
+
+  <h3>Key Hyperparameters</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Effect</th><th>Default</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>max_depth</code></td><td>Maximum depth of the tree. Lower = simpler model, less overfitting</td><td>None (fully grown)</td></tr>
+        <tr><td><code>min_samples_split</code></td><td>Min samples in a node to allow splitting. Higher = simpler model</td><td>2</td></tr>
+        <tr><td><code>min_samples_leaf</code></td><td>Min samples in a leaf. Prevents tiny leaf nodes</td><td>1</td></tr>
+        <tr><td><code>max_features</code></td><td>Max features to consider per split. Used by Random Forest</td><td>None (all features)</td></tr>
+        <tr><td><code>criterion</code></td><td>'gini' or 'entropy' for classification; 'squared_error', 'mae' for regression</td><td>'gini'</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><span class="kw">from</span> sklearn.tree <span class="kw">import</span> <span class="cl">DecisionTreeClassifier</span>, plot_tree, export_text
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+dt = <span class="cl">DecisionTreeClassifier</span>(
+    max_depth=<span class="nm">5</span>,
+    min_samples_leaf=<span class="nm">20</span>,
+    criterion=<span class="st">'gini'</span>,
+    random_state=<span class="nm">42</span>
+)
+dt.<span class="fn">fit</span>(X_train, y_train)
+
+<span class="cm"># Visualize the tree</span>
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">20</span>, <span class="nm">10</span>))
+<span class="fn">plot_tree</span>(dt, feature_names=X.columns, class_names=[<span class="st">'No'</span>, <span class="st">'Yes'</span>],
+          filled=<span class="kw">True</span>, rounded=<span class="kw">True</span>, fontsize=<span class="nm">10</span>, ax=ax)
+plt.<span class="fn">tight_layout</span>()
+
+<span class="cm"># Text representation</span>
+<span class="fn">print</span>(<span class="fn">export_text</span>(dt, feature_names=<span class="fn">list</span>(X.columns)))
+
+<span class="cm"># Feature importances (Gini importance = mean decrease in impurity)</span>
+importances = pd.<span class="cl">Series</span>(dt.feature_importances_, index=X.columns)
+importances.<span class="fn">sort_values</span>().<span class="fn">tail</span>(<span class="nm">10</span>).<span class="fn">plot</span>(kind=<span class="st">'barh'</span>)
+plt.<span class="fn">title</span>(<span class="st">'Feature Importances (Gini)'</span>)</pre>
+
+  <div class="note">
+    <div class="note-label">Decision Trees: Strengths & Weaknesses</div>
+    <p><strong>Strengths:</strong> Highly interpretable (you can visualize and explain a decision); handles mixed data types; no scaling needed; can capture non-linear relationships and interactions automatically. <strong>Weaknesses:</strong> Prone to overfitting (a fully grown tree memorizes training data); unstable (small changes in data → very different trees — high variance); biased toward features with more levels (information gain). The remedy is ensembles.</p>
+  </div>
+</section>
+
+<!-- SECTION 5 -->
+<section id="ensemble">
+  <h2>5. Ensemble Methods: Random Forest & Gradient Boosting</h2>
+
+  <h3>Random Forest</h3>
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p>A <strong>Random Forest</strong> is a bagging (Bootstrap Aggregating) ensemble of decision trees. Each tree is trained on a random bootstrap sample of the training data, and each split considers only a random subset of <code>max_features</code> features. Predictions are aggregated: majority vote for classification, mean for regression. The two sources of randomness (data sampling + feature sampling) decorrelate the trees, reducing variance.</p>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">Bagging (Bootstrap Aggregating)</div>
+    <div class="formula">
+      For b = 1 to B:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Sample n rows with replacement from training data → bootstrap sample D_b<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Train tree T_b on D_b (with feature randomness at each split)<br><br>
+      Final prediction: f̂(x) = (1/B) Σ T_b(x)   [regression]<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= majority_vote{T_b(x)}  [classification]
+    </div>
+  </div>
+
+  <pre><span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> <span class="cl">RandomForestClassifier</span>
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> GridSearchCV
+
+rf = <span class="cl">RandomForestClassifier</span>(
+    n_estimators=<span class="nm">200</span>,       <span class="cm"># number of trees; more = better (diminishing returns)</span>
+    max_depth=<span class="nm">10</span>,           <span class="cm"># limit depth of each tree to reduce overfitting</span>
+    max_features=<span class="st">'sqrt'</span>,   <span class="cm"># √p features per split (classification default)</span>
+    min_samples_leaf=<span class="nm">5</span>,
+    n_jobs=<span class="nm">-1</span>,              <span class="cm"># use all CPU cores</span>
+    random_state=<span class="nm">42</span>
+)
+rf.<span class="fn">fit</span>(X_train, y_train)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"OOB Score: {rf.oob_score_:.4f}"</span>)  <span class="cm"># out-of-bag estimate (free validation!)</span>
+
+<span class="cm"># Feature importances (mean decrease in impurity, averaged across trees)</span>
+feat_imp = pd.<span class="cl">Series</span>(rf.feature_importances_, index=X.columns)
+feat_imp.<span class="fn">sort_values</span>(ascending=<span class="kw">False</span>).<span class="fn">head</span>(<span class="nm">15</span>)</pre>
+
+  <h3>Gradient Boosting (XGBoost / LightGBM)</h3>
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p><strong>Gradient Boosting</strong> is a sequential ensemble method that builds trees one at a time, where each new tree fits the residuals (negative gradient of the loss function) of the current ensemble. Unlike bagging, which reduces variance, boosting reduces bias. Each tree corrects the errors of its predecessors.</p>
+  </div>
+
+  <pre><span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> <span class="cl">GradientBoostingClassifier</span>
+<span class="kw">import</span> xgboost <span class="kw">as</span> xgb
+<span class="kw">import</span> lightgbm <span class="kw">as</span> lgb
+
+<span class="cm"># sklearn Gradient Boosting</span>
+gb = <span class="cl">GradientBoostingClassifier</span>(
+    n_estimators=<span class="nm">300</span>,
+    learning_rate=<span class="nm">0.05</span>,  <span class="cm"># shrinkage: how much each tree contributes</span>
+    max_depth=<span class="nm">4</span>,
+    subsample=<span class="nm">0.8</span>,        <span class="cm"># stochastic GB: 80% of samples per tree</span>
+    random_state=<span class="nm">42</span>
+)
+gb.<span class="fn">fit</span>(X_train, y_train)
+
+<span class="cm"># XGBoost (optimized, parallel, with regularization)</span>
+xgb_model = xgb.<span class="cl">XGBClassifier</span>(
+    n_estimators=<span class="nm">300</span>,
+    learning_rate=<span class="nm">0.05</span>,
+    max_depth=<span class="nm">5</span>,
+    subsample=<span class="nm">0.8</span>,
+    colsample_bytree=<span class="nm">0.8</span>,  <span class="cm"># fraction of features per tree</span>
+    reg_alpha=<span class="nm">0.1</span>,           <span class="cm"># L1 regularization</span>
+    reg_lambda=<span class="nm">1.0</span>,          <span class="cm"># L2 regularization</span>
+    use_label_encoder=<span class="kw">False</span>,
+    eval_metric=<span class="st">'logloss'</span>,
+    random_state=<span class="nm">42</span>
+)
+xgb_model.<span class="fn">fit</span>(X_train, y_train, eval_set=[(X_test, y_test)],
+              early_stopping_rounds=<span class="nm">20</span>, verbose=<span class="kw">False</span>)</pre>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Property</th><th>Random Forest</th><th>Gradient Boosting (XGBoost)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Building strategy</td><td>Parallel (independent trees)</td><td>Sequential (each corrects previous)</td></tr>
+        <tr><td>Bias-Variance reduction</td><td>Reduces variance</td><td>Reduces bias</td></tr>
+        <tr><td>Overfitting risk</td><td>Lower (harder to overfit)</td><td>Higher (learning rate + n_estimators must be tuned)</td></tr>
+        <tr><td>Interpretability</td><td>Moderate (feature importances)</td><td>Same, plus SHAP values</td></tr>
+        <tr><td>Tuning effort</td><td>Low (mostly n_estimators, max_depth)</td><td>High (many interacting hyperparameters)</td></tr>
+        <tr><td>Typical performance</td><td>Very good baseline</td><td>State-of-art on tabular data</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 6 -->
+<section id="clustering">
+  <h2>6. K-Means Clustering</h2>
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p><strong>K-Means</strong> is an unsupervised partitioning algorithm that divides n observations into k clusters, where each observation belongs to the cluster with the nearest centroid. It minimizes the within-cluster sum of squared distances (inertia).</p>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">K-Means Objective</div>
+    <div class="formula">
+      Minimize: J = Σₖ Σ_{x∈Cₖ} ||x − μₖ||²<br>
+      where μₖ = mean of all points in cluster Cₖ
+    </div>
+  </div>
+
+  <h3>The K-Means Algorithm (Lloyd's Algorithm)</h3>
+  <ol>
+    <li>Initialize k centroids (randomly or with K-Means++ seeding)</li>
+    <li>Assign each point to its nearest centroid (Euclidean distance)</li>
+    <li>Recompute each centroid as the mean of all assigned points</li>
+    <li>Repeat steps 2–3 until centroids stop moving (convergence)</li>
+  </ol>
+
+  <div class="note">
+    <div class="note-label">Assumptions & Limitations</div>
+    <p>K-Means assumes clusters are spherical (equal variance in all directions), similarly sized, and equally dense. It fails on non-convex clusters (crescent shapes), clusters of very different sizes, and is sensitive to outliers (which pull centroids away from the true cluster center). It requires scaling — Euclidean distance is dominated by high-variance features without standardization.</p>
+  </div>
+
+  <h3>Choosing K: The Elbow Method and Silhouette Score</h3>
+  <pre><span class="kw">from</span> sklearn.cluster <span class="kw">import</span> <span class="cl">KMeans</span>
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> silhouette_score
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> <span class="cl">StandardScaler</span>
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+<span class="cm"># Scale first — K-Means is distance-based</span>
+scaler = <span class="cl">StandardScaler</span>()
+X_scaled = scaler.<span class="fn">fit_transform</span>(X)
+
+<span class="cm"># Elbow method: plot inertia vs k</span>
+inertias = []
+silhouettes = []
+k_range = <span class="fn">range</span>(<span class="nm">2</span>, <span class="nm">12</span>)
+
+<span class="kw">for</span> k <span class="kw">in</span> k_range:
+    km = <span class="cl">KMeans</span>(n_clusters=k, init=<span class="st">'k-means++'</span>, n_init=<span class="nm">10</span>, random_state=<span class="nm">42</span>)
+    km.<span class="fn">fit</span>(X_scaled)
+    inertias.<span class="fn">append</span>(km.inertia_)
+    silhouettes.<span class="fn">append</span>(<span class="fn">silhouette_score</span>(X_scaled, km.labels_))
+
+<span class="cm"># Plot elbow and silhouette side by side</span>
+fig, (ax1, ax2) = plt.<span class="fn">subplots</span>(<span class="nm">1</span>, <span class="nm">2</span>, figsize=(<span class="nm">12</span>, <span class="nm">4</span>))
+ax1.<span class="fn">plot</span>(k_range, inertias, marker=<span class="st">'o'</span>, color=<span class="st">'#2B5CE6'</span>)
+ax1.<span class="fn">set_xlabel</span>(<span class="st">'Number of Clusters (k)'</span>); ax1.<span class="fn">set_ylabel</span>(<span class="st">'Inertia'</span>)
+ax1.<span class="fn">set_title</span>(<span class="st">'Elbow Method'</span>)
+ax2.<span class="fn">plot</span>(k_range, silhouettes, marker=<span class="st">'o'</span>, color=<span class="st">'#059669'</span>)
+ax2.<span class="fn">set_xlabel</span>(<span class="st">'k'</span>); ax2.<span class="fn">set_ylabel</span>(<span class="st">'Silhouette Score'</span>)
+ax2.<span class="fn">set_title</span>(<span class="st">'Silhouette Score (higher = better)'</span>)
+plt.<span class="fn">tight_layout</span>()
+
+<span class="cm"># Fit final model with chosen k</span>
+km_final = <span class="cl">KMeans</span>(n_clusters=<span class="nm">4</span>, init=<span class="st">'k-means++'</span>, n_init=<span class="nm">10</span>, random_state=<span class="nm">42</span>)
+df[<span class="st">'cluster'</span>] = km_final.<span class="fn">fit_predict</span>(X_scaled)
+
+<span class="cm"># Profile the clusters</span>
+<span class="fn">print</span>(df.<span class="fn">groupby</span>(<span class="st">'cluster'</span>)[[<span class="st">'age'</span>, <span class="st">'income'</span>, <span class="st">'spending'</span>]].<span class="fn">mean</span>())</pre>
+
+  <div class="formula-box">
+    <div class="formula-title">Silhouette Score</div>
+    <div class="formula">
+      For point i:  s(i) = (b(i) − a(i)) / max(a(i), b(i))<br>
+      a(i) = mean distance to other points in same cluster (cohesion)<br>
+      b(i) = mean distance to nearest neighboring cluster (separation)<br>
+      Score range: [−1, +1]  →  +1 = perfect, 0 = on boundary, −1 = wrong cluster
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7 -->
+<section id="evaluation">
+  <h2>7. Model Evaluation Metrics</h2>
+
+  <h3>Confusion Matrix</h3>
+  <div class="confusion-matrix">
+    <div class="cm-cell cm-header"></div>
+    <div class="cm-cell cm-header">Predicted Positive</div>
+    <div class="cm-cell cm-header">Predicted Negative</div>
+    <div class="cm-cell cm-header">Actual Positive</div>
+    <div class="cm-cell cm-tp">TP (True Positive)</div>
+    <div class="cm-cell cm-fn">FN (False Negative)<br><small>Type II Error</small></div>
+    <div class="cm-cell cm-header">Actual Negative</div>
+    <div class="cm-cell cm-fp">FP (False Positive)<br><small>Type I Error</small></div>
+    <div class="cm-cell cm-tn">TN (True Negative)</div>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-tile">
+      <div class="metric-name">Accuracy</div>
+      <div class="metric-formula">(TP + TN) / (TP+TN+FP+FN)</div>
+      <p>Misleading on imbalanced datasets. 99% accuracy on 1% fraud rate is meaningless.</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">Precision</div>
+      <div class="metric-formula">TP / (TP + FP)</div>
+      <p>Of all predicted positives, how many were actually positive? Use when FP cost is high (spam filter — don't flag real emails).</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">Recall (Sensitivity)</div>
+      <div class="metric-formula">TP / (TP + FN)</div>
+      <p>Of all actual positives, how many did we catch? Use when FN cost is high (disease screening — don't miss sick patients).</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">F1 Score</div>
+      <div class="metric-formula">2 × (P × R) / (P + R)</div>
+      <p>Harmonic mean of precision and recall. Use when both FP and FN matter and classes are imbalanced.</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">Specificity</div>
+      <div class="metric-formula">TN / (TN + FP)</div>
+      <p>True Negative Rate. Of all actual negatives, how many did we correctly identify as negative?</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">ROC-AUC</div>
+      <div class="metric-formula">Area under ROC curve</div>
+      <p>Probability that the model ranks a random positive above a random negative. Threshold-independent. 0.5 = random, 1.0 = perfect.</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">PR-AUC</div>
+      <div class="metric-formula">Area under Precision-Recall curve</div>
+      <p>Better than ROC-AUC for highly imbalanced datasets. Focuses on positive class performance.</p>
+    </div>
+    <div class="metric-tile">
+      <div class="metric-name">Log Loss</div>
+      <div class="metric-formula">−(1/n) Σ[y log(p) + (1−y)log(1−p)]</div>
+      <p>Penalizes confident wrong predictions heavily. Lower is better. Used as loss function for logistic regression.</p>
+    </div>
+  </div>
+
+  <h3>Precision-Recall Tradeoff</h3>
+  <p>There is always a tradeoff between precision and recall controlled by the classification threshold:</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Lower Threshold (→ more positives)</th><th>Higher Threshold (→ fewer positives)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Higher Recall (catch more true positives)</td>
+          <td>Higher Precision (fewer false alarms)</td>
+        </tr>
+        <tr>
+          <td>Lower Precision (more false positives)</td>
+          <td>Lower Recall (miss more true positives)</td>
+        </tr>
+        <tr>
+          <td><strong>When to use:</strong> Disease screening, fraud detection (better to investigate false alarms than miss fraud)</td>
+          <td><strong>When to use:</strong> Spam filtering (better to miss spam than block real email)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 8 -->
+<section id="bias-variance">
+  <h2>8. Bias-Variance Tradeoff</h2>
+
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p>The <strong>Bias-Variance Tradeoff</strong> describes how the expected prediction error of a model decomposes into three sources: bias (from erroneous assumptions in the model), variance (from sensitivity to small fluctuations in the training set), and irreducible noise. A model must balance bias and variance — reducing one tends to increase the other.</p>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">Bias-Variance Decomposition</div>
+    <div class="formula">
+      Expected MSE = Bias² + Variance + Irreducible Noise<br><br>
+      Bias = E[ŷ] − y  →  how far is the average prediction from truth?<br>
+      Variance = E[(ŷ − E[ŷ])²]  →  how much does the model vary with training data?<br>
+      Noise = Var(ε)  →  inherent unpredictability (cannot be reduced by any model)
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th></th><th>High Bias (Underfitting)</th><th>High Variance (Overfitting)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Symptom</strong></td><td>High training error AND high test error</td><td>Low training error, high test error</td></tr>
+        <tr><td><strong>Cause</strong></td><td>Model too simple for the data</td><td>Model too complex, memorizes noise</td></tr>
+        <tr><td><strong>Examples</strong></td><td>Linear model on non-linear data; shallow tree</td><td>Deep decision tree with no depth limit; k=1 in KNN</td></tr>
+        <tr><td><strong>Fixes</strong></td><td>More complex model; add features; add polynomial terms; reduce regularization</td><td>More training data; regularization (L1/L2); reduce model complexity; dropout (neural nets); pruning (trees)</td></tr>
+        <tr><td><strong>Diagnostic</strong></td><td>Learning curve: both train/val error plateau high</td><td>Learning curve: train error low, val error high (large gap)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> learning_curve
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> <span class="cl">RandomForestClassifier</span>
+
+<span class="cm"># Learning curve: diagnose bias vs variance</span>
+train_sizes, train_scores, val_scores = <span class="fn">learning_curve</span>(
+    estimator=<span class="cl">RandomForestClassifier</span>(random_state=<span class="nm">42</span>),
+    X=X_scaled, y=y,
+    train_sizes=np.<span class="fn">linspace</span>(<span class="nm">0.1</span>, <span class="nm">1.0</span>, <span class="nm">10</span>),
+    cv=<span class="nm">5</span>, scoring=<span class="st">'accuracy'</span>, n_jobs=<span class="nm">-1</span>
+)
+
+train_mean = train_scores.<span class="fn">mean</span>(axis=<span class="nm">1</span>)
+train_std  = train_scores.<span class="fn">std</span>(axis=<span class="nm">1</span>)
+val_mean   = val_scores.<span class="fn">mean</span>(axis=<span class="nm">1</span>)
+val_std    = val_scores.<span class="fn">std</span>(axis=<span class="nm">1</span>)
+
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="nm">10</span>, <span class="nm">6</span>))
+ax.<span class="fn">plot</span>(train_sizes, train_mean, label=<span class="st">'Training Score'</span>, color=<span class="st">'#2B5CE6'</span>)
+ax.<span class="fn">fill_between</span>(train_sizes, train_mean - train_std, train_mean + train_std, alpha=<span class="nm">0.15</span>, color=<span class="st">'#2B5CE6'</span>)
+ax.<span class="fn">plot</span>(train_sizes, val_mean, label=<span class="st">'Validation Score'</span>, color=<span class="st">'#DC2626'</span>)
+ax.<span class="fn">fill_between</span>(train_sizes, val_mean - val_std, val_mean + val_std, alpha=<span class="nm">0.15</span>, color=<span class="st">'#DC2626'</span>)
+ax.<span class="fn">set_xlabel</span>(<span class="st">'Training Examples'</span>); ax.<span class="fn">set_ylabel</span>(<span class="st">'Accuracy'</span>)
+ax.<span class="fn">set_title</span>(<span class="st">'Learning Curve'</span>); ax.<span class="fn">legend</span>(); plt.<span class="fn">show</span>()</pre>
+</section>
+
+<!-- SECTION 9 -->
+<section id="cross-validation">
+  <h2>9. Cross-Validation</h2>
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p><strong>Cross-Validation (CV)</strong> is a model evaluation technique that provides a more reliable estimate of out-of-sample performance than a single train/test split. The data is divided into k folds; the model is trained on k−1 folds and evaluated on the remaining fold. This is repeated k times (each fold serves as the validation set once). The final metric is averaged across all k evaluations.</p>
+  </div>
+
+  <pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> (cross_val_score, StratifiedKFold,
+                                       cross_validate, KFold)
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> <span class="cl">RandomForestClassifier</span>
+
+model = <span class="cl">RandomForestClassifier</span>(n_estimators=<span class="nm">100</span>, random_state=<span class="nm">42</span>)
+
+<span class="cm"># Simple 5-fold CV</span>
+scores = <span class="fn">cross_val_score</span>(model, X, y, cv=<span class="nm">5</span>, scoring=<span class="st">'roc_auc'</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"AUC: {scores.mean():.4f} ± {scores.std():.4f}"</span>)
+
+<span class="cm"># Stratified K-Fold (preserves class proportions in each fold)</span>
+<span class="cm"># Use for classification, especially with class imbalance</span>
+skf = <span class="cl">StratifiedKFold</span>(n_splits=<span class="nm">5</span>, shuffle=<span class="kw">True</span>, random_state=<span class="nm">42</span>)
+scores_strat = <span class="fn">cross_val_score</span>(model, X, y, cv=skf, scoring=<span class="st">'roc_auc'</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Stratified AUC: {scores_strat.mean():.4f} ± {scores_strat.std():.4f}"</span>)
+
+<span class="cm"># Multiple metrics at once</span>
+results = <span class="fn">cross_validate</span>(
+    model, X, y, cv=skf,
+    scoring=[<span class="st">'roc_auc'</span>, <span class="st">'precision'</span>, <span class="st">'recall'</span>, <span class="st">'f1'</span>],
+    return_train_score=<span class="kw">True</span>
+)
+<span class="kw">for</span> metric <span class="kw">in</span> [<span class="st">'test_roc_auc'</span>, <span class="st">'test_precision'</span>, <span class="st">'test_recall'</span>, <span class="st">'test_f1'</span>]:
+    <span class="fn">print</span>(<span class="fn">f</span><span class="st">"{metric}: {results[metric].mean():.4f} ± {results[metric].std():.4f}"</span>)
+
+<span class="cm"># Hyperparameter tuning with GridSearchCV (nested CV inside)</span>
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> GridSearchCV
+param_grid = {
+    <span class="st">'n_estimators'</span>: [<span class="nm">100</span>, <span class="nm">200</span>],
+    <span class="st">'max_depth'</span>: [<span class="nm">5</span>, <span class="nm">10</span>, <span class="kw">None</span>],
+    <span class="st">'min_samples_leaf'</span>: [<span class="nm">1</span>, <span class="nm">5</span>, <span class="nm">10</span>]
+}
+grid_search = <span class="cl">GridSearchCV</span>(
+    <span class="cl">RandomForestClassifier</span>(random_state=<span class="nm">42</span>),
+    param_grid, cv=<span class="nm">5</span>, scoring=<span class="st">'roc_auc'</span>, n_jobs=<span class="nm">-1</span>
+)
+grid_search.<span class="fn">fit</span>(X_train, y_train)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Best params: {grid_search.best_params_}"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Best CV AUC: {grid_search.best_score_:.4f}"</span>)</pre>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>CV Strategy</th><th>When to Use</th><th>Note</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>K-Fold (k=5 or 10)</td><td>Default for regression and balanced classification</td><td>k=5 balances bias and variance of CV estimate</td></tr>
+        <tr><td>Stratified K-Fold</td><td>Classification with class imbalance</td><td>Preserves class ratio in each fold</td></tr>
+        <tr><td>Leave-One-Out (LOO)</td><td>Very small datasets (&lt;100 rows)</td><td>Expensive; nearly unbiased but high variance</td></tr>
+        <tr><td>Time-Series Split</td><td>Time-ordered data</td><td>Always train on past, validate on future — no shuffling!</td></tr>
+        <tr><td>Group K-Fold</td><td>Grouped data (e.g., multiple rows per patient)</td><td>Ensures all rows from one group are in same fold</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 10: QA -->
+<section id="qa" class="qa-section">
+  <h2>Interview Q&A</h2>
+
+  <div class="qa-item">
+    <div class="qa-q">What is the bias-variance tradeoff? How do you diagnose which problem your model has?</div>
+    <div class="qa-a">
+      <p>The bias-variance tradeoff describes the tension between two sources of prediction error. <strong>Bias</strong> is the error from incorrect assumptions in the learning algorithm — a biased model systematically predicts in the wrong direction. <strong>Variance</strong> is the error from the model's sensitivity to small fluctuations in training data — a high-variance model learns noise.</p>
+      <p>Total expected error = Bias² + Variance + Irreducible Noise. Reducing bias typically increases variance (a more complex model fits training data better but generalizes worse) and vice versa.</p>
+      <p><strong>Diagnosing with a learning curve:</strong></p>
+      <ul>
+        <li><strong>High Bias (Underfitting):</strong> Training error is high AND validation error is similarly high. Both plateau far above an acceptable level. More data won't help. Fix: increase model complexity, add features, reduce regularization.</li>
+        <li><strong>High Variance (Overfitting):</strong> Training error is low, but validation error is much higher (large gap). More training data usually helps. Fix: regularization (L1/L2), fewer features, more data, ensemble methods, dropout (neural nets).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">When would you use precision vs recall as your primary metric? Give a concrete example for each.</div>
+    <div class="qa-a">
+      <p>The choice depends on the <strong>relative cost of false positives vs false negatives</strong> in your specific business context.</p>
+      <p><strong>Use Recall (minimize False Negatives) when:</strong> The cost of missing a positive is very high. Example: cancer screening. A false negative (telling a sick patient they are healthy) is catastrophic — the patient doesn't get treatment. A false positive (telling a healthy patient they might be sick) leads to further testing, which is inconvenient but not dangerous. Maximize recall: you want to catch every positive case, even at the cost of many false alarms.</p>
+      <p><strong>Use Precision (minimize False Positives) when:</strong> The cost of acting on a false positive is very high. Example: email spam filter. A false positive (flagging a real, important email as spam) is a serious user experience failure — the user misses an important message. A false negative (letting spam through) is just annoying. Maximize precision: you want every flagged email to truly be spam, even if some spam gets through.</p>
+      <p><strong>Use F1 Score when:</strong> Both false positives and false negatives are costly, and there is class imbalance. Example: fraud detection — a false positive means a legitimate transaction is blocked (customer inconvenience, lost revenue), and a false negative means fraud goes undetected (financial loss). F1 is the harmonic mean and gives a balanced score.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">Explain how a Random Forest works and why it outperforms a single decision tree.</div>
+    <div class="qa-a">
+      <p>A single decision tree is prone to <strong>high variance</strong> — it tends to overfit by memorizing the training data, and small changes in the data produce very different trees. Random Forest addresses this through two key techniques:</p>
+      <p><strong>1. Bagging (Bootstrap Aggregating):</strong> Each tree is trained on a different bootstrap sample (random sample with replacement) of the training data. About 37% of training rows are "out-of-bag" (not sampled) for each tree.</p>
+      <p><strong>2. Feature Randomness at each split:</strong> When growing each tree, only a random subset of features (typically √p for classification, p/3 for regression, where p = total features) is considered at each split point. This ensures the trees are diverse and not all dominated by the same strong features.</p>
+      <p>By averaging many decorrelated trees, the variance of the ensemble is much lower than a single tree (bias is nearly unchanged). Key insight: if B uncorrelated trees each have variance σ², the ensemble variance is σ²/B. The decorrelation from feature randomness is crucial — without it, all trees would pick the same dominant features and remain correlated.</p>
+      <p>The out-of-bag samples can be used to estimate generalization error without a separate test set (OOB score), which is essentially a free cross-validation estimate.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">How do you choose the number of clusters k in K-Means? What are the limitations of the elbow method?</div>
+    <div class="qa-a">
+      <p>Choosing k is one of the central challenges of K-Means. Several methods exist:</p>
+      <p><strong>Elbow Method:</strong> Plot inertia (within-cluster sum of squared distances) vs k. As k increases, inertia always decreases — adding a cluster always reduces it. The elbow is the point where the rate of decrease slows significantly ("marginal gain from one more cluster drops sharply"). This represents the natural number of clusters in the data.</p>
+      <p><strong>Limitation of elbow method:</strong> The "elbow" is subjective and often not visible — the curve can be smooth with no clear bend, making it useless. Additionally, inertia always decreases monotonically, so cherry-picking k based on the elbow is unreliable for high-dimensional or noisy data.</p>
+      <p><strong>Silhouette Score:</strong> For each point, compute s(i) = (b−a)/max(a,b) where a = mean distance to same-cluster points, b = mean distance to nearest neighboring cluster. Score ranges from −1 to +1. Choose k that maximizes the mean silhouette score. This is more principled than the elbow because it measures both cohesion and separation.</p>
+      <p><strong>Domain Knowledge:</strong> Often the best guide. If you are segmenting customers for a marketing campaign, business constraints (you have budget for 5 campaigns) may drive k. Validate cluster interpretability: are the clusters meaningfully different and actionable?</p>
+      <p><strong>Gap Statistic:</strong> Compares the observed inertia to inertia under a null reference distribution. More principled but computationally expensive.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">What is cross-validation and why is it preferred over a single train-test split?</div>
+    <div class="qa-a">
+      <p>A <strong>single train-test split</strong> gives one estimate of model performance on one particular partition of the data. That estimate is noisy: if the test set happens to contain easy or hard examples, the performance metric is optimistic or pessimistic respectively. With a small dataset, this variance in the estimate can be very large.</p>
+      <p><strong>K-fold cross-validation</strong> addresses this by repeatedly splitting the data into training and validation portions. With k=5, the model is trained 5 times, each time on 80% of the data and validated on a different 20%. The final metric is the mean and standard deviation across 5 estimates, which is a much more stable and reliable estimate of true generalization performance.</p>
+      <p><strong>Additional advantages:</strong></p>
+      <ul>
+        <li>Every data point is used for validation exactly once, so no data is "wasted" on a fixed test set</li>
+        <li>The standard deviation across folds quantifies the stability of the model — a model with high variation across folds is sensitive to which data it sees</li>
+        <li>Required for proper hyperparameter tuning — if you tune on a fixed test set, the test set leaks into model selection</li>
+        <li>Works correctly inside a Pipeline to prevent data leakage from preprocessing</li>
+      </ul>
+      <p><strong>When single split is acceptable:</strong> Very large datasets (millions of rows) where a holdout set is large enough to give a reliable estimate, and k-fold CV would be too computationally expensive.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+<script>
+function toggleTheme() {
+  const root = document.documentElement;
+  root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+}
+</script>
+</body>
+</html>

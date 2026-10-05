@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 10: Excel &amp; BI Tools</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:wght@400;600&display=swap">
+<style>
+  :root {
+    --bg: #f8f9fc;
+    --surface: #ffffff;
+    --surface2: #f0f2f8;
+    --border: #e2e6f0;
+    --text: #1a1d2e;
+    --text2: #4a4f6a;
+    --text3: #7a7f9a;
+    --accent: #2B5CE6;
+    --accent-light: #e8edfb;
+    --accent2: #7C3AED;
+    --accent2-light: #f0ebfd;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --orange: #d97706;
+    --orange-light: #fef3c7;
+    --teal: #0891b2;
+    --teal-light: #cffafe;
+    --code-bg: #1e2030;
+    --code-text: #cdd6f4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1117; --surface: #1a1d2e; --surface2: #252840; --border: #2e3154;
+      --text: #e8eaf6; --text2: #9ea3c0; --text3: #6b7194;
+      --accent-light: #1a2340; --accent2-light: #1e1535;
+      --green-light: #052e1c; --red-light: #2d0a0a; --orange-light: #2d1a00; --teal-light: #042030;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1117; --surface: #1a1d2e; --surface2: #252840; --border: #2e3154;
+    --text: #e8eaf6; --text2: #9ea3c0; --text3: #6b7194;
+    --accent-light: #1a2340; --accent2-light: #1e1535;
+    --green-light: #052e1c; --red-light: #2d0a0a; --orange-light: #2d1a00; --teal-light: #042030;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 16px;
+    padding-inline: 24px;
+    padding-block: 0 60px;
+  }
+  .page-wrap { max-width: 900px; margin: 0 auto; }
+
+  .module-header {
+    background: linear-gradient(135deg, #1a3a2a 0%, #059669 50%, #0891b2 100%);
+    color: white;
+    padding: 56px 48px;
+    border-radius: 0 0 24px 24px;
+    margin-inline: -24px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .module-header::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,0.05);
+  }
+  .module-tag { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; margin-bottom: 12px; }
+  .module-header h1 { font-size: clamp(28px, 5vw, 42px); font-weight: 700; line-height: 1.2; margin-bottom: 16px; }
+  .module-header p { font-size: 17px; opacity: 0.85; max-width: 600px; line-height: 1.6; }
+
+  .overview-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  .toc {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 28px 32px; margin-bottom: 48px;
+  }
+  .toc h2 { font-size: 14px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 16px; }
+  .toc ol { list-style: none; counter-reset: toc; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 32px; }
+  @media (max-width: 600px) { .toc ol { grid-template-columns: 1fr; } }
+  .toc ol li { counter-increment: toc; display: flex; align-items: baseline; gap: 8px; }
+  .toc ol li::before { content: counter(toc, decimal-leading-zero); font-size: 11px; font-weight: 600; color: var(--accent); font-family: 'IBM Plex Mono', monospace; flex-shrink: 0; }
+  .toc a { color: var(--text2); text-decoration: none; font-size: 14px; }
+  .toc a:hover { color: var(--accent); }
+
+  .section { margin-bottom: 56px; }
+  .section-title {
+    font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 22px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--border);
+    display: flex; align-items: center; gap: 12px; text-wrap: balance;
+  }
+  .section-title .sec-num {
+    font-size: 13px; font-weight: 600; color: var(--accent); font-family: 'IBM Plex Mono', monospace;
+    background: var(--accent-light); padding: 3px 8px; border-radius: 4px; flex-shrink: 0;
+  }
+  h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 28px 0 12px; }
+  p { color: var(--text2); margin-bottom: 14px; }
+
+  .definition {
+    background: var(--accent-light); border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+  }
+  .definition strong { color: var(--accent); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+  .definition p { color: var(--text); margin: 0; }
+
+  .example {
+    background: var(--green-light); border-left: 4px solid var(--green);
+    border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+  }
+  .example strong { color: var(--green); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+  .example p, .example li { color: var(--text); margin: 0; }
+
+  .note {
+    background: var(--orange-light); border-left: 4px solid var(--orange);
+    border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+  }
+  .note strong { color: var(--orange); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+  .note p { color: var(--text); margin: 0; }
+
+  .tip {
+    background: var(--teal-light); border-left: 4px solid var(--teal);
+    border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+  }
+  .tip strong { color: var(--teal); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+  .tip p { color: var(--text); margin: 0; }
+
+  .code-block {
+    background: var(--code-bg); border-radius: 10px; padding: 22px;
+    margin: 18px 0; overflow-x: auto;
+    font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; line-height: 1.6;
+    color: var(--code-text);
+  }
+  .code-block .fn { color: #C3E88D; }
+  .code-block .st { color: #F78C6C; }
+  .code-block .cm { color: #546E7A; font-style: italic; }
+  .code-block .kw { color: #82AAFF; }
+  .code-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500;
+    color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead { background: var(--surface2); }
+  th { padding: 12px 16px; text-align: left; font-weight: 600; color: var(--text); font-size: 13px; letter-spacing: 0.03em; border-bottom: 2px solid var(--border); }
+  td { padding: 12px 16px; color: var(--text2); border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+  code { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; background: var(--surface2); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
+
+  /* Tool cards */
+  .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+  @media (max-width: 640px) { .tool-grid { grid-template-columns: 1fr; } }
+  .tool-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;
+  }
+  .tool-card .tool-logo {
+    width: 44px; height: 44px; border-radius: 10px; margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 800; letter-spacing: -1px;
+  }
+  .excel-logo { background: #1D6F42; color: white; font-size: 16px; }
+  .pbi-logo   { background: #F2C811; color: #333; font-size: 14px; }
+  .tab-logo   { background: #E97627; color: white; font-size: 14px; }
+  .loo-logo   { background: #5f6368; color: white; font-size: 14px; }
+  .tool-card h4 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .tool-card .tool-type { font-size: 12px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .tool-card p { font-size: 13px; color: var(--text2); margin-bottom: 10px; }
+  .tool-card .strengths { list-style: none; }
+  .tool-card .strengths li { font-size: 13px; color: var(--text2); padding: 3px 0; }
+  .tool-card .strengths li::before { content: '✓ '; color: var(--green); font-weight: 600; }
+
+  /* Function category pills */
+  .func-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin: 20px 0; }
+  .func-category {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px;
+  }
+  .func-category .cat-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .func-category ul { list-style: none; }
+  .func-category ul li { font-size: 13px; color: var(--text2); padding: 3px 0; font-family: 'IBM Plex Mono', monospace; }
+
+  /* Formula display */
+  .formula-row {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 10px;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .formula-name { font-weight: 700; color: var(--text); font-size: 14px; min-width: 160px; flex-shrink: 0; }
+  .formula-syntax { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent); }
+  .formula-desc { font-size: 13px; color: var(--text2); }
+
+  /* Dashboard principles */
+  .principle-list { display: flex; flex-direction: column; gap: 14px; margin: 20px 0; }
+  .principle-item { display: flex; gap: 16px; align-items: flex-start; }
+  .principle-num {
+    width: 32px; height: 32px; border-radius: 8px; background: var(--accent); color: white;
+    font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .principle-body { flex: 1; }
+  .principle-body strong { display: block; font-size: 15px; color: var(--text); margin-bottom: 3px; }
+  .principle-body p { font-size: 14px; color: var(--text2); margin: 0; }
+
+  ul.bullet { margin: 10px 0 10px 20px; }
+  ul.bullet li { color: var(--text2); margin-bottom: 6px; font-size: 15px; }
+  ul.bullet li strong { color: var(--text); }
+
+  /* Comparison matrix */
+  .compare-good { color: var(--green); font-weight: 600; }
+  .compare-mid  { color: var(--orange); font-weight: 600; }
+  .compare-bad  { color: var(--red); font-weight: 600; }
+
+  .qa-section { margin-top: 16px; display: flex; flex-direction: column; gap: 20px; }
+  .qa-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .qa-q {
+    background: var(--accent-light); padding: 18px 22px; font-weight: 600; font-size: 15px;
+    color: var(--text); display: flex; gap: 12px; align-items: flex-start;
+  }
+  .qa-q::before { content: 'Q'; font-weight: 800; color: var(--accent); font-size: 16px; flex-shrink: 0; line-height: 1.4; }
+  .qa-a { padding: 20px 22px; font-size: 14.5px; color: var(--text2); line-height: 1.75; }
+  .qa-a p { margin-bottom: 10px; color: var(--text2); }
+  .qa-a p:last-child { margin-bottom: 0; }
+  .qa-a ul { margin: 8px 0 8px 20px; }
+  .qa-a li { margin-bottom: 4px; color: var(--text2); }
+  .qa-a strong { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<header class="module-header">
+  <div class="module-tag">Data Analytics Interview Packet · Module 10</div>
+  <div class="overview-badge">Overview Module</div>
+  <h1>Excel &amp; BI Tools</h1>
+  <p>Conceptual fluency in spreadsheet functions, pivot tables, and business intelligence platforms — what every data analyst needs to know about Excel, Power BI, Tableau, and dashboard design principles.</p>
+</header>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#excel-functions">Essential Excel Functions</a></li>
+    <li><a href="#lookup">VLOOKUP vs. INDEX-MATCH</a></li>
+    <li><a href="#pivot">Pivot Tables</a></li>
+    <li><a href="#tools">BI Tools Overview</a></li>
+    <li><a href="#comparison">Tool Comparison</a></li>
+    <li><a href="#dashboard">Dashboard Design Principles</a></li>
+    <li><a href="#qa">Interview Q&amp;A</a></li>
+  </ol>
+</nav>
+
+<!-- ===== SECTION 1: Excel Functions ===== -->
+<section class="section" id="excel-functions">
+  <h2 class="section-title"><span class="sec-num">01</span>Essential Excel Functions for Data Analysis</h2>
+
+  <p>Excel remains ubiquitous in business analytics. Proficiency with the following categories of functions is expected in most analytics roles, particularly in roles interfacing with business stakeholders.</p>
+
+  <div class="func-grid">
+    <div class="func-category">
+      <div class="cat-label">Lookup &amp; Reference</div>
+      <ul>
+        <li>VLOOKUP / HLOOKUP</li>
+        <li>INDEX / MATCH</li>
+        <li>XLOOKUP (Excel 365)</li>
+        <li>INDIRECT</li>
+        <li>OFFSET</li>
+      </ul>
+    </div>
+    <div class="func-category">
+      <div class="cat-label">Logical</div>
+      <ul>
+        <li>IF / IFS</li>
+        <li>AND / OR / NOT</li>
+        <li>IFERROR / IFNA</li>
+        <li>SWITCH</li>
+        <li>SUMIF / SUMIFS</li>
+      </ul>
+    </div>
+    <div class="func-category">
+      <div class="cat-label">Statistical</div>
+      <ul>
+        <li>AVERAGE / MEDIAN</li>
+        <li>STDEV / VAR</li>
+        <li>PERCENTILE / QUARTILE</li>
+        <li>CORREL / COVAR</li>
+        <li>COUNTIF / COUNTIFS</li>
+      </ul>
+    </div>
+    <div class="func-category">
+      <div class="cat-label">Text</div>
+      <ul>
+        <li>CONCATENATE / CONCAT</li>
+        <li>LEFT / RIGHT / MID</li>
+        <li>TRIM / CLEAN</li>
+        <li>TEXT (formatting)</li>
+        <li>FIND / SEARCH</li>
+      </ul>
+    </div>
+    <div class="func-category">
+      <div class="cat-label">Date &amp; Time</div>
+      <ul>
+        <li>TODAY / NOW</li>
+        <li>DATE / DATEVALUE</li>
+        <li>DATEDIF / DAYS360</li>
+        <li>WEEKDAY / MONTH / YEAR</li>
+        <li>EDATE / EOMONTH</li>
+      </ul>
+    </div>
+    <div class="func-category">
+      <div class="cat-label">Array (Ctrl+Shift+Enter)</div>
+      <ul>
+        <li>SUMPRODUCT</li>
+        <li>FREQUENCY</li>
+        <li>TRANSPOSE</li>
+        <li>UNIQUE (365)</li>
+        <li>FILTER (365)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Key Formulas in Detail</h3>
+
+  <div class="formula-row">
+    <div class="formula-name">SUMIFS</div>
+    <div>
+      <div class="formula-syntax">=SUMIFS(sum_range, criteria_range1, criteria1, [criteria_range2, criteria2, ...])</div>
+      <div class="formula-desc" style="font-size:13px; color:var(--text2); margin-top:4px;">Sum values where multiple conditions are all met. Example: Total sales in Q1 for Region "North": <code>=SUMIFS(C:C, A:A,"Q1", B:B,"North")</code></div>
+    </div>
+  </div>
+
+  <div class="formula-row">
+    <div class="formula-name">SUMPRODUCT</div>
+    <div>
+      <div class="formula-syntax">=SUMPRODUCT(array1, [array2], ...)</div>
+      <div class="formula-desc" style="font-size:13px; color:var(--text2); margin-top:4px;">Multiplies arrays element-by-element and sums the result. Also acts as array formula without Ctrl+Shift+Enter. Weighted average: <code>=SUMPRODUCT(B2:B10, C2:C10)/SUM(C2:C10)</code></div>
+    </div>
+  </div>
+
+  <div class="formula-row">
+    <div class="formula-name">COUNTIFS</div>
+    <div>
+      <div class="formula-syntax">=COUNTIFS(criteria_range1, criteria1, [criteria_range2, criteria2, ...])</div>
+      <div class="formula-desc" style="font-size:13px; color:var(--text2); margin-top:4px;">Count cells meeting all specified conditions. Segment size: <code>=COUNTIFS(A:A,"Active", B:B,">1000")</code></div>
+    </div>
+  </div>
+
+  <div class="formula-row">
+    <div class="formula-name">TEXT</div>
+    <div>
+      <div class="formula-syntax">=TEXT(value, format_text)</div>
+      <div class="formula-desc" style="font-size:13px; color:var(--text2); margin-top:4px;">Formats a number as text with a specific number format. <code>=TEXT(A2,"DD-MMM-YYYY")</code> converts date serial to readable string. Essential for dashboard labels.</div>
+    </div>
+  </div>
+
+  <div class="formula-row">
+    <div class="formula-name">IFERROR</div>
+    <div>
+      <div class="formula-syntax">=IFERROR(value, value_if_error)</div>
+      <div class="formula-desc" style="font-size:13px; color:var(--text2); margin-top:4px;">Returns alternative value if expression results in an error. Cleaner than nested IF: <code>=IFERROR(VLOOKUP(A2,Table1,2,0),"Not Found")</code></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 2: VLOOKUP vs INDEX-MATCH ===== -->
+<section class="section" id="lookup">
+  <h2 class="section-title"><span class="sec-num">02</span>VLOOKUP vs. INDEX-MATCH</h2>
+
+  <p>The most common lookup debate in Excel. In interview contexts, understanding the <em>why</em> behind INDEX-MATCH is more important than just knowing the syntax.</p>
+
+  <h3>VLOOKUP</h3>
+  <div class="code-label">Excel Formula Syntax</div>
+  <div class="code-block">
+<span class="cm">-- Syntax: VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])</span>
+<span class="cm">-- Find price of a product by product_id from a lookup table</span>
+<span class="fn">=VLOOKUP</span>(<span class="st">A2</span>, ProductTable, <span class="kw">3</span>, <span class="st">FALSE</span>)
+<span class="cm">-- A2: the product_id to search for</span>
+<span class="cm">-- ProductTable: the range containing your data (product_id must be FIRST column)</span>
+<span class="cm">-- 3: return value from the 3rd column of the table</span>
+<span class="cm">-- FALSE: exact match (always use FALSE for data lookups)</span>
+  </div>
+
+  <div class="note">
+    <strong>VLOOKUP Limitations</strong>
+    <p><strong>1. Lookup column must be the leftmost column</strong> — you can never look up something to the left of the key column.<br>
+    <strong>2. Column index is fragile</strong> — if you insert a column in the table, col_index_num 3 now points to the wrong column with no error.<br>
+    <strong>3. No dynamic column reference</strong> — the column number is hardcoded, making it brittle for dashboards that change shape.</p>
+  </div>
+
+  <h3>INDEX-MATCH — The Professional Alternative</h3>
+  <div class="code-label">Excel Formula Syntax</div>
+  <div class="code-block">
+<span class="cm">-- INDEX returns a value from a range given row and column position</span>
+<span class="cm">-- MATCH returns the position of a value within a range</span>
+<span class="cm">-- Combined: look up any value relative to any other column</span>
+
+<span class="cm">-- Equivalent to the VLOOKUP above:</span>
+<span class="fn">=INDEX</span>(ProductTable[Price], <span class="fn">MATCH</span>(<span class="st">A2</span>, ProductTable[ProductID], <span class="kw">0</span>))
+<span class="cm">-- MATCH finds the row where A2 appears in the ProductID column</span>
+<span class="cm">-- INDEX returns the value from the Price column at that row</span>
+<span class="cm">-- No positional column index — uses named columns directly</span>
+
+<span class="cm">-- Two-way lookup (row and column both dynamic):</span>
+<span class="fn">=INDEX</span>(DataRange, <span class="fn">MATCH</span>(RowKey, RowLabels, <span class="kw">0</span>), <span class="fn">MATCH</span>(ColKey, ColHeaders, <span class="kw">0</span>))
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Criterion</th><th>VLOOKUP</th><th>INDEX-MATCH</th></tr></thead>
+      <tbody>
+        <tr><td>Lookup direction</td><td>Left-to-right only</td><td>Any direction (left, right, up, down)</td></tr>
+        <tr><td>Column key stability</td><td>Breaks if columns inserted/deleted</td><td>Refers to column by name/range; stable</td></tr>
+        <tr><td>2-way lookup</td><td>Not possible</td><td>Yes (MATCH in both INDEX arguments)</td></tr>
+        <tr><td>Performance (large data)</td><td>Slightly faster on very small data</td><td>Faster on large datasets (matches once)</td></tr>
+        <tr><td>Modern Excel replacement</td><td>XLOOKUP (Excel 365)</td><td>Still the professional standard</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="example">
+    <strong>When to Use XLOOKUP (Excel 365 / Google Sheets)</strong>
+    <p><code>=XLOOKUP(A2, ProductTable[ProductID], ProductTable[Price], "Not found")</code></p>
+    <p>XLOOKUP combines the simplicity of VLOOKUP with the power of INDEX-MATCH: it searches in any direction, doesn't require a column index number, and has a built-in default value for not-found cases. If you're working in Excel 365 or Google Sheets, XLOOKUP / VLOOKUP-equivalent functions are preferred. For older Excel versions (2016 and below), INDEX-MATCH is the gold standard.</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 3: PIVOT TABLES ===== -->
+<section class="section" id="pivot">
+  <h2 class="section-title"><span class="sec-num">03</span>Pivot Tables</h2>
+
+  <div class="definition">
+    <strong>Definition — Pivot Table</strong>
+    <p>A pivot table is an interactive data summarization tool that allows dynamic grouping, filtering, and aggregation of tabular data without writing formulas. It enables analysts to rapidly explore data across multiple dimensions by dragging fields into rows, columns, values, and filter areas.</p>
+  </div>
+
+  <h3>Pivot Table Anatomy</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Area</th><th>Purpose</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Rows</strong></td>
+          <td>Groups data by unique values of the field(s) placed here — one row per unique value</td>
+          <td>Product Category, Region, Month</td>
+        </tr>
+        <tr>
+          <td><strong>Columns</strong></td>
+          <td>Creates a cross-tabulation — unique values become column headers</td>
+          <td>Quarter (creates Q1, Q2, Q3, Q4 columns)</td>
+        </tr>
+        <tr>
+          <td><strong>Values</strong></td>
+          <td>The numerical field to aggregate; choose function: Sum, Count, Average, Min, Max, % of Total</td>
+          <td>Sum of Revenue, Count of Orders, Average of Rating</td>
+        </tr>
+        <tr>
+          <td><strong>Filters</strong></td>
+          <td>Global filter applied before any aggregation — like a WHERE clause</td>
+          <td>Filter by Year = 2024; Country = "India"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Calculated Fields and % of Total</h3>
+  <p>Two of the most important pivot table features for analytics:</p>
+  <ul class="bullet">
+    <li><strong>% of Row Total / % of Column Total / % of Grand Total:</strong> Right-click any value cell → "Show Values As" → select percentage type. Instantly converts raw counts to proportions without new columns.</li>
+    <li><strong>Calculated Field:</strong> Insert tab → PivotTable → Fields, Items, & Sets → Calculated Field. Define formulas using existing field names. Example: <code>= Revenue / Units</code> to add an "Average Selling Price" column derived from two existing fields.</li>
+  </ul>
+
+  <h3>Slicers and Timelines</h3>
+  <p><strong>Slicers</strong> are visual filter buttons that can be linked to multiple pivot tables simultaneously — clicking "North" on a Region slicer filters all connected pivot tables at once. They're the foundation of interactive Excel dashboards. <strong>Timelines</strong> are slicers specialized for date fields, allowing filtering by year, quarter, month, or day with a visual slider.</p>
+
+  <div class="tip">
+    <strong>Interview Context</strong>
+    <p>Pivot tables are often tested in take-home assignments and Excel-based rounds. Interviewers look for: (1) correct aggregation choice (Sum vs. Count vs. Average), (2) handling of blanks/nulls, (3) meaningful cross-tabulations, and (4) ability to show % breakdowns without additional columns. Knowing that slicers can link multiple pivots shows dashboard design maturity.</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 4: BI TOOLS OVERVIEW ===== -->
+<section class="section" id="tools">
+  <h2 class="section-title"><span class="sec-num">04</span>BI Tools — Overview</h2>
+
+  <p>Business Intelligence (BI) tools allow analysts to connect to databases, build calculated measures, and create interactive dashboards that non-technical stakeholders can use independently. The four most relevant platforms for data analytics roles:</p>
+
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-logo excel-logo">XL</div>
+      <h4>Microsoft Excel</h4>
+      <div class="tool-type">Spreadsheet + Lightweight BI</div>
+      <p>The universal fallback. Every analytics professional must be proficient. Power Query (for ETL) and Power Pivot (for data modelling) extend it toward BI territory.</p>
+      <ul class="strengths">
+        <li>Available everywhere; no setup</li>
+        <li>Excellent for ad-hoc analysis</li>
+        <li>Power Query for data transformation</li>
+        <li>Familiar to all business stakeholders</li>
+      </ul>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-logo pbi-logo">PBI</div>
+      <h4>Microsoft Power BI</h4>
+      <div class="tool-type">Enterprise BI Platform</div>
+      <p>Microsoft's full BI suite. DAX (Data Analysis Expressions) is its formula language for calculated columns and measures. Tight integration with Azure, SQL Server, and Microsoft 365.</p>
+      <ul class="strengths">
+        <li>Strong for Microsoft-stack organizations</li>
+        <li>Cost-effective (included in M365 E3+)</li>
+        <li>Power Query for data transformation</li>
+        <li>DAX for complex business calculations</li>
+      </ul>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-logo tab-logo">Tb</div>
+      <h4>Tableau</h4>
+      <div class="tool-type">Visual Analytics Platform</div>
+      <p>Industry leader for data visualization. Known for its intuitive drag-and-drop interface and powerful visualization capabilities. VizQL (Visual Query Language) drives its chart engine. Salesforce-owned.</p>
+      <ul class="strengths">
+        <li>Best-in-class visualization flexibility</li>
+        <li>Strong for storytelling and exploration</li>
+        <li>Tableau Prep for data wrangling</li>
+        <li>Large analyst community and resources</li>
+      </ul>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-logo loo-logo">Lk</div>
+      <h4>Looker (Google)</h4>
+      <div class="tool-type">Semantic Layer BI</div>
+      <p>Uses LookML, a modelling language that defines metrics, dimensions, and joins at the semantic layer — so every analyst uses the same definition of "revenue" or "active users." Google Cloud-native.</p>
+      <ul class="strengths">
+        <li>Single source of truth via semantic model</li>
+        <li>Excellent for metric governance at scale</li>
+        <li>Git-versioned metric definitions</li>
+        <li>Strong for data teams in GCP environments</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Key Concepts Common to All BI Tools</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Concept</th><th>Description</th><th>Tool-specific Name</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Dimension</strong></td>
+          <td>Categorical variable used to group/filter data (Region, Product Category, Date)</td>
+          <td>Dimension (Tableau/Looker), Column/Field (Power BI)</td>
+        </tr>
+        <tr>
+          <td><strong>Measure</strong></td>
+          <td>Numerical variable that is aggregated (Revenue, Count of Orders, Average Rating)</td>
+          <td>Measure (all), Metric (Looker)</td>
+        </tr>
+        <tr>
+          <td><strong>Calculated Field</strong></td>
+          <td>Derived measure defined by a formula or expression</td>
+          <td>Calculated Field (Tableau), DAX Measure (Power BI), LookML Measure (Looker)</td>
+        </tr>
+        <tr>
+          <td><strong>Data Source / Connection</strong></td>
+          <td>The database, file, or API the tool connects to for raw data</td>
+          <td>Data Source (Tableau), Dataset (Power BI), Model (Looker)</td>
+        </tr>
+        <tr>
+          <td><strong>Dashboard</strong></td>
+          <td>A collection of visualizations that update dynamically and support filters/interactions</td>
+          <td>Dashboard (all tools)</td>
+        </tr>
+        <tr>
+          <td><strong>Published / Live connection</strong></td>
+          <td>Live query to DB vs. extracted/cached data (trade-off: freshness vs. performance)</td>
+          <td>DirectQuery vs. Import (Power BI); Live vs. Extract (Tableau)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>DAX Fundamentals (Power BI)</h3>
+  <p>DAX (Data Analysis Expressions) is the formula language for Power BI calculated columns and measures. Understanding its core functions is expected in Power BI-centric roles.</p>
+
+  <div class="code-label">DAX — Common Measure Patterns</div>
+  <div class="code-block">
+<span class="cm">-- Basic aggregation measure</span>
+Total Revenue = <span class="fn">SUM</span>(Sales[Revenue])
+
+<span class="cm">-- Count distinct customers</span>
+Unique Customers = <span class="fn">DISTINCTCOUNT</span>(Sales[CustomerID])
+
+<span class="cm">-- Conditional measure: revenue from new customers only</span>
+New Customer Revenue =
+<span class="fn">CALCULATE</span>(
+    <span class="fn">SUM</span>(Sales[Revenue]),
+    Customers[IsNew] = <span class="kw">TRUE</span>
+)
+
+<span class="cm">-- Time intelligence: Year-to-Date revenue</span>
+Revenue YTD =
+<span class="fn">TOTALYTD</span>(<span class="fn">SUM</span>(Sales[Revenue]), Dates[Date])
+
+<span class="cm">-- Previous period comparison</span>
+Revenue PY =
+<span class="fn">CALCULATE</span>(
+    <span class="fn">SUM</span>(Sales[Revenue]),
+    <span class="fn">SAMEPERIODLASTYEAR</span>(Dates[Date])
+)
+
+<span class="cm">-- Revenue growth rate</span>
+Revenue YoY % =
+<span class="fn">DIVIDE</span>(
+    [Total Revenue] - [Revenue PY],
+    [Revenue PY],
+    <span class="kw">BLANK</span>()  <span class="cm">-- Returns BLANK instead of error when PY is 0</span>
+)
+  </div>
+
+  <div class="note">
+    <strong>CALCULATE is the most important DAX function</strong>
+    <p>CALCULATE evaluates an expression in a modified filter context. It's how you apply conditions to measures — similar to adding a WHERE clause to your aggregation. Understanding filter context vs. row context is the key conceptual leap in DAX.</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 5: TOOL COMPARISON ===== -->
+<section class="section" id="comparison">
+  <h2 class="section-title"><span class="sec-num">05</span>Tool Comparison Matrix</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Criterion</th>
+          <th>Excel</th>
+          <th>Power BI</th>
+          <th>Tableau</th>
+          <th>Looker</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Learning Curve</strong></td>
+          <td class="compare-good">Low</td>
+          <td class="compare-mid">Medium</td>
+          <td class="compare-mid">Medium</td>
+          <td class="compare-bad">High</td>
+        </tr>
+        <tr>
+          <td><strong>Visualization Quality</strong></td>
+          <td class="compare-mid">Medium</td>
+          <td class="compare-mid">Medium-High</td>
+          <td class="compare-good">Excellent</td>
+          <td class="compare-mid">Good</td>
+        </tr>
+        <tr>
+          <td><strong>Data Volume Handling</strong></td>
+          <td class="compare-bad">Limited (~1M rows)</td>
+          <td class="compare-good">Large (DirectQuery)</td>
+          <td class="compare-good">Large (Live/Extract)</td>
+          <td class="compare-good">Unlimited (DB pushdown)</td>
+        </tr>
+        <tr>
+          <td><strong>Metric Governance</strong></td>
+          <td class="compare-bad">Weak (per-file)</td>
+          <td class="compare-mid">Medium</td>
+          <td class="compare-mid">Medium</td>
+          <td class="compare-good">Excellent (LookML)</td>
+        </tr>
+        <tr>
+          <td><strong>Collaboration</strong></td>
+          <td class="compare-mid">SharePoint/OneDrive</td>
+          <td class="compare-good">Power BI Service</td>
+          <td class="compare-good">Tableau Server/Cloud</td>
+          <td class="compare-good">Looker Platform</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td class="compare-good">Included in M365</td>
+          <td class="compare-good">$10/user/month</td>
+          <td class="compare-bad">$70+/user/month</td>
+          <td class="compare-bad">Enterprise pricing</td>
+        </tr>
+        <tr>
+          <td><strong>Ad-hoc Analysis</strong></td>
+          <td class="compare-good">Excellent</td>
+          <td class="compare-mid">Good</td>
+          <td class="compare-good">Excellent</td>
+          <td class="compare-mid">Moderate (structured)</td>
+        </tr>
+        <tr>
+          <td><strong>Best for</strong></td>
+          <td>Quick analysis, reports</td>
+          <td>Microsoft orgs, operational dashboards</td>
+          <td>Data storytelling, exploration</td>
+          <td>Data teams, metric consistency</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip">
+    <strong>Career Context</strong>
+    <p>Most companies use one primary BI tool. Knowing the conceptual underpinnings (dimensions/measures, calculated fields, live vs. extracted data) transfers across tools. If you know Tableau, Power BI's concepts will be familiar within days. In interviews, being honest about your primary tool while demonstrating you understand cross-tool concepts is the correct approach.</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 6: DASHBOARD DESIGN ===== -->
+<section class="section" id="dashboard">
+  <h2 class="section-title"><span class="sec-num">06</span>Dashboard Design Principles</h2>
+
+  <p>A well-designed dashboard is not just about putting charts on a page — it is about enabling fast, accurate decisions for a specific audience. Poor dashboard design is one of the most common analytics failures.</p>
+
+  <div class="principle-list">
+    <div class="principle-item">
+      <div class="principle-num">1</div>
+      <div class="principle-body">
+        <strong>Know Your Audience and Their Decision</strong>
+        <p>An executive dashboard (top-line KPIs, trend vs. target) is very different from an operational dashboard (real-time queue depths, error rates). Define: who will use this, what decision will they make, and how often will they check it? The audience determines metric granularity, chart complexity, and layout.</p>
+      </div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">2</div>
+      <div class="principle-body">
+        <strong>Lead with the Most Important Number</strong>
+        <p>The top-left or top-center of a dashboard is where the eye goes first. Place the primary KPI (revenue, DAU, conversion rate) with clear context: current value, change vs. prior period, and trend direction. Big-number tiles for 3–5 headline metrics, then charts below for detail.</p>
+      </div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">3</div>
+      <div class="principle-body">
+        <strong>Show Context, Not Just Numbers</strong>
+        <p>A number without context is meaningless. Always show: comparison to target or prior period, a trend over time, and the significance of the change. "Revenue: ₹4.2Cr" tells you nothing. "₹4.2Cr — 8% below Q3 2023 target of ₹4.6Cr — declining 3 months in a row" enables a decision.</p>
+      </div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">4</div>
+      <div class="principle-body">
+        <strong>Reduce Cognitive Load</strong>
+        <p>Every element on the dashboard should earn its place. Remove gridlines that don't add information, direct labels beat legends (the eye doesn't have to travel back and forth), consistent color encoding across all charts, and white space is not wasted space — it groups related elements and rests the eye.</p>
+      </div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">5</div>
+      <div class="principle-body">
+        <strong>Use Color Purposefully</strong>
+        <p>Color is a preattentive attribute — it's processed before conscious thought. Rules: one accent color for the primary metric or the "thing to notice"; semantic color for status (green = good, red = bad, yellow = warning); muted neutrals for context; colorblind-safe palette (avoid pure red-green; use blue-orange or add text labels).</p>
+      </div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">6</div>
+      <div class="principle-body">
+        <strong>Design for Scanning, Not Reading</strong>
+        <p>Dashboard users scan — they spend 3–5 seconds before their eye settles on something. Use clear headings, consistent visual hierarchy, and grouping that chunks related metrics. Critical information should not be buried below the fold or hidden behind a filter. If you have to explain how to read the dashboard, it needs a redesign.</p>
+      </div>
+    </div>
+    <div class="principle-item">
+      <div class="principle-num">7</div>
+      <div class="principle-body">
+        <strong>Filter and Interactivity with Defaults</strong>
+        <p>Filters are powerful but must have sensible defaults — a dashboard that opens blank because no filter is selected is a failure. Pre-select the most common view (current month, all regions) and let users drill down. Limit the number of filters visible at once to avoid decision paralysis.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Common Dashboard Anti-Patterns</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Anti-Pattern</th><th>Problem</th><th>Fix</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Pie chart with 8+ slices</strong></td><td>Impossible to compare slice sizes; many categories too small to label</td><td>Bar chart, or group small slices into "Other"</td></tr>
+        <tr><td><strong>3D charts</strong></td><td>Perspective distorts values; slices look bigger/smaller based on position</td><td>Always use flat 2D charts</td></tr>
+        <tr><td><strong>Dual axis without warning</strong></td><td>Two Y-axes with different scales are trivially misleading</td><td>Label clearly; prefer separate panels; or normalize both to %</td></tr>
+        <tr><td><strong>Too many KPIs</strong></td><td>If everything is highlighted, nothing is highlighted</td><td>Max 5 headline KPIs; rest go to detail section</td></tr>
+        <tr><td><strong>Sparklines without scale labels</strong></td><td>A trending line without Y-axis context could be going from 99.9% to 100%</td><td>Always show min/max or current value on sparklines</td></tr>
+        <tr><td><strong>Stale data without timestamp</strong></td><td>Users don't know if data is 5 minutes old or 5 days old</td><td>Always show "Last updated: [timestamp]" on every dashboard</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SECTION 7: Q&A ===== -->
+<section class="section" id="qa">
+  <h2 class="section-title"><span class="sec-num">07</span>Interview Q&amp;A</h2>
+
+  <div class="qa-section">
+
+    <div class="qa-item">
+      <div class="qa-q">When would you use INDEX-MATCH instead of VLOOKUP? Explain with an example.</div>
+      <div class="qa-a">
+        <p>INDEX-MATCH should be preferred over VLOOKUP in three situations:</p>
+        <p><strong>1. Lookup to the left of the key column.</strong> VLOOKUP only looks rightward. If your product ID is in column D and the product name you want is in column B, VLOOKUP cannot retrieve it. INDEX-MATCH can: <code>=INDEX(B:B, MATCH(H2, D:D, 0))</code> — find the row where H2 appears in column D, then return the value from column B at that row. No restriction on relative column positions.</p>
+        <p><strong>2. Fragile column index numbers.</strong> <code>=VLOOKUP(A2, Table, 4, FALSE)</code> returns column 4. If someone inserts a column into the table, column 4 now contains different data and the formula returns wrong results silently. INDEX-MATCH uses named ranges or explicit column references that don't shift with insertions.</p>
+        <p><strong>3. Two-way lookups.</strong> To find a value at the intersection of a specific row label and column header: <code>=INDEX(DataRange, MATCH(RowKey, RowLabels, 0), MATCH(ColKey, ColHeaders, 0))</code>. VLOOKUP cannot do this without helper formulas.</p>
+        <p>If working in Excel 365 or Google Sheets, <strong>XLOOKUP</strong> supersedes both — it handles leftward lookups, has a built-in error default, and doesn't require an exact positional column number.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">What is the difference between Power BI's DirectQuery and Import mode?</div>
+      <div class="qa-a">
+        <p>This is a fundamental architectural choice in Power BI that affects performance, data freshness, and scale.</p>
+        <p><strong>Import mode:</strong> Power BI fetches all the data from the source, compresses it, and stores a copy inside the Power BI file (.pbix) / Power BI Service. Queries are run against this in-memory copy using Power BI's VertiPaq engine. Extremely fast for report users (queries take milliseconds); but (1) data is a snapshot — you must refresh (manually or scheduled) to get new data, and (2) dataset size is limited (~10 GB in Power BI Service on standard capacity).</p>
+        <p><strong>DirectQuery mode:</strong> Power BI generates and sends SQL queries to your source database in real-time, every time a user interacts with the report. The database processes the query and returns results. Advantages: always shows current data with no refresh lag; can query arbitrarily large tables. Disadvantages: performance is limited by your database query speed; not all DAX functions work; heavy user traffic can overload the database.</p>
+        <p><strong>When to use which:</strong> Use Import for most reporting scenarios where data updates daily/hourly and table sizes are manageable. Use DirectQuery for operational dashboards requiring real-time data, or when tables exceed the size limit. A <strong>Composite Model</strong> (mixing both modes in one dataset) is the modern hybrid approach — import frequently-used lookup tables for speed, DirectQuery large fact tables for freshness.</p>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">What makes a good dashboard? How would you design a dashboard for a Head of Sales?</div>
+      <div class="qa-a">
+        <p>A good dashboard enables fast, accurate decisions for its specific audience with minimal cognitive effort. The three principles are: (1) audience-first design — know their question before choosing metrics; (2) show context — numbers alone are meaningless without comparison to target, prior period, or benchmark; (3) reduce noise — every element either earns its place by informing a decision, or it gets removed.</p>
+        <p><strong>For a Head of Sales:</strong></p>
+        <p><strong>Step 1 — Understand their question.</strong> A Head of Sales asks: "Are we on track to hit quota? Where are we behind? Which reps or regions need attention?"</p>
+        <p><strong>Step 2 — Headline KPIs (top of dashboard):</strong></p>
+        <ul>
+          <li>Revenue: Month-to-date vs. monthly target (with % attainment)</li>
+          <li>Deals Closed: current month count vs. target</li>
+          <li>Pipeline Value: total qualified pipeline vs. 3× coverage goal</li>
+          <li>Average Deal Size vs. prior quarter</li>
+        </ul>
+        <p><strong>Step 3 — Supporting charts:</strong></p>
+        <ul>
+          <li>Revenue trend: daily/weekly MTD vs. same period last month</li>
+          <li>Rep performance: horizontal bar chart — each rep, sorted by % attainment; color-coded red/yellow/green by attainment threshold</li>
+          <li>Pipeline funnel: deals by stage with win rate by stage</li>
+          <li>Region map: if multi-geography, heatmap by revenue attainment</li>
+        </ul>
+        <p><strong>Step 4 — Filters:</strong> Default to current month; allow drill-down by rep, region, product line. Keep to 3 filters maximum — more creates decision paralysis.</p>
+        <p><strong>Step 5 — Design choices:</strong> Accent color (blue) on the primary revenue KPI; red/green semantic color only for attainment status; data refreshes daily at 7 AM with a visible timestamp; one page for the executive summary, a second page for rep-level drill-down.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</div>
+</body>
+</html>
