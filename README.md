@@ -18,3 +18,5 @@ This project consists of purely static files (`.html`, CSS, and JS). Yes, you ca
 3. Under "Build and deployment", select "Deploy from a branch".
 4. Choose the `main` branch and the `/ (root)` folder.
 5. Click **Save**. Within a minute or two, your web page will be live on GitHub Pages!
+
+> Notes By Ayush Sir
